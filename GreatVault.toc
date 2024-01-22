@@ -1,20 +1,16 @@
-﻿## Interface: 100005
+﻿## Interface: 100000
 ## Title: Great Vault
 ## Notes: 
 ## Version: 1.0.0
 ## Author: Muhmiauwau
-## RequiredDeps: Details
 ## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: GreatVaultAddon_OnAddonCompartmentEnter
 ## AddonCompartmentFuncOnLeave: GreatVaultAddon_OnAddonCompartmentLeave
 ## SavedVariables: GreatVaultDB
 
+Libs/libs.xml
 
-enUS.lua
-zhTW.lua
-ruRU.lua
-
-
+locale/locale.xml
 Config.lua
 
 

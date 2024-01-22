@@ -1,6 +1,7 @@
 ---@diagnostic disable: deprecated
-GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVault", "AceConsole-3.0", "AceEvent-3.0",  "AceSerializer-3.0");
+GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVault", "AceEvent-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVault")
+
 
 local PlayerName = UnitName("player")
 
@@ -126,6 +127,8 @@ end
 
 
 function GreatVaultAddon:OnInitialize()
+
+	print("ok?")
     self.db = LibStub("AceDB-3.0"):New("GreatVaultDB", default_global_data, true)
 	self:buildColumns()
 
