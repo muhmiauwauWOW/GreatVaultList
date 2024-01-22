@@ -1,0 +1,4 @@
+package-as: GreatVault
+
+ignore:
+  - README.md
