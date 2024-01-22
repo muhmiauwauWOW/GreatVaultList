@@ -255,7 +255,7 @@ function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLine
 			for key, items in pairs(viewTypes) do
 				for idx, col in ipairs(items) do
 					if GreatVaultAddon.db.global.view[key] then 
-						line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.status.lastUpdated)
+						line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.lastUpdated)
 					end
 				end
 			end
@@ -326,6 +326,10 @@ function GetDifficultyName(difficultyID)
 end
 
 function GreatVaultAddon:GetVault(activity, lastUpdated)
+	if not lastUpdated then
+		lastUpdated = time()
+	end
+
 	local status
 	local activityThisWeek = lastUpdated > GetWeeklyQuestResetTime() - 604800
 	local difficulty
