@@ -437,17 +437,10 @@ function GreatVaultAddon:OnDisable()
 end
 
 
-
 function GreatVaultAddon_OnAddonCompartmentClick() 
 	if GreatVaultInfoFrame:IsShown() then 
 		GreatVaultInfoFrame:Hide()
 	else
 		GreatVaultInfoFrame:Show()
 	end
-end
-
-function GreatVaultAddon_OnAddonCompartmentEnter() 
-end
-
-function GreatVaultAddon_OnAddonCompartmentLeave() 
 end

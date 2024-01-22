@@ -4,8 +4,6 @@
 ## Version: 1.0.0
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
-## AddonCompartmentFuncOnEnter: GreatVaultAddon_OnAddonCompartmentEnter
-## AddonCompartmentFuncOnLeave: GreatVaultAddon_OnAddonCompartmentLeave
 ## SavedVariables: GreatVaultDB
 
 Libs/libs.xml
