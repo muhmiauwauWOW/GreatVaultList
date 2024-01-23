@@ -32,16 +32,16 @@ local backdrop_color_inparty = {.5, .5, .8, 0.2}
 
 
 local DIFFICULTY_NAMES = {
-	[DifficultyUtil.ID.DungeonNormal] = "nhc",
+	[DifficultyUtil.ID.DungeonNormal] = "NHC",
 	[DifficultyUtil.ID.DungeonHeroic] = "HC",
-	[DifficultyUtil.ID.Raid10Normal] = "nhc",
-	[DifficultyUtil.ID.Raid25Normal] = "nhc",
+	[DifficultyUtil.ID.Raid10Normal] = "NHC",
+	[DifficultyUtil.ID.Raid25Normal] = "NHC",
 	[DifficultyUtil.ID.Raid10Heroic] = "HC",
 	[DifficultyUtil.ID.Raid25Heroic] = "HC",
 	[DifficultyUtil.ID.RaidLFR] = "LFR",
 	[DifficultyUtil.ID.DungeonChallenge] = PLAYER_DIFFICULTY_MYTHIC_PLUS,
 	[DifficultyUtil.ID.Raid40] = LEGACY_RAID_DIFFICULTY,
-	[DifficultyUtil.ID.PrimaryRaidNormal] = "nhc",
+	[DifficultyUtil.ID.PrimaryRaidNormal] = "NHC",
 	[DifficultyUtil.ID.PrimaryRaidHeroic] = "HC",
 	[DifficultyUtil.ID.PrimaryRaidMythic] = "MTH",
 	[DifficultyUtil.ID.PrimaryRaidLFR] = "LFR",
@@ -72,7 +72,7 @@ local default_global_data = {
 
 local headerTable = {
 	{key = "class", text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
-	{key = "character", text = L["Character"], width = 140, canSort = true, dataType = "string", order = "DESC", offset = 0},
+	{key = "character", text = L["Character"], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
 	{key = "iLevel", text = L["iLevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
 }
 
@@ -81,7 +81,7 @@ local headerTableConfig  = { "class", "character", "iLevel" }
 
 local headerOptions = {
 	["raid"] = { text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
-	["activities"] = { text = L["Activities"], width = 50, canSort = false, dataType = "string", order = "DESC", offset = 25, align = "center"},
+	["activities"] = { text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
 	["pvp"] = { text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"}
 }
 
