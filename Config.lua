@@ -99,18 +99,21 @@ local function shallowcopy(orig)
     end
     return copy
 end
-function GreatVaultAddon:buildColumns()
 
+function GreatVaultAddon:addColumn(config)
+	table.insert(headerTableConfig, config.key)
+	table.insert(headerTable, config)
+end
+function GreatVaultAddon:buildColumns()
 	for key, items in pairs(viewTypes) do
 		for idx, col in ipairs(items) do
 			if self.db.global.view[key] then 
-				table.insert(headerTableConfig, col)
 				local opt = shallowcopy(headerOptions[key])
 				opt.key = col
 				if idx > 1 then
 					opt.text = ""
 				end
-				table.insert(headerTable, opt)
+				GreatVaultAddon:addColumn(opt)
 			end
 		end
 	end
@@ -179,7 +182,8 @@ end
 function GreatVaultAddon:createWindow() 
 
 	local f = DetailsFramework:CreateSimplePanel(UIParent, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT, "GreatVault", "GreatVaultInfoFrame")
-	f:SetPoint("center", UIParent, "center", 0, 0)
+	f:SetFrameStrata("HIGH")
+	f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
 	f:SetScript("OnMouseDown", nil)
 	f:SetScript("OnMouseUp", nil)
@@ -200,6 +204,85 @@ function GreatVaultAddon:createWindow()
 	DetailsFramework:SetFontColor(statusBar.text, "gray")
 
 	GreatVaultAddon.ScrollFrame.create(f) 
+
+	
+	local openOptions = function()
+		if GreatVaultAddonOptionsPanel then 
+			GreatVaultAddonOptionsPanel:Show()
+			return
+		end
+
+
+		local heightSize = 200
+
+		local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 300, heightSize, "GreatVault Options", "GreatVaultAddonOptionsPanel")
+		optionsFrame:SetFrameStrata("DIALOG")
+		optionsFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+		optionsFrame:Show()
+
+		local bUseSolidColor = true
+		DetailsFramework:ApplyStandardBackdrop(optionsFrame, bUseSolidColor)
+
+		local options_text_template = DetailsFramework:GetTemplate("font", "OPTIONS_FONT_TEMPLATE")
+		local options_dropdown_template = DetailsFramework:GetTemplate("dropdown", "OPTIONS_DROPDOWN_TEMPLATE")
+		local options_switch_template = DetailsFramework:GetTemplate("switch", "OPTIONS_CHECKBOX_TEMPLATE")
+		local options_slider_template = DetailsFramework:GetTemplate("slider", "OPTIONS_SLIDER_TEMPLATE")
+		local options_button_template = DetailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE")
+		local subSectionTitleTextTemplate = DetailsFramework:GetTemplate("font", "ORANGE_FONT_TEMPLATE")
+		
+		local reloadSettings = function()
+			C_UI.Reload()
+		end
+
+		local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, "Reload UI")
+		reloadSettingsButton:SetPoint("bottomleft", optionsFrame, "bottomleft", 5, 5)
+		reloadSettingsButton:SetTemplate(options_button_template)
+		
+		local optionsTable = {
+			{type = "label", get = function() return "Columns" end, text_template = subSectionTitleTextTemplate},
+			{
+				type = "toggle",
+				get = function() return GreatVaultAddon.db.global.view.raid end,
+				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.raid = not GreatVaultAddon.db.global.view.raid end,
+				name = "Raid",
+				desc = "Raid",
+			},
+			{
+				type = "toggle",
+				get = function() return GreatVaultAddon.db.global.view.activities end,
+				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.activities = not GreatVaultAddon.db.global.view.activities end,
+				name = "Activities",
+				desc = "Activities",
+			},
+			{
+				type = "toggle",
+				get = function() return GreatVaultAddon.db.global.view.pvp end,
+				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.pvp = not GreatVaultAddon.db.global.view.pvp end,
+				name = "PVP",
+				desc = "PVP",
+			},
+		}
+	
+		--build the menu
+		optionsTable.always_boxfirst = true
+
+		local startX = 10
+		local startY = -32
+		DetailsFramework:BuildMenu(optionsFrame, optionsTable, startX, startY, heightSize, false, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
+	
+
+	end
+	
+	local optButton = DetailsFramework:CreateButton(f, openOptions, 130, 14, "options", 14)
+	optButton:SetPoint("bottomright", f, "bottomright", -10, 4)
+	optButton.textsize = 12
+	optButton.textcolor = "orange"
+
+	DetailsFramework:AddRoundedCornersToFrame(optButton, {
+		roundness = 5,
+		color = {.2, .2, .2, 0.98},
+		border_color = {.1, .1, .1, 0.834},
+	})
 end
 
 function GreatVaultAddon.ScrollFrame.create(f) 
