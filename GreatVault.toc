@@ -1,7 +1,7 @@
 ﻿## Interface: 100000
 ## Title: Great Vault
 ## Notes: Lists the great vault options for all your alt characters
-## Version: 1.1.0
+## Version: 1.2.0
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
 ## SavedVariables: GreatVaultDB

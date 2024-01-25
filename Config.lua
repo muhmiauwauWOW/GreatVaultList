@@ -5,6 +5,9 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GreatVault")
 
 local PlayerName = UnitName("player")
 
+
+local playerConfig = nil
+
 local sortConfig  = { 
 	["class"] = "class",
 	["character"] = "name",
@@ -140,6 +143,9 @@ function GreatVaultAddon:OnInitialize()
 
 	GreatVaultAddon:slashcommand() 
 	GreatVaultAddon:createWindow()
+
+
+	GreatVaultAddon:SaveCharacterInfo(playerConfig)
 end
 
 function GreatVaultAddon:slashcommand() 
@@ -149,6 +155,11 @@ function GreatVaultAddon:slashcommand()
         if GreatVaultInfoFrame:IsShown() then 
             GreatVaultInfoFrame:Hide()
         else
+			if playerConfig then 
+				local _, ilvl = GetAverageItemLevel();
+				playerConfig.averageItemLevel = ilvl;
+				GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+			end
             GreatVaultInfoFrame:Show()
         end
 
@@ -404,10 +415,6 @@ local function GetWeeklyQuestResetTime()
 	return reset
 end
 
-function GetDifficultyName(difficultyID)
-	return DIFFICULTY_NAMES[difficultyID];
-end
-
 function GreatVaultAddon:GetVault(activity, lastUpdated)
 	if not lastUpdated then
 		lastUpdated = time()
@@ -423,7 +430,7 @@ function GreatVaultAddon:GetVault(activity, lastUpdated)
 		elseif activity.type == Enum.WeeklyRewardChestThresholdType.RankedPvP then
 			difficulty = PVPUtil.GetTierName(activity.level)
 		elseif activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
-			difficulty = GetDifficultyName(activity.level)
+			difficulty = DIFFICULTY_NAMES[activity.level]
 		end
 
 		status = GREEN_FONT_COLOR_CODE .. difficulty .. FONT_COLOR_CODE_CLOSE
@@ -432,12 +439,8 @@ function GreatVaultAddon:GetVault(activity, lastUpdated)
 		if activityThisWeek then
 			progress = activity.progress
 		end
-		local spacer = " "
-		if activity.type == Enum.WeeklyRewardChestThresholdType.Activities then
-			spacer = " "
-		end
 
-		status = GRAY_FONT_COLOR_CODE .. spacer .. progress .. '/' .. activity.threshold .. spacer ..  FONT_COLOR_CODE_CLOSE
+		status = GRAY_FONT_COLOR_CODE .. progress .. '/' .. activity.threshold  ..  FONT_COLOR_CODE_CLOSE
 	end
 
     return status
@@ -447,21 +450,7 @@ function GreatVaultAddon:SaveCharacterInfo(info)
 	if UnitLevel("player") < 70 then
 		return
 	end
-
-	local characterInfo = info or self:GetCharacterInfo()
-	local characterName = UnitName("player")
-
-	local found = false
-    for _, value in ipairs(self.db.global.characters) do
-        if value.name == characterName  then
-			found = true
-			value = characterInfo
-        end
-    end
-
-	if not found then 
-		table.insert(self.db.global.characters, characterInfo)
-	end
+	playerConfig = info or self:GetCharacterInfo()
 end
 
 function GreatVaultAddon:GetCharacterInfo()
@@ -475,26 +464,33 @@ function GreatVaultAddon:GetCharacterInfo()
 
 	local _, className = UnitClass("player")
 	characterInfo.name = name
-	characterInfo.lastUpdate = time()
 	characterInfo.class = className
 	characterInfo.realm = GetRealmName()
 	characterInfo.level = UnitLevel("player")
-	characterInfo.averageItemLevel = GetAverageItemLevel();
 
-	characterInfo.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
-	characterInfo.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
-	characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+	local _, ilvl = GetAverageItemLevel();
+	characterInfo.averageItemLevel = ilvl;
 
+	characterInfo = GreatVaultAddon:UpdateCharacterInfo(characterInfo)
+	
 	return characterInfo
 end
 
-local function UpdateStatus()
-	GreatVaultAddon:SaveCharacterInfo()
-	GreatVaultAddon:sortEntries("iLevel", "ASC")
+
+function GreatVaultAddon:UpdateCharacterInfo(pConfig)
+	if pConfig then
+		pConfig.lastUpdate = time()
+		pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
+		pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
+		pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+		return pConfig
+	end
 end
 
-
-
+local function UpdateStatus()
+	GreatVaultAddon:SaveCharacterInfo(playerConfig)
+	GreatVaultAddon:sortEntries("iLevel", "ASC")
+end
 
 function GreatVaultAddon:PLAYER_ENTERING_WORLD(event, isLogin, isReload)
 	if isLogin or isReload then
@@ -503,13 +499,12 @@ function GreatVaultAddon:PLAYER_ENTERING_WORLD(event, isLogin, isReload)
 end
 
 function GreatVaultAddon:WEEKLY_REWARDS_UPDATE(event)
-	UpdateStatus()
+	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
 end
 
 function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
-	UpdateStatus()
+	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
 end
-
 
 function GreatVaultAddon:OnEnable()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -522,7 +517,6 @@ function GreatVaultAddon:OnDisable()
 	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 end
-
 
 function GreatVaultAddon_OnAddonCompartmentClick() 
 	if GreatVaultInfoFrame:IsShown() then 
