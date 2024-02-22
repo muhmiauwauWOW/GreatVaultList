@@ -113,6 +113,15 @@
         "FAILED",
         "INTERRUPTED",
         "MouseIsOver",
-        "LE_PARTY_CATEGORY_INSTANCE"
+        "LE_PARTY_CATEGORY_INSTANCE",
+        "GreatVaultInfoFrame",
+        "GreatVaultAddonOptionsPanel",
+        "LFGListFrame",
+        "LFGListApplicationViewer_UpdateResults",
+        "ChallengesFrame"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-field",
+        "inject-field"
     ]
 }

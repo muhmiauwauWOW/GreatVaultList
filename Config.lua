@@ -1,27 +1,17 @@
 ---@diagnostic disable: deprecated
-GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVault", "AceEvent-3.0");
+---@class GreatVaultAddon:AceAddon
+local GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVault", "AceEvent-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVault")
 
 
 local PlayerName = UnitName("player")
 
 
+
+
 local playerConfig = nil
-
-local sortConfig  = { 
-	["class"] = "class",
-	["character"] = "name",
-	["iLevel"] = "averageItemLevel",
-	["Raids"] = "averageItemLevel",
-	["Activities"] = "averageItemLevel"
-}
-
-
-local viewTypes = {
-	["raid"] = { "Raid1", "Raid2", "Raid3" },
-	["activities"] = { "Activities1", "Activities2", "Activities3" },
-	["pvp"] = { "pvp1", "pvp2", "pvp3" }
-}
+local sortConfig  = {}
+local viewTypes = {}
 
 --frame options
 local CONST_WINDOW_WIDTH = 0
@@ -73,20 +63,87 @@ local default_global_data = {
 }
 
 
-local headerTable = {
-	{key = "class", text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
-	{key = "character", text = L["Character"], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
-	{key = "iLevel", text = L["iLevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
+local headerTable = {}
+local headerTableConfig  = {}
+
+
+
+local colConfig = {
+	["class"] = {
+		["index"] = 1,
+		["header"] = {key = "class", text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
+		["sort"] = {
+			["key"] = "class",
+			["store"] = "class",
+		},
+		["create"] = function(line)
+			local icon = line:CreateTexture("$parentClassIcon", "overlay")
+			icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
+			icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
+			line.icon = icon
+			line:AddFrameToHeaderAlignment(icon)
+			return line
+		end,
+		["refresh"] = function(line, data)
+			local L, R, T, B = unpack(CLASS_ICON_TCOORDS[data.class])
+			line.icon:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
+			return line
+		end
+	},
+	["character"] = {
+		["index"] = 2,
+		["header"] = {key = "character", text = L["Character"], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
+		["sort"] = {
+			["key"] = "character",
+			["store"] = "name",
+		},
+		["refresh"] = function(line, data)
+			line.character.text = data.name
+			return line
+		end
+	},
+	["iLevel"] = {
+		["index"] = 3,
+		["header"] = {key = "iLevel", text = L["iLevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
+		["sort"] = {
+			["key"] = "iLevel",
+			["store"] = "averageItemLevel",
+		},
+		["refresh"] = function(line, data)
+			line.iLevel.text  = string.format("%.2f", data.averageItemLevel)
+			return line
+		end
+	},
+	["raid"] = {
+		["index"] = 4,
+		["header"] =  { key = "raid", text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+		["subCols"] = 3,
+		["sort"] = {
+			["key"] = "raid",
+			["store"] = "averageItemLevel",
+		}
+	},
+	["activities"] = {
+		["index"] = 7,
+		["header"] =  { key = "activities", text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+		["subCols"] = 3,
+		["sort"] = {
+			["key"] = "activities",
+			["store"] = "averageItemLevel",
+		}
+	},
+	["pvp"] = {
+		["index"] = 10,
+		["header"] =  { key = "pvp", text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
+		["subCols"] = 3,
+		["sort"] = {
+			["key"] = "pvp",
+			["store"] = "averageItemLevel",
+		}
+	}
 }
 
-local headerTableConfig  = { "class", "character", "iLevel" }
 
-
-local headerOptions = {
-	["raid"] = { text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
-	["activities"] = { text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
-	["pvp"] = { text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"}
-}
 
 
 local function shallowcopy(orig)
@@ -107,45 +164,22 @@ function GreatVaultAddon:addColumn(config)
 	table.insert(headerTableConfig, config.key)
 	table.insert(headerTable, config)
 end
-function GreatVaultAddon:buildColumns()
-	for key, items in pairs(viewTypes) do
-		for idx, col in ipairs(items) do
-			if self.db.global.view[key] then 
-				local opt = shallowcopy(headerOptions[key])
-				opt.key = col
-				if idx > 1 then
-					opt.text = ""
-				end
-				GreatVaultAddon:addColumn(opt)
-			end
-		end
-	end
-
-	local windowWidth = 0
-	for _, value in ipairs(headerTable) do
-		windowWidth = windowWidth + value.width
-	end
-
-	--frame options
-	CONST_WINDOW_WIDTH = windowWidth + 30
-
-end
 
 
 function GreatVaultAddon:OnInitialize()
-
-	print("ok?")
     self.db = LibStub("AceDB-3.0"):New("GreatVaultDB", default_global_data, true)
-	self:buildColumns()
+	self:SetupColumns()
 
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	WeeklyRewardExpirationWarningDialog:Hide()
 
-	GreatVaultAddon:slashcommand() 
+	GreatVaultAddon:slashcommand()
 	GreatVaultAddon:createWindow()
 
-
-	GreatVaultAddon:SaveCharacterInfo(playerConfig)
+	C_Timer.After(3, function() 
+		GreatVaultAddon:SaveCharacterInfo(playerConfig)
+	end)
+	
 end
 
 function GreatVaultAddon:slashcommand() 
@@ -155,7 +189,7 @@ function GreatVaultAddon:slashcommand()
         if GreatVaultInfoFrame:IsShown() then 
             GreatVaultInfoFrame:Hide()
         else
-			if playerConfig then 
+			if playerConfig then
 				local _, ilvl = GetAverageItemLevel();
 				playerConfig.averageItemLevel = ilvl;
 				GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
@@ -340,15 +374,16 @@ function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLine
                 line:SetBackdropColor(unpack(backdrop_color))
             end
 
-			local L, R, T, B = unpack(CLASS_ICON_TCOORDS[data.class])
-			line.icon:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
-
-			line.character.text = data.name
-			line.iLevel.text  = string.format("%.2f", data.averageItemLevel)
+			for key, value in pairs(colConfig) do
+				if value["refresh"] then 
+					local lineFn = value["refresh"]
+					line = lineFn(line, data) 
+				end
+			end
 
 			for key, items in pairs(viewTypes) do
-				for idx, col in ipairs(items) do
-					if GreatVaultAddon.db.global.view[key] then 
+				if GreatVaultAddon.db.global.view[key] then
+					for idx, col in ipairs(items) do
 						line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.lastUpdated)
 					end
 				end
@@ -386,12 +421,9 @@ function GreatVaultAddon.ScrollFrame.CreateScrollLine(self, lineId)
 	local header = self:GetParent().Header
 
 	for _, value in pairs(headerTableConfig) do
-		if value == "class" then 
-			local icon = line:CreateTexture("$parentClassIcon", "overlay")
-			icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
-			icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
-			line.icon = icon
-			line:AddFrameToHeaderAlignment(icon)
+		if colConfig[value] and colConfig[value]["create"] then
+			local lineFn = colConfig[value]["create"]
+			line = lineFn(line)
 		else
 			local obj = DetailsFramework:CreateLabel(line)
 			line[value] = obj
@@ -420,7 +452,7 @@ function GreatVaultAddon:GetVault(activity, lastUpdated)
 		lastUpdated = time()
 	end
 
-	local status
+	local status = ""
 	local activityThisWeek = lastUpdated > GetWeeklyQuestResetTime() - 604800
 	local difficulty
 
@@ -454,25 +486,30 @@ function GreatVaultAddon:SaveCharacterInfo(info)
 end
 
 function GreatVaultAddon:GetCharacterInfo()
-	local name = UnitName("player")
 	local characterInfo = {}
+	local found = false
 	for _, value in ipairs(self.db.global.characters) do
-        if value.name == name  then
+        if value.name == PlayerName  then
+			found = true
 			characterInfo = value
         end
     end
 
 	local _, className = UnitClass("player")
-	characterInfo.name = name
+	characterInfo.name = PlayerName
 	characterInfo.class = className
 	characterInfo.realm = GetRealmName()
 	characterInfo.level = UnitLevel("player")
 
 	local _, ilvl = GetAverageItemLevel();
-	characterInfo.averageItemLevel = ilvl;
+	characterInfo.averageItemLevel = ilvl
 
 	characterInfo = GreatVaultAddon:UpdateCharacterInfo(characterInfo)
 	
+	if not found then 
+		table.insert(self.db.global.characters, characterInfo)
+	end
+
 	return characterInfo
 end
 
@@ -487,16 +524,6 @@ function GreatVaultAddon:UpdateCharacterInfo(pConfig)
 	end
 end
 
-local function UpdateStatus()
-	GreatVaultAddon:SaveCharacterInfo(playerConfig)
-	GreatVaultAddon:sortEntries("iLevel", "ASC")
-end
-
-function GreatVaultAddon:PLAYER_ENTERING_WORLD(event, isLogin, isReload)
-	if isLogin or isReload then
-		C_Timer.After(3, UpdateStatus)
-	end
-end
 
 function GreatVaultAddon:WEEKLY_REWARDS_UPDATE(event)
 	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
@@ -507,13 +534,11 @@ function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
 end
 
 function GreatVaultAddon:OnEnable()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 end
 
 function GreatVaultAddon:OnDisable()
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 end
@@ -524,4 +549,66 @@ function GreatVaultAddon_OnAddonCompartmentClick()
 	else
 		GreatVaultInfoFrame:Show()
 	end
+end
+
+
+
+
+function GreatVaultAddon:SetupColumns()
+
+	viewTypes = {}
+	headerTable = {}
+	headerTableConfig = {}
+
+	local colConfig2 = {}
+
+	for key, value in pairs(colConfig) do
+		colConfig2[value.index] = value
+	end
+
+	for k, value in pairs(colConfig2) do
+		local key = value.sort.key
+
+		-- sortConfig
+		if value.sort then
+			sortConfig[value.sort.key] = value.sort.store
+		end
+
+		if value.subCols then 
+			if self.db.global.view[key] then 
+				if value.header then
+					viewTypes[key] = {}
+					for idx = 1, value.subCols, 1 do
+						local opt = shallowcopy(value.header)
+						opt.key = key .. idx
+						if idx > 1 then
+							opt.text = ""
+						end
+						local pos = k + idx - 1
+						table.insert(headerTable, pos, opt)
+						table.insert(headerTableConfig, pos, opt.key)
+						table.insert(viewTypes[key], opt.key)
+					end
+				end
+			end
+		else
+			-- headerTable
+			if value.header then
+				table.insert(headerTable, value.index, value.header)
+				table.insert(headerTableConfig, value.index, key)
+			end
+		end
+	end
+
+
+	local windowWidth = 0
+	for _, value in ipairs(headerTable) do
+		windowWidth = windowWidth + value.width
+	end
+
+	--frame options
+	CONST_WINDOW_WIDTH = windowWidth + 30
+
+
+
 end
