@@ -115,7 +115,7 @@ local colConfig = {
 		end
 	},
 	["raid"] = {
-		["index"] = 4,
+		["index"] = 5,
 		["header"] =  { key = "raid", text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
@@ -124,7 +124,7 @@ local colConfig = {
 		}
 	},
 	["activities"] = {
-		["index"] = 7,
+		["index"] = 8,
 		["header"] =  { key = "activities", text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
@@ -133,13 +133,34 @@ local colConfig = {
 		}
 	},
 	["pvp"] = {
-		["index"] = 10,
+		["index"] = 11,
 		["header"] =  { key = "pvp", text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
 			["key"] = "pvp",
 			["store"] = "averageItemLevel",
 		}
+	},
+	["keystone"] = {
+		["index"] = 4,
+		["header"] =  { key = "keystone", text = L["Keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
+		["sort"] = {
+			["key"] = "keystone",
+			["store"] = "keystone",
+		},
+		["refresh"] = function(line, data)
+			if not data.keystone then line.keystone.text = GRAY_FONT_COLOR_CODE .. "-" .. FONT_COLOR_CODE_CLOSE; return line end
+
+			local fullName = C_LFGList.GetActivityFullName(data.keystone.activityID)
+			local estart, _ = string.find(fullName, " %(")
+			local estart2, _ = string.find(fullName, " %- ")
+			if estart2 and estart2 < estart then
+				estart = estart2
+			end
+			fullName = string.sub(fullName, 1, estart-1)  
+			line.keystone.text = fullName .. " " .. data.keystone.keystoneLevel
+			return line
+		end
 	}
 }
 
@@ -504,6 +525,15 @@ function GreatVaultAddon:GetCharacterInfo()
 	local _, ilvl = GetAverageItemLevel();
 	characterInfo.averageItemLevel = ilvl
 
+	local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
+	if activityID then 
+		characterInfo.keystone = {}
+		characterInfo.keystone.activityID = activityID
+		characterInfo.keystone.groupID = groupID
+		characterInfo.keystone.keystoneLevel = keystoneLevel
+	end
+
+
 	characterInfo = GreatVaultAddon:UpdateCharacterInfo(characterInfo)
 	
 	if not found then 
@@ -533,14 +563,20 @@ function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
 	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
 end
 
+function GreatVaultAddon:PLAYER_LOGOUT(event)
+	GreatVaultAddon:SaveCharacterInfo(playerConfig)
+end
+
 function GreatVaultAddon:OnEnable()
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
+	self:RegisterEvent("PLAYER_LOGOUT")
 end
 
 function GreatVaultAddon:OnDisable()
 	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
+	self:UnregisterEvent("PLAYER_LOGOUT")
 end
 
 function GreatVaultAddon_OnAddonCompartmentClick() 
@@ -599,6 +635,7 @@ function GreatVaultAddon:SetupColumns()
 			end
 		end
 	end
+
 
 
 	local windowWidth = 0

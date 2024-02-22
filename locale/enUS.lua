@@ -11,4 +11,5 @@ L["PvP"] = true
 L["iLevel"] = true
 L["Mythic"] = true
 L["Boss List"] = true
+L["Keystone"] = true
 
