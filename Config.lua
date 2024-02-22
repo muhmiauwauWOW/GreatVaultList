@@ -97,6 +97,15 @@ local colConfig = {
 			["key"] = "character",
 			["store"] = "name",
 		},
+		["store"] = function(characterInfo)
+			local _, className = UnitClass("player")
+			characterInfo.name = PlayerName
+			characterInfo.class = className
+			characterInfo.realm = GetRealmName()
+			characterInfo.level = UnitLevel("player")
+
+			return characterInfo
+		end,
 		["refresh"] = function(line, data)
 			line.character.text = data.name
 			return line
@@ -109,45 +118,77 @@ local colConfig = {
 			["key"] = "iLevel",
 			["store"] = "averageItemLevel",
 		},
+		["OnShow"] = function(self, obj)
+			playerConfig =  obj["store"](playerConfig)
+		end,
+		["store"] = function(characterInfo)
+			local _, ilvl = GetAverageItemLevel();
+			characterInfo.averageItemLevel = ilvl
+			return characterInfo
+		end,
 		["refresh"] = function(line, data)
 			line.iLevel.text  = string.format("%.2f", data.averageItemLevel)
 			return line
 		end
 	},
 	["raid"] = {
-		["index"] = 5,
+		["index"] = 4,
 		["header"] =  { key = "raid", text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
 			["key"] = "raid",
 			["store"] = "averageItemLevel",
-		}
+		},
+		["store"] = function(characterInfo)
+			characterInfo.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
+			return characterInfo
+		end
 	},
 	["activities"] = {
-		["index"] = 8,
+		["index"] = 7,
 		["header"] =  { key = "activities", text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
 			["key"] = "activities",
 			["store"] = "averageItemLevel",
-		}
+		},
+		["store"] = function(characterInfo)
+			characterInfo.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
+			return characterInfo
+		end
 	},
 	["pvp"] = {
-		["index"] = 11,
+		["index"] = 10,
 		["header"] =  { key = "pvp", text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
 		["subCols"] = 3,
 		["sort"] = {
 			["key"] = "pvp",
 			["store"] = "averageItemLevel",
-		}
+		},
+		["store"] = function(characterInfo)
+			characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+			return characterInfo
+		end
 	},
 	["keystone"] = {
-		["index"] = 4,
+		["index"] = 13,
 		["header"] =  { key = "keystone", text = L["Keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
 		["sort"] = {
 			["key"] = "keystone",
 			["store"] = "keystone",
 		},
+		["store"] = function(characterInfo)
+			local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
+			if activityID then 
+				characterInfo.keystone = {}
+				characterInfo.keystone.activityID = activityID
+				characterInfo.keystone.groupID = groupID
+				characterInfo.keystone.keystoneLevel = keystoneLevel
+			end
+
+			return characterInfo
+
+		end,
 		["refresh"] = function(line, data)
 			if not data.keystone then line.keystone.text = GRAY_FONT_COLOR_CODE .. "-" .. FONT_COLOR_CODE_CLOSE; return line end
 
@@ -211,8 +252,12 @@ function GreatVaultAddon:slashcommand()
             GreatVaultInfoFrame:Hide()
         else
 			if playerConfig then
-				local _, ilvl = GetAverageItemLevel();
-				playerConfig.averageItemLevel = ilvl;
+				for _, value in pairs(colConfig) do
+					if value["OnShow"] then 
+						local fn = value["OnShow"]
+						fn(self, value)
+					end
+				end
 				GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
 			end
             GreatVaultInfoFrame:Show()
@@ -516,26 +561,15 @@ function GreatVaultAddon:GetCharacterInfo()
         end
     end
 
-	local _, className = UnitClass("player")
-	characterInfo.name = PlayerName
-	characterInfo.class = className
-	characterInfo.realm = GetRealmName()
-	characterInfo.level = UnitLevel("player")
-
-	local _, ilvl = GetAverageItemLevel();
-	characterInfo.averageItemLevel = ilvl
-
-	local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
-	if activityID then 
-		characterInfo.keystone = {}
-		characterInfo.keystone.activityID = activityID
-		characterInfo.keystone.groupID = groupID
-		characterInfo.keystone.keystoneLevel = keystoneLevel
+	for _, value in pairs(colConfig) do
+		if value["store"] then 
+			local storeFn = value["store"]
+			characterInfo = storeFn(characterInfo) 
+		end
 	end
 
+	characterInfo.lastUpdate = time()
 
-	characterInfo = GreatVaultAddon:UpdateCharacterInfo(characterInfo)
-	
 	if not found then 
 		table.insert(self.db.global.characters, characterInfo)
 	end
@@ -563,20 +597,32 @@ function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
 	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
 end
 
-function GreatVaultAddon:PLAYER_LOGOUT(event)
-	GreatVaultAddon:SaveCharacterInfo(playerConfig)
-end
-
 function GreatVaultAddon:OnEnable()
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-	self:RegisterEvent("PLAYER_LOGOUT")
+	
+	--[[
+	for _, value in pairs(colConfig) do
+		if value["OnEnable"] then 
+			local fn = value["OnEnable"]
+			fn(self, value) 
+		end
+	end
+	]]
 end
 
 function GreatVaultAddon:OnDisable()
 	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-	self:UnregisterEvent("PLAYER_LOGOUT")
+
+	--[[
+	for _, value in pairs(colConfig) do
+		if value["OnDisable"] then 
+			local fn = value["OnDisable"]
+			fn(self, value) 
+		end
+	end
+	]]
 end
 
 function GreatVaultAddon_OnAddonCompartmentClick() 
@@ -586,8 +632,6 @@ function GreatVaultAddon_OnAddonCompartmentClick()
 		GreatVaultInfoFrame:Show()
 	end
 end
-
-
 
 
 function GreatVaultAddon:SetupColumns()
@@ -637,6 +681,20 @@ function GreatVaultAddon:SetupColumns()
 	end
 
 
+	local newheaderTableConfig = {}
+	local newheaderTable =  {}
+	local i = 0 
+	for key, _ in pairs(headerTableConfig) do
+		i = i + 1
+		newheaderTableConfig[i] =  headerTableConfig[key]
+		newheaderTable[i] =  headerTable[key]
+	end
+
+	headerTableConfig = newheaderTableConfig
+	headerTable = newheaderTable
+
+
+
 
 	local windowWidth = 0
 	for _, value in ipairs(headerTable) do
@@ -645,7 +703,4 @@ function GreatVaultAddon:SetupColumns()
 
 	--frame options
 	CONST_WINDOW_WIDTH = windowWidth + 30
-
-
-
 end
