@@ -1,7 +1,7 @@
 ---@diagnostic disable: deprecated
 ---@class GreatVaultAddon:AceAddon
-local GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVault", "AceEvent-3.0");
-local L = LibStub("AceLocale-3.0"):GetLocale("GreatVault")
+local GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0");
+local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 
 
 local PlayerName = UnitName("player")
