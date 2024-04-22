@@ -118,7 +118,12 @@
         "GreatVaultAddonOptionsPanel",
         "LFGListFrame",
         "LFGListApplicationViewer_UpdateResults",
-        "ChallengesFrame"
+        "ChallengesFrame",
+        "PlayerName",
+        "WeeklyRewardsFrame",
+        "ClassTalentFrame_LoadUI",
+        "ClassTalentFrame",
+        "ClassTalentImportExportMixin"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

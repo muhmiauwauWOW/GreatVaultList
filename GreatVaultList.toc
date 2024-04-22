@@ -8,7 +8,14 @@
 
 Libs/libs.xml
 
+
 locale/locale.xml
 Config.lua
 
-
+columns/activities.lua
+columns/character.lua
+columns/class.lua
+columns/iLevel.lua
+columns/keystone.lua
+columns/pvp.lua
+columns/raid.lua

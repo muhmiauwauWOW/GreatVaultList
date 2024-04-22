@@ -1,8 +1,12 @@
 ---@diagnostic disable: deprecated
 ---@class GreatVaultAddon:AceAddon
-local GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0");
+GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
+local _ = LibStub("Lodash"):Get()
 
+function GreatVaultAddon:GetLibs()
+    return L, _
+end 
 
 local PlayerName = UnitName("player")
 
@@ -66,147 +70,7 @@ local default_global_data = {
 local headerTable = {}
 local headerTableConfig  = {}
 
-
-
-local colConfig = {
-	["class"] = {
-		["index"] = 1,
-		["header"] = {key = "class", text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
-		["sort"] = {
-			["key"] = "class",
-			["store"] = "class",
-		},
-		["create"] = function(line)
-			local icon = line:CreateTexture("$parentClassIcon", "overlay")
-			icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
-			icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
-			line.icon = icon
-			line:AddFrameToHeaderAlignment(icon)
-			return line
-		end,
-		["refresh"] = function(line, data)
-			local L, R, T, B = unpack(CLASS_ICON_TCOORDS[data.class])
-			line.icon:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
-			return line
-		end
-	},
-	["character"] = {
-		["index"] = 2,
-		["header"] = {key = "character", text = L["Character"], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
-		["sort"] = {
-			["key"] = "character",
-			["store"] = "name",
-		},
-		["store"] = function(characterInfo)
-			local _, className = UnitClass("player")
-			characterInfo.name = PlayerName
-			characterInfo.class = className
-			characterInfo.realm = GetRealmName()
-			characterInfo.level = UnitLevel("player")
-
-			return characterInfo
-		end,
-		["refresh"] = function(line, data)
-			line.character.text = data.name
-			return line
-		end
-	},
-	["iLevel"] = {
-		["index"] = 3,
-		["header"] = {key = "iLevel", text = L["iLevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
-		["sort"] = {
-			["key"] = "iLevel",
-			["store"] = "averageItemLevel",
-		},
-		["OnShow"] = function(self, obj)
-			playerConfig =  obj["store"](playerConfig)
-		end,
-		["store"] = function(characterInfo)
-			local _, ilvl = GetAverageItemLevel();
-			characterInfo.averageItemLevel = ilvl
-			return characterInfo
-		end,
-		["refresh"] = function(line, data)
-			line.iLevel.text  = string.format("%.2f", data.averageItemLevel)
-			return line
-		end
-	},
-	["raid"] = {
-		["index"] = 4,
-		["header"] =  { key = "raid", text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
-		["subCols"] = 3,
-		["sort"] = {
-			["key"] = "raid",
-			["store"] = "averageItemLevel",
-		},
-		["store"] = function(characterInfo)
-			characterInfo.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
-			return characterInfo
-		end
-	},
-	["activities"] = {
-		["index"] = 7,
-		["header"] =  { key = "activities", text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
-		["subCols"] = 3,
-		["sort"] = {
-			["key"] = "activities",
-			["store"] = "averageItemLevel",
-		},
-		["store"] = function(characterInfo)
-			characterInfo.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
-			return characterInfo
-		end
-	},
-	["pvp"] = {
-		["index"] = 10,
-		["header"] =  { key = "pvp", text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
-		["subCols"] = 3,
-		["sort"] = {
-			["key"] = "pvp",
-			["store"] = "averageItemLevel",
-		},
-		["store"] = function(characterInfo)
-			characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
-			return characterInfo
-		end
-	},
-	["keystone"] = {
-		["index"] = 13,
-		["header"] =  { key = "keystone", text = L["Keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
-		["sort"] = {
-			["key"] = "keystone",
-			["store"] = "keystone",
-		},
-		["store"] = function(characterInfo)
-			local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
-			if activityID then 
-				characterInfo.keystone = {}
-				characterInfo.keystone.activityID = activityID
-				characterInfo.keystone.groupID = groupID
-				characterInfo.keystone.keystoneLevel = keystoneLevel
-			end
-
-			return characterInfo
-
-		end,
-		["refresh"] = function(line, data)
-			if not data.keystone then line.keystone.text = GRAY_FONT_COLOR_CODE .. "-" .. FONT_COLOR_CODE_CLOSE; return line end
-
-			local fullName = C_LFGList.GetActivityFullName(data.keystone.activityID)
-			local estart, _ = string.find(fullName, " %(")
-			local estart2, _ = string.find(fullName, " %- ")
-			if estart2 and estart2 < estart then
-				estart = estart2
-			end
-			fullName = string.sub(fullName, 1, estart-1)  
-			line.keystone.text = fullName .. " " .. data.keystone.keystoneLevel
-			return line
-		end
-	}
-}
-
-
-
+local colConfig = {}
 
 local function shallowcopy(orig)
     local orig_type = type(orig)
@@ -230,17 +94,23 @@ end
 
 function GreatVaultAddon:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
-	self:SetupColumns()
+	GreatVaultAddon.db.global.columns = GreatVaultAddon.db.global.columns or {}
 
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
-	WeeklyRewardExpirationWarningDialog:Hide()
+	--WeeklyRewardExpirationWarningDialog:Hide()
 
 	GreatVaultAddon:slashcommand()
-	GreatVaultAddon:createWindow()
+end
+
+function GreatVaultAddon:Initwindow()
+	self:SetupColumns()
+    GreatVaultAddon:createWindow()
 
 	C_Timer.After(3, function() 
 		GreatVaultAddon:SaveCharacterInfo(playerConfig)
 	end)
+
+	GreatVaultInfoFrame:Hide()
 	
 end
 
@@ -251,15 +121,7 @@ function GreatVaultAddon:slashcommand()
         if GreatVaultInfoFrame:IsShown() then 
             GreatVaultInfoFrame:Hide()
         else
-			if playerConfig then
-				for _, value in pairs(colConfig) do
-					if value["OnShow"] then 
-						local fn = value["OnShow"]
-						fn(self, value)
-					end
-				end
-				GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
-			end
+			
             GreatVaultInfoFrame:Show()
         end
 
@@ -298,6 +160,17 @@ function GreatVaultAddon:createWindow()
 
 	f:SetScript("OnMouseDown", nil)
 	f:SetScript("OnMouseUp", nil)
+	
+	f:SetScript("OnShow", function()
+		for _, value in pairs(colConfig) do
+			if value["OnShow"] then 
+				local fn = value["OnShow"]
+				fn(self, value)
+			end
+		end
+		GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+	end)
+
 
 	local LibWindow = LibStub("LibWindow-1.1")
 	LibWindow.RegisterConfig(f, GreatVaultAddon.db.global.greatvault_frame.position)
@@ -548,6 +421,7 @@ function GreatVaultAddon:SaveCharacterInfo(info)
 	if UnitLevel("player") < 70 then
 		return
 	end
+	
 	playerConfig = info or self:GetCharacterInfo()
 end
 
@@ -560,6 +434,7 @@ function GreatVaultAddon:GetCharacterInfo()
 			characterInfo = value
         end
     end
+
 
 	for _, value in pairs(colConfig) do
 		if value["store"] then 
@@ -625,12 +500,8 @@ function GreatVaultAddon:OnDisable()
 	]]
 end
 
-function GreatVaultAddon_OnAddonCompartmentClick() 
-	if GreatVaultInfoFrame:IsShown() then 
-		GreatVaultInfoFrame:Hide()
-	else
-		GreatVaultInfoFrame:Show()
-	end
+function GreatVaultAddon_OnAddonCompartmentClick()
+	GreatVaultInfoFrame:SetShown(not GreatVaultInfoFrame:IsShown()) 
 end
 
 
@@ -703,4 +574,66 @@ function GreatVaultAddon:SetupColumns()
 
 	--frame options
 	CONST_WINDOW_WIDTH = windowWidth + 30
+end
+
+
+
+
+
+
+
+
+
+
+
+
+GREATVAULTLIST_COLUMNS = {
+    OnEnable = function(self)
+	  	colConfig[self.key] = self.config
+
+		
+
+	  	if not  GreatVaultAddon.db.global.columns[self.key] then 
+			GreatVaultAddon.db.global.columns[self.key] = {
+				 ['key'] = self.key,
+				 ['order'] = self.config.index,
+				 ['active'] =true
+			}
+		else 
+			GreatVaultAddon.db.global.columns[self.key].active = true
+	  	end
+
+		self.loaded = true
+      	GREATVAULTLIST_COLUMNS__checkModules()
+    end,
+    OnDisable = function(self)
+
+		if not  GreatVaultAddon.db.global.columns[self.key] then 
+			GreatVaultAddon.db.global.columns[self.key].active = false
+		end
+
+
+        self.loaded = false
+        GREATVAULTLIST_COLUMNS__checkModules()
+    end 
+}
+
+
+function GREATVAULTLIST_COLUMNS__checkModules()
+    local modules = GreatVaultAddon:IterateModules()
+    local check = _.every(modules, function(module)
+        return module.loaded
+    end)
+
+    if GREATVAULTLIST_COLUMNS__ticker then
+        GREATVAULTLIST_COLUMNS__ticker:Cancel()
+	end
+
+    if check then
+        GREATVAULTLIST_COLUMNS__ticker = C_Timer.NewTimer(0.1, function()
+			GREATVAULTLIST_COLUMNS__ticker:Cancel()
+            print("cols loaded")
+			GreatVaultAddon:Initwindow()
+        end)
+    end
 end

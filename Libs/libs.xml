@@ -7,4 +7,5 @@
 	<Include file="AceLocale-3.0\AceLocale-3.0.xml" />
 	<Include file="AceDB-3.0\AceDB-3.0.xml"/>
 	<Include file="DF\load.xml"/>
+	<Include file="Lodash\Lodash.lua"/>
 </Ui>
