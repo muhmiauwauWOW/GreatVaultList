@@ -12,7 +12,6 @@ Column.config = {
         ["store"] = "name",
     },
     ["store"] = function(characterInfo)
-        print(characterInfo.name)
         local _, className = UnitClass("player")
         characterInfo.name = UnitName("player")
         characterInfo.class = className
