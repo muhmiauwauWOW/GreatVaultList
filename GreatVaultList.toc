@@ -4,7 +4,7 @@
 ## Version: 1.2.0
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
-## SavedVariables: GreatVaultDB
+## SavedVariables: GreatVaultListDB
 
 Libs/libs.xml
 

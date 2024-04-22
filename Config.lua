@@ -229,7 +229,7 @@ end
 
 
 function GreatVaultAddon:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("GreatVaultDB", default_global_data, true)
+    self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
 	self:SetupColumns()
 
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
