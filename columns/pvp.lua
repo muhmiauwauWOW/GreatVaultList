@@ -7,7 +7,7 @@ Column.key = "pvp"
 
 Column.config = {
     ["index"] = 10,
-    ["header"] =  { key = "pvp", text = L["PvP"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
+    ["header"] =  { key = "pvp", text = L["pvp"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = "pvp",

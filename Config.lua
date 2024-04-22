@@ -111,6 +111,9 @@ function GreatVaultAddon:Initwindow()
 	end)
 
 	GreatVaultInfoFrame:Hide()
+
+
+	
 	
 end
 
@@ -191,15 +194,16 @@ function GreatVaultAddon:createWindow()
 
 	
 	local openOptions = function()
+		DevTools_Dump(GreatVaultAddon.db.global.columns["class"])
 		if GreatVaultAddonOptionsPanel then 
 			GreatVaultAddonOptionsPanel:Show()
 			return
 		end
 
 
-		local heightSize = 200
+		local heightSize = 300
 
-		local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 300, heightSize, "GreatVault Options", "GreatVaultAddonOptionsPanel")
+		local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, "GreatVault Options", "GreatVaultAddonOptionsPanel")
 		optionsFrame:SetFrameStrata("DIALOG")
 		optionsFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 		optionsFrame:Show()
@@ -245,6 +249,19 @@ function GreatVaultAddon:createWindow()
 				name = "PVP",
 				desc = "PVP",
 			},
+			{--title bar icons position X
+				type = "range",
+				get = function() end,
+				set = function(self, fixedparam, value)
+					
+					
+				end,
+				min = -200,
+				max = 200,
+				step = 1,
+				name = "dddd",
+				desc = "dddd",
+			},
 		}
 	
 		--build the menu
@@ -255,6 +272,61 @@ function GreatVaultAddon:createWindow()
 		DetailsFramework:BuildMenu(optionsFrame, optionsTable, startX, startY, heightSize, false, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
 	
 
+
+
+		sectionFrame = optionsFrame
+		sectionFrame.AutoHideOptions = {}
+
+
+		local header1Label = _G.DetailsFramework:CreateLabel(sectionFrame, L["opt_column"])
+		local header3Label = _G.DetailsFramework:CreateLabel(sectionFrame,L["opt_enabled"])
+		local header4Label = _G.DetailsFramework:CreateLabel(sectionFrame, L["opt_position"])
+
+		
+		local right_start_at = 250
+		header1Label:SetPoint("topleft", sectionFrame, "topleft", right_start_at, startY)
+		header3Label:SetPoint("topright", sectionFrame, "topleft", right_start_at + 160, startY)
+		header4Label:SetPoint("topleft", sectionFrame, "topleft", right_start_at + 164, startY)
+
+		local columnLen = _.size(GreatVaultAddon.db.global.columns)
+		local i = 0
+		_.forEach(GreatVaultAddon.db.global.columns, function(column, key)
+			i = i + 1
+
+			local line = _G.CreateFrame("frame", nil, sectionFrame,"BackdropTemplate")
+			line:SetSize(302, 22)
+			line:SetPoint("topleft", sectionFrame, "topleft", right_start_at, startY + ((i) * -23) + 4)
+			DetailsFramework:ApplyStandardBackdrop(line)
+
+			local contextLabel = DetailsFramework:CreateLabel(line, L[key])
+			contextLabel:SetPoint("left", line, "left", 2, 0)
+			contextLabel.textsize = 10
+
+
+			local enabledCheckbox = DetailsFramework:NewSwitch(line, nil, nil, nil, 20, 20, nil, nil, false, nil, nil, nil, nil, options_switch_template)
+			enabledCheckbox:SetPoint("left", line, "left", 140, 1)
+			enabledCheckbox:SetAsCheckBox()
+			enabledCheckbox:SetFixedParameter(key)
+			enabledCheckbox:SetValue(GreatVaultAddon.db.global.columns[key].active)
+			enabledCheckbox.OnSwitch = function(self, contextId, value) 
+				GreatVaultAddon.db.global.columns[contextId].active = value
+			end
+
+
+			local positionSlider = DetailsFramework:CreateSlider(line, 138, 20, 1, columnLen, 1, columnLen, false, nil, nil, nil, options_slider_template)
+			positionSlider:SetPoint("left", line, "left", 164, 0)
+			positionSlider:SetFixedParameter(key)
+			positionSlider:SetValue(GreatVaultAddon.db.global.columns[key].position)
+			positionSlider:SetHook("OnValueChanged", function(self, contextId, value)
+				GreatVaultAddon.db.global.columns[contextId].position = value
+			end)
+
+			positionSlider.thumb:SetWidth(32)
+			
+		end)
+
+
+
 	end
 	
 	local optButton = DetailsFramework:CreateButton(f, openOptions, 130, 14, "options", 14)
@@ -263,10 +335,11 @@ function GreatVaultAddon:createWindow()
 	optButton.textcolor = "orange"
 
 	DetailsFramework:AddRoundedCornersToFrame(optButton, {
-		roundness = 5,
+		roundness = 0,
 		color = {.2, .2, .2, 0.98},
 		border_color = {.1, .1, .1, 0.834},
 	})
+
 end
 
 function GreatVaultAddon.ScrollFrame.create(f) 
@@ -589,29 +662,27 @@ end
 
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
-	  	colConfig[self.key] = self.config
 
-		
-
-	  	if not  GreatVaultAddon.db.global.columns[self.key] then 
+	  	if not  GreatVaultAddon.db.global.columns[self.key] then
 			GreatVaultAddon.db.global.columns[self.key] = {
-				 ['key'] = self.key,
-				 ['order'] = self.config.index,
-				 ['active'] =true
+				['key'] = self.key,
+				['active'] = true,
+				['position'] = self.config.index
 			}
-		else 
-			GreatVaultAddon.db.global.columns[self.key].active = true
 	  	end
+
+		if GreatVaultAddon.db.global.columns[self.key].active then 
+			colConfig[self.key] = self.config
+		end
 
 		self.loaded = true
       	GREATVAULTLIST_COLUMNS__checkModules()
     end,
     OnDisable = function(self)
 
-		if not  GreatVaultAddon.db.global.columns[self.key] then 
+		if not GreatVaultAddon.db.global.columns[self.key] then 
 			GreatVaultAddon.db.global.columns[self.key].active = false
 		end
-
 
         self.loaded = false
         GREATVAULTLIST_COLUMNS__checkModules()
@@ -632,7 +703,6 @@ function GREATVAULTLIST_COLUMNS__checkModules()
     if check then
         GREATVAULTLIST_COLUMNS__ticker = C_Timer.NewTimer(0.1, function()
 			GREATVAULTLIST_COLUMNS__ticker:Cancel()
-            print("cols loaded")
 			GreatVaultAddon:Initwindow()
         end)
     end

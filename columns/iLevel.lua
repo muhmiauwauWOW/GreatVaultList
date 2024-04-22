@@ -1,12 +1,12 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_iLevel", GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_ilevel", GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
 
-Column.key = "iLevel"
+Column.key = "ilevel"
 
 Column.config = {
     ["index"] = 3,
-    ["header"] = {key = "iLevel", text = L["iLevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
+    ["header"] = {key = "iLevel", text = L["ilevel"], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
     ["sort"] = {
         ["key"] = "iLevel",
         ["store"] = "averageItemLevel",

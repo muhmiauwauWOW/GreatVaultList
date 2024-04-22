@@ -7,7 +7,7 @@ Column.key = "activities"
 
 Column.config = {
     ["index"] = 7,
-    ["header"] =  { key = "activities", text = L["Activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["header"] =  { key = "activities", text = L["activities"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = "activities",

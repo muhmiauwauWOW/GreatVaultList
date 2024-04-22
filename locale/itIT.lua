@@ -4,10 +4,10 @@ if not L then
 	return
 end
 
-L["Activities"] = "Attività"
-L["Character"] = "Personaggio "
-L["iLevel"] = "Liv. Oggetto "
-L["Keystone"] = "Chiave del Potere"
-L["Mythic"] = "Mitico"
-L["Raids"] = "Incursioni "
+L["activities"] = "Attività"
+L["character"] = "Personaggio "
+L["ilevel"] = "Liv. Oggetto"
+L["keystone"] = "Chiave del Potere"
+L["mythic"] = "Mitico"
+L["raid"] = "Incursioni"
 

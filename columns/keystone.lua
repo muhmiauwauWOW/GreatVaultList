@@ -7,7 +7,7 @@ Column.key = "keystone"
 
 Column.config = {
     ["index"] = 13,
-    ["header"] =  { key = "keystone", text = L["Keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
+    ["header"] =  { key = "keystone", text = L["keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
     ["sort"] = {
         ["key"] = "keystone",
         ["store"] = "keystone",

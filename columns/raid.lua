@@ -6,7 +6,7 @@ Column.key = "raid"
 
 Column.config = {
     ["index"] = 4,
-    ["header"] =  { key = "raid", text = L["Raids"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["header"] =  { key = "raid", text = L["raid"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = "raid",
