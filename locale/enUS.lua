@@ -4,6 +4,10 @@ if not L then
 	return
 end
 
+
+L["addonName"] = "Great Vault List"
+
+
 L["class"] = "Class"
 L["character"] = "Character"
 L["raid"] = "Raids"
@@ -14,6 +18,17 @@ L["mythic"] = "Mythic"
 L["keystone"] = "Keystone"
 
 
+
+
+
+
+
+L["opt_windowname"] = "Great Vault List Options"
+
+L["opt_option"] = "Options"
+
+L["opt_lines_name"] = "Lines"
+L["opt_lines_desc"] = "Amount of lines to display"
 
 L["opt_column"] = "Column"
 L["opt_enabled"] = "Enabled"

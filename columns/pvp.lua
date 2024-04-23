@@ -1,17 +1,15 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_pvp", GREATVAULTLIST_COLUMNS)
+local ColumKey = "pvp"
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
-local CONST_SCROLL_LINE_HEIGHT = 20
-
-Column.key = "pvp"
-
+Column.key = ColumKey
 Column.config = {
     ["index"] = 10,
-    ["header"] =  { key = "pvp", text = L["pvp"], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
-        ["key"] = "pvp",
-        ["store"] = "averageItemLevel",
+        ["key"] = ColumKey,
+        ["store"] = ColumKey,
     },
     ["store"] = function(characterInfo)
         characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)

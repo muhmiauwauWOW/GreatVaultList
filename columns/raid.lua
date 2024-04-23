@@ -1,15 +1,14 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_raid", GREATVAULTLIST_COLUMNS)
+local ColumKey = "raid"
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
-
-Column.key = "raid"
-
+Column.key = ColumKey
 Column.config = {
     ["index"] = 4,
-    ["header"] =  { key = "raid", text = L["raid"], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
-        ["key"] = "raid",
+        ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
     ["store"] = function(characterInfo)

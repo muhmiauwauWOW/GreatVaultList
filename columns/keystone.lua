@@ -1,16 +1,14 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_keystone", GREATVAULTLIST_COLUMNS)
+local ColumKey = "keystone"
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
-local CONST_SCROLL_LINE_HEIGHT = 20
-
-Column.key = "keystone"
-
+Column.key = ColumKey
 Column.config = {
     ["index"] = 13,
-    ["header"] =  { key = "keystone", text = L["keystone"], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
     ["sort"] = {
-        ["key"] = "keystone",
-        ["store"] = "keystone",
+        ["key"] = ColumKey,
+        ["store"] = ColumKey,
     },
     ["store"] = function(characterInfo)
         local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()

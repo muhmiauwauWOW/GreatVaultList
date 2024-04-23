@@ -1,16 +1,15 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_class", GREATVAULTLIST_COLUMNS)
+local ColumKey = "class"
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
 local CONST_SCROLL_LINE_HEIGHT = 20
-
-Column.key = "class"
-
+Column.key = ColumKey
 Column.config = {
     ["index"] = 1,
-    ["header"] = {key = "class", text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
+    ["header"] = {key = ColumKey, text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
     ["sort"] = {
-        ["key"] = "class",
-        ["store"] = "class",
+        ["key"] = ColumKey,
+        ["store"] = ColumKey,
     },
     ["create"] = function(line)
         local icon = line:CreateTexture("$parentClassIcon", "overlay")

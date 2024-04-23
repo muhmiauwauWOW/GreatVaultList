@@ -1,12 +1,11 @@
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_character", GREATVAULTLIST_COLUMNS)
+local ColumKey = "character"
+local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
-
-Column.key = "character"
-
+Column.key = ColumKey
 Column.config = {
     ["index"] = 2,
-    ["header"] = {key = "character", text = L["character"], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
+    ["header"] = {key = ColumKey, text = L[ColumKey], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
     ["sort"] = {
         ["key"] = "character",
         ["store"] = "name",
@@ -21,7 +20,7 @@ Column.config = {
         return characterInfo
     end,
     ["refresh"] = function(line, data)
-        line.character.text = data.name
+        line[ColumKey].text = data.name
         return line
     end
 }

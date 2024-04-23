@@ -11,8 +11,6 @@ end
 local PlayerName = UnitName("player")
 
 
-
-
 local playerConfig = nil
 local sortConfig  = {}
 local viewTypes = {}
@@ -20,8 +18,7 @@ local viewTypes = {}
 --frame options
 local CONST_WINDOW_WIDTH = 0
 local CONST_SCROLL_LINE_HEIGHT = 20
-local CONST_SCROLL_LINE_AMOUNT = 12
-local CONST_WINDOW_HEIGHT = CONST_SCROLL_LINE_AMOUNT * CONST_SCROLL_LINE_HEIGHT + 70
+local CONST_WINDOW_HEIGHT = 0
 
 local backdrop_color = {.2, .2, .2, 0.2}
 local backdrop_color_on_enter = {.8, .8, .8, 0.4}
@@ -55,7 +52,8 @@ local default_global_data = {
 	global = {
 		greatvault_frame = {
 			scale = 1,
-			position = {}
+			position = {},
+			lines = 12
 		},
 		characters = {},
 		view = {
@@ -96,6 +94,8 @@ function GreatVaultAddon:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
 	GreatVaultAddon.db.global.columns = GreatVaultAddon.db.global.columns or {}
 
+	CONST_WINDOW_HEIGHT = GreatVaultAddon.db.global.greatvault_frame.lines * CONST_SCROLL_LINE_HEIGHT + 70
+
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	--WeeklyRewardExpirationWarningDialog:Hide()
 
@@ -127,17 +127,6 @@ function GreatVaultAddon:slashcommand()
 			
             GreatVaultInfoFrame:Show()
         end
-
-		if msg == "raid" then 
-			GreatVaultAddon.db.global.view.raid = not GreatVaultAddon.db.global.view.raid
-			C_UI.Reload()
-		elseif msg == "activities" then
-			GreatVaultAddon.db.global.view.activities = not GreatVaultAddon.db.global.view.activities
-			C_UI.Reload()
-		elseif  msg == "pvp" then
-			GreatVaultAddon.db.global.view.pvp = not GreatVaultAddon.db.global.view.pvp
-			C_UI.Reload()
-		end
 	end 
 end
 
@@ -157,7 +146,7 @@ end
 
 function GreatVaultAddon:createWindow() 
 
-	local f = DetailsFramework:CreateSimplePanel(UIParent, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT, "GreatVault", "GreatVaultInfoFrame")
+	local f = DetailsFramework:CreateSimplePanel(UIParent, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT, L["addonName"], "GreatVaultInfoFrame")
 	f:SetFrameStrata("HIGH")
 	f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
@@ -186,27 +175,38 @@ function GreatVaultAddon:createWindow()
 	local statusBar = DetailsFramework:CreateStatusBar(f)
 	statusBar.text = statusBar:CreateFontString(nil, "overlay", "GameFontNormal")
 	statusBar.text:SetPoint("left", statusBar, "left", 5, 0)
-	statusBar.text:SetText("By Muhmiauwau | Built with Details! Framework")
+	statusBar.text:SetText("By muhmiauwau | Built with Details! Framework")
 	DetailsFramework:SetFontSize(statusBar.text, 11)
 	DetailsFramework:SetFontColor(statusBar.text, "gray")
 
 	GreatVaultAddon.ScrollFrame.create(f) 
 
 	
-	local openOptions = function()
-		DevTools_Dump(GreatVaultAddon.db.global.columns["class"])
+	local openOptions2 = function()
 		if GreatVaultAddonOptionsPanel then 
 			GreatVaultAddonOptionsPanel:Show()
 			return
 		end
 
 
-		local heightSize = 300
+		local loadedColumms = _.filter(GreatVaultAddon.db.global.columns, function (col)
+			return (col.loaded == true)
+		end)
 
-		local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, "GreatVault Options", "GreatVaultAddonOptionsPanel")
+
+
+		local columnLen = _.size(loadedColumms)
+
+
+		local heightSize = (columnLen * 23) + 65
+
+		local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, L["opt_windowname"], "GreatVaultAddonOptionsPanel")
 		optionsFrame:SetFrameStrata("DIALOG")
 		optionsFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 		optionsFrame:Show()
+
+		local scaleBar = DetailsFramework:CreateScaleBar(optionsFrame, GreatVaultAddon.db.global.greatvault_frame)
+		optionsFrame:SetScale(GreatVaultAddon.db.global.greatvault_frame.scale)
 
 		local bUseSolidColor = true
 		DetailsFramework:ApplyStandardBackdrop(optionsFrame, bUseSolidColor)
@@ -223,51 +223,31 @@ function GreatVaultAddon:createWindow()
 		end
 
 		local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, "Reload UI")
-		reloadSettingsButton:SetPoint("bottomleft", optionsFrame, "bottomleft", 5, 5)
+		reloadSettingsButton:SetPoint("bottomleft", optionsFrame, "bottomleft", 15, 15)
 		reloadSettingsButton:SetTemplate(options_button_template)
 		
 		local optionsTable = {
-			{type = "label", get = function() return "Columns" end, text_template = subSectionTitleTextTemplate},
+			{type = "label", get = function() return L["opt_option"] end},
 			{
-				type = "toggle",
-				get = function() return GreatVaultAddon.db.global.view.raid end,
-				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.raid = not GreatVaultAddon.db.global.view.raid end,
-				name = "Raid",
-				desc = "Raid",
-			},
-			{
-				type = "toggle",
-				get = function() return GreatVaultAddon.db.global.view.activities end,
-				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.activities = not GreatVaultAddon.db.global.view.activities end,
-				name = "Activities",
-				desc = "Activities",
-			},
-			{
-				type = "toggle",
-				get = function() return GreatVaultAddon.db.global.view.pvp end,
-				set = function(self, fixedparam, value) GreatVaultAddon.db.global.view.pvp = not GreatVaultAddon.db.global.view.pvp end,
-				name = "PVP",
-				desc = "PVP",
-			},
-			{--title bar icons position X
 				type = "range",
-				get = function() end,
-				set = function(self, fixedparam, value)
-					
-					
+				get = function()
+					return GreatVaultAddon.db.global.greatvault_frame.lines
 				end,
-				min = -200,
-				max = 200,
+				set = function(self, fixedparam, value)
+					GreatVaultAddon.db.global.greatvault_frame.lines = value
+				end,
+				min = 1,
+				max = 50,
 				step = 1,
-				name = "dddd",
-				desc = "dddd",
+				name = L["opt_lines_name"],
+				desc = L["opt_lines_desc"],
 			},
 		}
 	
 		--build the menu
 		optionsTable.always_boxfirst = true
 
-		local startX = 10
+		local startX = 15
 		local startY = -32
 		DetailsFramework:BuildMenu(optionsFrame, optionsTable, startX, startY, heightSize, false, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
 	
@@ -288,10 +268,12 @@ function GreatVaultAddon:createWindow()
 		header3Label:SetPoint("topright", sectionFrame, "topleft", right_start_at + 160, startY)
 		header4Label:SetPoint("topleft", sectionFrame, "topleft", right_start_at + 164, startY)
 
-		local columnLen = _.size(GreatVaultAddon.db.global.columns)
+		
 		local i = 0
-		_.forEach(GreatVaultAddon.db.global.columns, function(column, key)
+		_.forEach(loadedColumms, function(column)
 			i = i + 1
+
+			local key = column.key
 
 			local line = _G.CreateFrame("frame", nil, sectionFrame,"BackdropTemplate")
 			line:SetSize(302, 22)
@@ -328,6 +310,10 @@ function GreatVaultAddon:createWindow()
 
 
 	end
+
+	function openOptions()
+		GreatVaultAddonOptions:toggle()
+	end
 	
 	local optButton = DetailsFramework:CreateButton(f, openOptions, 130, 14, "options", 14)
 	optButton:SetPoint("bottomright", f, "bottomright", -10, 4)
@@ -344,9 +330,9 @@ end
 
 function GreatVaultAddon.ScrollFrame.create(f) 
 	GreatVaultAddon.ScrollFrame.setHeader(f)
-	local scrollFrame = DetailsFramework:CreateScrollBox(f, "$parentScroll", GreatVaultAddon.ScrollFrame.RefreshScroll, GreatVaultAddon.db.global.characters, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT-70, CONST_SCROLL_LINE_AMOUNT, CONST_SCROLL_LINE_HEIGHT)
+	local scrollFrame = DetailsFramework:CreateScrollBox(f, "$parentScroll", GreatVaultAddon.ScrollFrame.RefreshScroll, GreatVaultAddon.db.global.characters, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT-70, GreatVaultAddon.db.global.greatvault_frame.lines, CONST_SCROLL_LINE_HEIGHT)
 	DetailsFramework:ReskinSlider(scrollFrame)
-	scrollFrame:CreateLines(GreatVaultAddon.ScrollFrame.CreateScrollLine, CONST_SCROLL_LINE_AMOUNT)
+	scrollFrame:CreateLines(GreatVaultAddon.ScrollFrame.CreateScrollLine, GreatVaultAddon.db.global.greatvault_frame.lines)
 	scrollFrame:SetPoint("topleft", f.Header, "bottomleft", -1, -1)
 	scrollFrame:SetPoint("topright", f.Header, "bottomright", 0, -1)
     scrollFrame:Refresh()
@@ -394,10 +380,8 @@ function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLine
 			end
 
 			for key, items in pairs(viewTypes) do
-				if GreatVaultAddon.db.global.view[key] then
-					for idx, col in ipairs(items) do
-						line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.lastUpdated)
-					end
+				for idx, col in ipairs(items) do
+					line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.lastUpdated)
 				end
 			end
 
@@ -578,20 +562,39 @@ function GreatVaultAddon_OnAddonCompartmentClick()
 end
 
 
+
+
 function GreatVaultAddon:SetupColumns()
 
+	CONST_WINDOW_WIDTH = 300
 	viewTypes = {}
 	headerTable = {}
 	headerTableConfig = {}
 
-	local colConfig2 = {}
+	local columnsTable = GreatVaultAddon.db.global.columns
+	columnsTable = _.sortBy(columnsTable, function(a) 
+		return a.position 
+	end)
 
-	for key, value in pairs(colConfig) do
-		colConfig2[value.index] = value
-	end
+	table.sort(columnsTable, function (a, b)
+		if a.position == b.position then
+			return  a.key < b.key 
+		end
+		return a.position < b.position 
+	end)
 
-	for k, value in pairs(colConfig2) do
-		local key = value.sort.key
+	local size = 1
+
+	_.forEach(columnsTable, function(col) 
+		if not col.active then return end
+
+		local colstart = size 
+		size = size + col.size
+
+		local key = col.key
+		local value = colConfig[col.key]
+
+		if not value then return end
 
 		-- sortConfig
 		if value.sort then
@@ -599,31 +602,34 @@ function GreatVaultAddon:SetupColumns()
 		end
 
 		if value.subCols then 
-			if self.db.global.view[key] then 
-				if value.header then
-					viewTypes[key] = {}
-					for idx = 1, value.subCols, 1 do
-						local opt = shallowcopy(value.header)
-						opt.key = key .. idx
-						if idx > 1 then
-							opt.text = ""
-						end
-						local pos = k + idx - 1
-						table.insert(headerTable, pos, opt)
-						table.insert(headerTableConfig, pos, opt.key)
-						table.insert(viewTypes[key], opt.key)
+			if value.header then
+				viewTypes[key] = {}
+				for idx = 1, value.subCols, 1 do
+					local opt = shallowcopy(value.header)
+					opt.key = key .. idx
+					if idx > 1 then
+						opt.text = ""
 					end
+					local pos = colstart + idx - 1
+					table.insert(headerTable, pos, opt)
+					table.insert(headerTableConfig, pos, opt.key)
+					table.insert(viewTypes[key], opt.key)
 				end
 			end
 		else
 			-- headerTable
 			if value.header then
-				table.insert(headerTable, value.index, value.header)
-				table.insert(headerTableConfig, value.index, key)
+				table.insert(headerTable, colstart, value.header)
+				table.insert(headerTableConfig, colstart, col.key)
 			end
 		end
-	end
 
+
+	--	table.insert(headerTable, colstart, colConfig[col.key].header)
+	--	table.insert(headerTableConfig, colstart, col.key)
+
+	
+	end)
 
 	local newheaderTableConfig = {}
 	local newheaderTable =  {}
@@ -639,7 +645,6 @@ function GreatVaultAddon:SetupColumns()
 
 
 
-
 	local windowWidth = 0
 	for _, value in ipairs(headerTable) do
 		windowWidth = windowWidth + value.width
@@ -647,13 +652,9 @@ function GreatVaultAddon:SetupColumns()
 
 	--frame options
 	CONST_WINDOW_WIDTH = windowWidth + 30
+
+
 end
-
-
-
-
-
-
 
 
 
@@ -663,13 +664,20 @@ end
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
 
-	  	if not  GreatVaultAddon.db.global.columns[self.key] then
-			GreatVaultAddon.db.global.columns[self.key] = {
-				['key'] = self.key,
-				['active'] = true,
-				['position'] = self.config.index
-			}
-	  	end
+		GreatVaultAddon.db.global.columns[self.key] = {
+			['key'] = self.key,
+			['active'] = GreatVaultAddon.db.global.columns[self.key].active,
+			['position'] = GreatVaultAddon.db.global.columns[self.key].position or self.config.index,
+			['size'] = self.config.subCols or 1
+		}
+
+		if not _.isBoolean(GreatVaultAddon.db.global.columns[self.key].active) then
+			GreatVaultAddon.db.global.columns[self.key].active =  true
+		end
+
+
+
+
 
 		if GreatVaultAddon.db.global.columns[self.key].active then 
 			colConfig[self.key] = self.config
@@ -683,6 +691,7 @@ GREATVAULTLIST_COLUMNS = {
 		if not GreatVaultAddon.db.global.columns[self.key] then 
 			GreatVaultAddon.db.global.columns[self.key].active = false
 		end
+
 
         self.loaded = false
         GREATVAULTLIST_COLUMNS__checkModules()
@@ -703,6 +712,27 @@ function GREATVAULTLIST_COLUMNS__checkModules()
     if check then
         GREATVAULTLIST_COLUMNS__ticker = C_Timer.NewTimer(0.1, function()
 			GREATVAULTLIST_COLUMNS__ticker:Cancel()
+
+
+			GreatVaultAddon.db.global.columns = _.forEach(GreatVaultAddon.db.global.columns, function(col)
+				col.loaded = false
+				return col
+			end)
+			for name, module in GreatVaultAddon:IterateModules() do
+				GreatVaultAddon.db.global.columns[module.key].loaded = true
+			end
+
+--[[
+			local colConfigTemp = {}
+			local columsTemp = {}
+			for name, module in GreatVaultAddon:IterateModules() do
+				colConfigTemp[module.key] = colConfig[module.key]
+				columsTemp = GreatVaultAddon.db.global.columns[module.key]
+			end
+
+			GreatVaultAddon.db.global.columns= columsTemp
+			colConfig = colConfigTemp
+--]]
 			GreatVaultAddon:Initwindow()
         end)
     end
