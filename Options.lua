@@ -138,7 +138,7 @@ end
 
 
 function GreatVaultAddonOptions:toggle()
-    print("open")
+
 
     if GreatVaultAddonOptionsPanel then
         GreatVaultAddonOptionsPanel:SetShown(not GreatVaultAddonOptionsPanel:IsShown()) 

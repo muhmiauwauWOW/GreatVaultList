@@ -664,20 +664,17 @@ end
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
 
-		GreatVaultAddon.db.global.columns[self.key] = {
-			['key'] = self.key,
-			['active'] = GreatVaultAddon.db.global.columns[self.key].active,
-			['position'] = GreatVaultAddon.db.global.columns[self.key].position or self.config.index,
-			['size'] = self.config.subCols or 1
-		}
+		GreatVaultAddon.db.global.columns[self.key] = GreatVaultAddon.db.global.columns[self.key] or {}
+
+		GreatVaultAddon.db.global.columns[self.key].key = self.key
+		GreatVaultAddon.db.global.columns[self.key].size =  self.config.subCols or 1
+		--GreatVaultAddon.db.global.columns[self.key].active = GreatVaultAddon.db.global.columns[self.key].active or true
+		GreatVaultAddon.db.global.columns[self.key].position = GreatVaultAddon.db.global.columns[self.key].position or self.config.index
+
 
 		if not _.isBoolean(GreatVaultAddon.db.global.columns[self.key].active) then
 			GreatVaultAddon.db.global.columns[self.key].active =  true
 		end
-
-
-
-
 
 		if GreatVaultAddon.db.global.columns[self.key].active then 
 			colConfig[self.key] = self.config
@@ -686,7 +683,7 @@ GREATVAULTLIST_COLUMNS = {
 		self.loaded = true
       	GREATVAULTLIST_COLUMNS__checkModules()
     end,
-    OnDisable = function(self)
+	OnDisable = function(self)
 
 		if not GreatVaultAddon.db.global.columns[self.key] then 
 			GreatVaultAddon.db.global.columns[self.key].active = false
