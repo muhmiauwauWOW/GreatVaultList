@@ -5,6 +5,8 @@
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
 ## SavedVariables: GreatVaultListDB
+## X-Curse-Project-ID: 965814
+## X-Wago-ID: nGvpV56x
 
 Libs/libs.xml
 
