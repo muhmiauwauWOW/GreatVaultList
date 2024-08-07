@@ -436,6 +436,7 @@ end
 local function GetWeeklyQuestResetTime()
 	local now = time()
 	local region = GetCurrentRegion()
+	if region == 72 then region = 3 end -- fix for ptr
 	local regionDayOffset = {{ 2, 1, 0, 6, 5, 4, 3 }, { 4, 3, 2, 1, 0, 6, 5 }, { 3, 2, 1, 0, 6, 5, 4 }, { 4, 3, 2, 1, 0, 6, 5 }, { 4, 3, 2, 1, 0, 6, 5 } }
 	local nextDailyReset = GetQuestResetTime()
 	local utc = date("!*t", now + nextDailyReset)
