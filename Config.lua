@@ -408,9 +408,9 @@ end
 function GreatVaultAddon:UpdateCharacterInfo(pConfig)
 	if pConfig then
 		pConfig.lastUpdate = time()
-	--	pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
-	--	pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
-	--	pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+		pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
+		pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
+		pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
 		return pConfig
 	end
 end
@@ -426,31 +426,14 @@ end
 
 
 function GreatVaultAddon:OnEnable()
+	print("lala")
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-	
-	--[[
-	for _, value in pairs(colConfig) do
-		if value["OnEnable"] then 
-			local fn = value["OnEnable"]
-			fn(self, value) 
-		end
-	end
-	]]
 end
 
 function GreatVaultAddon:OnDisable()
 	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-
-	--[[
-	for _, value in pairs(colConfig) do
-		if value["OnDisable"] then 
-			local fn = value["OnDisable"]
-			fn(self, value) 
-		end
-	end
-	]]
 end
 
 function GreatVaultAddon_OnAddonCompartmentClick()
@@ -519,11 +502,6 @@ function GreatVaultAddon:SetupColumns()
 				table.insert(headerTableConfig, colstart, col.key)
 			end
 		end
-
-
-	--	table.insert(headerTable, colstart, colConfig[col.key].header)
-	--	table.insert(headerTableConfig, colstart, col.key)
-
 	
 	end)
 
