@@ -390,24 +390,7 @@ function GreatVaultAddon:GetCharacterInfo()
 end
 
 
-function GreatVaultAddon:UpdateCharacterInfo(pConfig)
-	if pConfig then
-		pConfig.lastUpdate = time()
-		pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
-		pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
-		pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
-		return pConfig
-	end
-end
 
-
-function GreatVaultAddon:WEEKLY_REWARDS_UPDATE(event)
-	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
-end
-
-function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
-	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
-end
 
 function GreatVaultAddon:OnEnable()
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
