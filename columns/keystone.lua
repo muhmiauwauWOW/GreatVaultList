@@ -17,6 +17,8 @@ Column.config = {
             characterInfo.keystone.activityID = activityID
             characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
+        else
+            characterInfo.keystone = nil
         end
 
         return characterInfo
