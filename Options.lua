@@ -5,10 +5,6 @@ local L, _ = GreatVaultAddon:GetLibs()
 GreatVaultAddonOptions = {}
 
 
-
-print("lol")
-
-
 function GreatVaultAddonOptions:createOptions()
     
 
