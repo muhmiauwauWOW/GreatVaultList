@@ -184,7 +184,7 @@ function GreatVaultAddon:createWindow()
 	
 	local options_button_template = DetailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE")
 
-	function openVault()
+	local function openVault()
 		WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
 	end
 
@@ -192,7 +192,7 @@ function GreatVaultAddon:createWindow()
 	vaultButton:SetPoint("bottomright", f, "bottomright", -150, 4)
 	vaultButton:SetTemplate(options_button_template)
 
-	function openOptions()
+	local function openOptions()
 		GreatVaultAddonOptions:toggle()
 	end
 	
@@ -233,6 +233,24 @@ function GreatVaultAddon.ScrollFrame.setHeader(f)
     f.Header.columnSelected = 2
 end
 
+
+function GreatVaultAddon.ScrollFrame.setEmptyFieldStr(obj, col, key,  idx)
+	local str = ""
+
+	if col and idx then
+		str = _.get(colConfig, {key, "emptyStr", idx})
+	else 
+		str = _.get(colConfig, {col, "emptyStr"})
+	end
+
+	if not str then return obj end
+
+	obj[col].text = GRAY_FONT_COLOR_CODE .. str  ..  FONT_COLOR_CODE_CLOSE
+	return obj
+
+end
+
+
 function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLines) 
 	for i = 1, totalLines do
 		local index = i + offset
@@ -245,22 +263,27 @@ function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLine
                 line:SetBackdropColor(unpack(backdrop_color))
             end
 
-			for key, value in pairs(colConfig) do
+			for col, value in pairs(colConfig) do
 				if value["refresh"] then 
 					local lineFn = value["refresh"]
 					line = lineFn(line, data) 
+					if not line[col].text then
+					 	line = GreatVaultAddon.ScrollFrame.setEmptyFieldStr(line, col)
+					end
 				end
 			end
 
 			for key, items in pairs(viewTypes) do
+				--print(data.name, key)
 				for idx, col in ipairs(items) do
 					local colData = _.get(data, {key, idx})
 					if colData then 
-						line[col].text = GreatVaultAddon:GetVault(colData, data.lastUpdated)
-					else 
-						-- fix for no data in table
-						line[col].text = GRAY_FONT_COLOR_CODE .. "no data"  ..  FONT_COLOR_CODE_CLOSE
+						line[col].text = GreatVaultAddon:GetVault(colData, data.lastUpdated, key, idx)
 					end
+
+					if not line[col].text then 
+						line = GreatVaultAddon.ScrollFrame.setEmptyFieldStr(line, col, key,idx)
+					end 
 				end
 			end
 
@@ -323,12 +346,12 @@ local function GetWeeklyQuestResetTime()
 	return reset
 end
 
-function GreatVaultAddon:GetVault(activity, lastUpdated)
+function GreatVaultAddon:GetVault(activity, lastUpdated, key, idx)
 	if not lastUpdated then
 		lastUpdated = time()
 	end
 
-	local status = ""
+	local status = nil
 	local activityThisWeek = lastUpdated > GetWeeklyQuestResetTime() - 604800
 	local difficulty
 
@@ -342,13 +365,6 @@ function GreatVaultAddon:GetVault(activity, lastUpdated)
 		end
 
 		status = GREEN_FONT_COLOR_CODE .. difficulty .. FONT_COLOR_CODE_CLOSE
-	else
-		local progress = 0
-		if activityThisWeek then
-			progress = activity.progress
-		end
-
-		status = GRAY_FONT_COLOR_CODE .. progress .. '/' .. activity.threshold  ..  FONT_COLOR_CODE_CLOSE
 	end
 
     return status
@@ -389,7 +405,24 @@ function GreatVaultAddon:GetCharacterInfo()
 	return characterInfo
 end
 
+function GreatVaultAddon:UpdateCharacterInfo(pConfig)
+	if pConfig then
+		pConfig.lastUpdate = time()
+	--	pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
+	--	pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
+	--	pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+		return pConfig
+	end
+end
 
+
+function GreatVaultAddon:WEEKLY_REWARDS_UPDATE(event)
+	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
+end
+
+function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
+	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
+end
 
 
 function GreatVaultAddon:OnEnable()

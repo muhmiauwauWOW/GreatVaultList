@@ -15,13 +15,13 @@ Column.config = {
         local icon = line:CreateTexture("$parentClassIcon", "overlay")
         icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
         icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
-        line.icon = icon
+        line[ColumKey] = icon
         line:AddFrameToHeaderAlignment(icon)
         return line
     end,
     ["refresh"] = function(line, data)
         local L, R, T, B = unpack(CLASS_ICON_TCOORDS[data.class])
-        line.icon:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
+        line[ColumKey]:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
         return line
     end
 }

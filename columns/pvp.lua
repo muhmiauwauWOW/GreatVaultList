@@ -11,6 +11,11 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
+    ['emptyStr'] = {
+        "0/1250",
+        "0/2500",
+        "0/5000"
+    },
     ["store"] = function(characterInfo)
         characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
         return characterInfo

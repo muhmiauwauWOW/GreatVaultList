@@ -11,6 +11,11 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
+    ['emptyStr'] = {
+        "0/2",
+        "0/4",
+        "0/6"
+    },
     ["store"] = function(characterInfo)
         characterInfo.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
         return characterInfo

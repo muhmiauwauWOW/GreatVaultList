@@ -9,7 +9,8 @@ Column.config = {
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
-    },
+    }, 
+    ['emptyStr'] = "-",
     ["store"] = function(characterInfo)
         local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
         if activityID then 
@@ -25,7 +26,7 @@ Column.config = {
 
     end,
     ["refresh"] = function(line, data)
-        if not data.keystone then line.keystone.text = GRAY_FONT_COLOR_CODE .. "-" .. FONT_COLOR_CODE_CLOSE; return line end
+        if not data.keystone then line[ColumKey].text = data.keystone; return line end
 
         local fullName = C_LFGList.GetActivityFullName(data.keystone.activityID)
         local estart, _ = string.find(fullName, " %(")
@@ -34,7 +35,7 @@ Column.config = {
             estart = estart2
         end
         fullName = string.sub(fullName, 1, estart-1)  
-        line.keystone.text = fullName .. " " .. data.keystone.keystoneLevel
+        line[ColumKey].text = fullName .. " " .. data.keystone.keystoneLevel
         return line
     end
 }
