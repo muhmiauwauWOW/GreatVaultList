@@ -90,11 +90,9 @@
         "ITEM_QUALITY_COLORS",
         "CooldownFrame_Set",
         "UISpecialFrames",
-        "UnitAura",
         "HelpPlate_Show",
         "HelpPlate_Hide",
         "HelpPlate_IsShowing",
-        "GetItemStats",
         "ColorPickerFrame",
         "InterfaceOptionsFrame_OpenToCategory",
         "DEFAULT_CHAT_FRAME",
@@ -259,5 +257,20 @@
     "Lua.diagnostics.disable": [
         "undefined-field",
         "inject-field"
+    ],
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.workspace.library": [
+        "$USERPROFILE\\.vscode\\extensions\\ketho.wow-api-0.15.8\\Annotations"
     ]
 }

@@ -20,6 +20,8 @@ L["keystone"] = "Keystone"
 
 
 
+L["OpenVault"] = "Open Vault"
+L["Options"] = "Options"
 
 
 
