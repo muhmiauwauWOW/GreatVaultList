@@ -254,7 +254,13 @@ function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLine
 
 			for key, items in pairs(viewTypes) do
 				for idx, col in ipairs(items) do
-					line[col].text = GreatVaultAddon:GetVault(data[key][idx], data.lastUpdated)
+					local colData = _.get(data, {key, idx})
+					if colData then 
+						line[col].text = GreatVaultAddon:GetVault(colData, data.lastUpdated)
+					else 
+						-- fix for no data in table
+						line[col].text = GRAY_FONT_COLOR_CODE .. "no data"  ..  FONT_COLOR_CODE_CLOSE
+					end
 				end
 			end
 
