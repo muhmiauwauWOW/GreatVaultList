@@ -426,7 +426,6 @@ end
 
 
 function GreatVaultAddon:OnEnable()
-	print("lala")
 	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
 	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
 end
