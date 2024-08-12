@@ -7,12 +7,9 @@ GreatVaultAddonOptions = {}
 
 function GreatVaultAddonOptions:createOptions()
     
-
-
     local loadedColumms = _.filter(GreatVaultAddon.db.global.columns, function (col)
         return (col.loaded == true)
     end)
-
 
 
     local columnLen = _.size(loadedColumms)

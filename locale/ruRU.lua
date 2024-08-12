@@ -13,7 +13,6 @@ L["raid"] = "Рейды"
 L["activities"] = "Ключи М+"
 L["pvp"] = "PvP"
 L["ilevel"] = "ilvl"
-L["mythic"] = "М+"
 L["keystone"] = "Ключ"
 
 L["OpenVault"] = "Открыть Хранилище"
