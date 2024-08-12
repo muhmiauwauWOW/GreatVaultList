@@ -1,8 +1,10 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("GreatVaultList", "itIT", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("GreatVaultList", "itIT")
 
 if not L then
 	return
 end
+
+
 
 L["activities"] = "Attività"
 L["character"] = "Personaggio "

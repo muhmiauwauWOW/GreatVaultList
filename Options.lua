@@ -36,13 +36,13 @@ function GreatVaultAddonOptions:createOptions()
     local options_switch_template = DetailsFramework:GetTemplate("switch", "OPTIONS_CHECKBOX_TEMPLATE")
     local options_slider_template = DetailsFramework:GetTemplate("slider", "OPTIONS_SLIDER_TEMPLATE")
     local options_button_template = DetailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE")
-    local subSectionTitleTextTemplate = DetailsFramework:GetTemplate("font", "ORANGE_FONT_TEMPLATE")
+    --local subSectionTitleTextTemplate = DetailsFramework:GetTemplate("font", "ORANGE_FONT_TEMPLATE")
     
     local reloadSettings = function()
         C_UI.Reload()
     end
 
-    local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, "Reload UI")
+    local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, L["opt_btn_reload"])
     reloadSettingsButton:SetPoint("bottomleft", optionsFrame, "bottomleft", 15, 15)
     reloadSettingsButton:SetTemplate(options_button_template)
     
@@ -74,7 +74,7 @@ function GreatVaultAddonOptions:createOptions()
 
 
 
-    sectionFrame = optionsFrame
+    local sectionFrame = optionsFrame
     sectionFrame.AutoHideOptions = {}
 
 
@@ -134,13 +134,9 @@ end
 
 
 function GreatVaultAddonOptions:toggle()
-
-
     if GreatVaultAddonOptionsPanel then
         GreatVaultAddonOptionsPanel:SetShown(not GreatVaultAddonOptionsPanel:IsShown()) 
     else
         self:createOptions()
     end
-
-    
 end
