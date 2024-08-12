@@ -252,7 +252,10 @@
         "UnitIsFriend",
         "GetUnitEmpowerStageDuration",
         "GetAverageItemLevel",
-        "C_LFGList"
+        "C_LFGList",
+        "PanelTemplates_TabResize",
+        "PanelTemplates_DeselectTab",
+        "PanelTemplates_SelectTab"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
@@ -271,6 +274,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "~\\.vscode\\extensions\\ketho.wow-api-0.16.4\\Annotations"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.16.5\\Annotations"
     ]
 }

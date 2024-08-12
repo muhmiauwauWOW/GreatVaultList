@@ -1,6 +1,6 @@
 ---@diagnostic disable: deprecated
 ---@class GreatVaultAddon:AceAddon
-GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0");
+GreatVaultAddon = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("Lodash"):Get()
 
@@ -10,8 +10,6 @@ end
 
 local PlayerName = UnitName("player")
 
-
-local playerConfig = nil
 local sortConfig  = {}
 local viewTypes = {}
 
@@ -90,31 +88,67 @@ function GreatVaultAddon:addColumn(config)
 end
 
 
+
+
+GreatVaultAddon.data = {}
+
+function GreatVaultAddon.data:get()
+	if self.characterInfo then return self.characterInfo end
+	
+	local characterInfo = _.find(GreatVaultAddon.db.global.characters, function(v)
+		return v.name == PlayerName
+	end)
+
+	if not characterInfo then 
+		table.insert(GreatVaultAddon.db.global.characters, { name = PlayerName })
+		characterInfo = _.find(GreatVaultAddon.db.global.characters, function(v)
+			return v.name == PlayerName
+		end)
+	end
+
+	self.characterInfo = characterInfo
+
+	return characterInfo
+end
+
+function GreatVaultAddon.data:storeAll()
+	if UnitLevel("player") < GetMaxLevelForLatestExpansion() then
+		return
+	end
+
+	local characterInfo = self:get()
+
+	for _, value in pairs(colConfig) do
+		if value["store"] then 
+			local storeFn = value["store"]
+			characterInfo = storeFn(characterInfo) 
+		end
+	end
+
+	characterInfo.lastUpdate = time()
+end
+
+
+
+
 function GreatVaultAddon:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
 	GreatVaultAddon.db.global.columns = GreatVaultAddon.db.global.columns or {}
-
 	CONST_WINDOW_HEIGHT = GreatVaultAddon.db.global.greatvault_frame.lines * CONST_SCROLL_LINE_HEIGHT + 70
 
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
-	--WeeklyRewardExpirationWarningDialog:Hide()
 
 	GreatVaultAddon:slashcommand()
+end
+
+function GreatVaultAddon_OnAddonCompartmentClick()
+	GreatVaultInfoFrame:SetShown(not GreatVaultInfoFrame:IsShown()) 
 end
 
 function GreatVaultAddon:Initwindow()
 	self:SetupColumns()
     GreatVaultAddon:createWindow()
-
-	C_Timer.After(3, function() 
-		GreatVaultAddon:SaveCharacterInfo(playerConfig)
-	end)
-
-	GreatVaultInfoFrame:Hide()
-
-
-	
-	
+	GreatVaultAddon.data:storeAll()
 end
 
 function GreatVaultAddon:slashcommand() 
@@ -124,7 +158,6 @@ function GreatVaultAddon:slashcommand()
         if GreatVaultInfoFrame:IsShown() then 
             GreatVaultInfoFrame:Hide()
         else
-			
             GreatVaultInfoFrame:Show()
         end
 	end 
@@ -147,6 +180,7 @@ end
 function GreatVaultAddon:createWindow() 
 
 	local f = DetailsFramework:CreateSimplePanel(UIParent, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT, L["addonName"], "GreatVaultInfoFrame")
+	f:Hide()
 	f:SetFrameStrata("HIGH")
 	f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
@@ -154,12 +188,7 @@ function GreatVaultAddon:createWindow()
 	f:SetScript("OnMouseUp", nil)
 	
 	f:SetScript("OnShow", function()
-		for _, value in pairs(colConfig) do
-			if value["OnShow"] then 
-				local fn = value["OnShow"]
-				fn(self, value)
-			end
-		end
+		GreatVaultAddon.data:storeAll()
 		GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
 	end)
 
@@ -208,7 +237,7 @@ function GreatVaultAddon.ScrollFrame.create(f)
 	scrollFrame:CreateLines(GreatVaultAddon.ScrollFrame.CreateScrollLine, GreatVaultAddon.db.global.greatvault_frame.lines)
 	scrollFrame:SetPoint("topleft", f.Header, "bottomleft", -1, -1)
 	scrollFrame:SetPoint("topright", f.Header, "bottomright", 0, -1)
-    scrollFrame:Refresh()
+    --scrollFrame:Refresh()
 	GreatVaultAddon.ScrollFrame.ScollFrame = scrollFrame;
 end
 
@@ -370,77 +399,6 @@ function GreatVaultAddon:GetVault(activity, lastUpdated, key, idx)
     return status
 end
 
-function GreatVaultAddon:SaveCharacterInfo(info)
-	if UnitLevel("player") < 70 then
-		return
-	end
-	
-	playerConfig = info or self:GetCharacterInfo()
-end
-
-function GreatVaultAddon:GetCharacterInfo()
-	local characterInfo = {}
-	local found = false
-	for _, value in ipairs(self.db.global.characters) do
-        if value.name == PlayerName  then
-			found = true
-			characterInfo = value
-        end
-    end
-
-
-	for _, value in pairs(colConfig) do
-		if value["store"] then 
-			local storeFn = value["store"]
-			characterInfo = storeFn(characterInfo) 
-		end
-	end
-
-	characterInfo.lastUpdate = time()
-
-	if not found then 
-		table.insert(self.db.global.characters, characterInfo)
-	end
-
-	return characterInfo
-end
-
-function GreatVaultAddon:UpdateCharacterInfo(pConfig)
-	if pConfig then
-		pConfig.lastUpdate = time()
-		pConfig.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
-		pConfig.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
-		pConfig.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
-		return pConfig
-	end
-end
-
-
-function GreatVaultAddon:WEEKLY_REWARDS_UPDATE(event)
-	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
-end
-
-function GreatVaultAddon:WEEKLY_REWARDS_ITEM_CHANGED(event)
-	playerConfig = GreatVaultAddon:UpdateCharacterInfo(playerConfig)
-end
-
-
-function GreatVaultAddon:OnEnable()
-	self:RegisterEvent("WEEKLY_REWARDS_UPDATE")
-	self:RegisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-end
-
-function GreatVaultAddon:OnDisable()
-	self:UnregisterEvent("WEEKLY_REWARDS_UPDATE")
-	self:UnregisterEvent("WEEKLY_REWARDS_ITEM_CHANGED")
-end
-
-function GreatVaultAddon_OnAddonCompartmentClick()
-	GreatVaultInfoFrame:SetShown(not GreatVaultInfoFrame:IsShown()) 
-end
-
-
-
 
 function GreatVaultAddon:SetupColumns()
 
@@ -533,7 +491,6 @@ end
 
 
 
-
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
 
@@ -541,7 +498,6 @@ GREATVAULTLIST_COLUMNS = {
 
 		GreatVaultAddon.db.global.columns[self.key].key = self.key
 		GreatVaultAddon.db.global.columns[self.key].size =  self.config.subCols or 1
-		--GreatVaultAddon.db.global.columns[self.key].active = GreatVaultAddon.db.global.columns[self.key].active or true
 		GreatVaultAddon.db.global.columns[self.key].position = GreatVaultAddon.db.global.columns[self.key].position or self.config.index
 
 
@@ -552,6 +508,13 @@ GREATVAULTLIST_COLUMNS = {
 		if GreatVaultAddon.db.global.columns[self.key].active then 
 			colConfig[self.key] = self.config
 		end
+
+		if self.config.event then 
+			GreatVaultAddon:RegisterBucketEvent(self.config.event[1], 0.5, function(event) 
+				self.config.event[2](self, event)
+			end)
+		end
+
 
 		self.loaded = true
       	GREATVAULTLIST_COLUMNS__checkModules()
@@ -592,17 +555,6 @@ function GREATVAULTLIST_COLUMNS__checkModules()
 				GreatVaultAddon.db.global.columns[module.key].loaded = true
 			end
 
---[[
-			local colConfigTemp = {}
-			local columsTemp = {}
-			for name, module in GreatVaultAddon:IterateModules() do
-				colConfigTemp[module.key] = colConfig[module.key]
-				columsTemp = GreatVaultAddon.db.global.columns[module.key]
-			end
-
-			GreatVaultAddon.db.global.columns= columsTemp
-			colConfig = colConfigTemp
---]]
 			GreatVaultAddon:Initwindow()
         end)
     end

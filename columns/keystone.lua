@@ -11,6 +11,15 @@ Column.config = {
         ["store"] = ColumKey,
     }, 
     ['emptyStr'] = "-",
+    event = {
+        "CHALLENGE_MODE_COMPLETED",
+        function(self)
+            self.config.store(GreatVaultAddon.data:get())
+            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+            end
+        end
+    },
     ["store"] = function(characterInfo)
         local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
         if activityID then 

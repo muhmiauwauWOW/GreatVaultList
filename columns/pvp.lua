@@ -16,6 +16,15 @@ Column.config = {
         "0/2500",
         "0/5000"
     },
+    event = {
+        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
+        function(self)
+            self.config.store(GreatVaultAddon.data:get())
+            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+            end
+        end
+    },
     ["store"] = function(characterInfo)
         characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
         return characterInfo

@@ -10,15 +10,17 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
-    ["OnShow"] = function(self, obj)
-
-        local playerConfig = GreatVaultAddon:GetCharacterInfo(playerConfig)
-        playerConfig = obj["store"](playerConfig)
-        GreatVaultAddon:SaveCharacterInfo(playerConfig)
-    end,
+    event = {
+        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
+        function(self)
+            self.config.store(GreatVaultAddon.data:get())
+            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+            end
+        end
+    },
     ["store"] = function(characterInfo)
         local _, ilvl = GetAverageItemLevel();
-        characterInfo.averageItemLevel = characterInfo.averageItemLevel or ""
         characterInfo.averageItemLevel = ilvl
         return characterInfo
     end,
