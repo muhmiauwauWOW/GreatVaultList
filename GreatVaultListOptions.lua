@@ -13,8 +13,6 @@ function GreatVaultAddonOptions:createOptions()
 
 
     local columnLen = _.size(loadedColumms)
-
-
     local heightSize = (columnLen * 23) + 65
 
     local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, L["opt_windowname"], "GreatVaultAddonOptionsPanel")

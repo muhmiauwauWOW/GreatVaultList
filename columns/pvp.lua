@@ -28,5 +28,18 @@ Column.config = {
     ["store"] = function(characterInfo)
         characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
         return characterInfo
+    end,
+    ["refresh"] = function(line, data, idx)
+        local activity = _.get(data, {ColumKey, idx})
+
+        if activity.progress >= activity.threshold then
+            if activity.type == Enum.WeeklyRewardChestThresholdType.RankedPvP then
+                line[ColumKey .. idx].text  = GREEN_FONT_COLOR_CODE .. PVPUtil.GetTierName(activity.level) .. FONT_COLOR_CODE_CLOSE
+                return line
+            end
+        end
+
+        line[ColumKey .. idx].text  = nil
+        return line
     end
 }

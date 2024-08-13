@@ -1,4 +1,4 @@
-﻿## Interface: 110000
+﻿## Interface: 110000, 110002
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Version: @project-version@
@@ -24,8 +24,8 @@ Libs\Lodash\Lodash.lua
 
 
 locale/locale.xml
-Config.lua
-Options.lua
+GreatVaultList.lua
+GreatVaultListOptions.lua
 
 columns/activities.lua
 columns/character.lua

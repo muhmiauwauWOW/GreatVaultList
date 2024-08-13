@@ -11,7 +11,6 @@ end
 local PlayerName = UnitName("player")
 
 local sortConfig  = {}
-local viewTypes = {}
 
 --frame options
 local CONST_WINDOW_WIDTH = 0
@@ -22,25 +21,6 @@ local backdrop_color = {.2, .2, .2, 0.2}
 local backdrop_color_on_enter = {.8, .8, .8, 0.4}
 local backdrop_color_inparty = {.5, .5, .8, 0.2}
 
-
-local DIFFICULTY_NAMES = {
-	[DifficultyUtil.ID.DungeonNormal] = "NHC",
-	[DifficultyUtil.ID.DungeonHeroic] = "HC",
-	[DifficultyUtil.ID.Raid10Normal] = "NHC",
-	[DifficultyUtil.ID.Raid25Normal] = "NHC",
-	[DifficultyUtil.ID.Raid10Heroic] = "HC",
-	[DifficultyUtil.ID.Raid25Heroic] = "HC",
-	[DifficultyUtil.ID.RaidLFR] = "LFR",
-	[DifficultyUtil.ID.DungeonChallenge] = PLAYER_DIFFICULTY_MYTHIC_PLUS,
-	[DifficultyUtil.ID.Raid40] = LEGACY_RAID_DIFFICULTY,
-	[DifficultyUtil.ID.PrimaryRaidNormal] = "NHC",
-	[DifficultyUtil.ID.PrimaryRaidHeroic] = "HC",
-	[DifficultyUtil.ID.PrimaryRaidMythic] = "MTH",
-	[DifficultyUtil.ID.PrimaryRaidLFR] = "LFR",
-	[DifficultyUtil.ID.DungeonMythic] = PLAYER_DIFFICULTY6,
-	[DifficultyUtil.ID.DungeonTimewalker] = PLAYER_DIFFICULTY_TIMEWALKER,
-	[DifficultyUtil.ID.RaidTimewalker] = PLAYER_DIFFICULTY_TIMEWALKER,
-}
 
 
 --namespace
@@ -230,6 +210,18 @@ function GreatVaultAddon:createWindow()
 	optButton:SetTemplate(options_button_template)
 end
 
+
+
+
+
+
+
+
+
+
+
+
+
 function GreatVaultAddon.ScrollFrame.create(f) 
 	GreatVaultAddon.ScrollFrame.setHeader(f)
 	local scrollFrame = DetailsFramework:CreateScrollBox(f, "$parentScroll", GreatVaultAddon.ScrollFrame.RefreshScroll, GreatVaultAddon.db.global.characters, CONST_WINDOW_WIDTH, CONST_WINDOW_HEIGHT-70, GreatVaultAddon.db.global.greatvault_frame.lines, CONST_SCROLL_LINE_HEIGHT)
@@ -263,7 +255,7 @@ function GreatVaultAddon.ScrollFrame.setHeader(f)
 end
 
 
-function GreatVaultAddon.ScrollFrame.setEmptyFieldStr(obj, col, key,  idx)
+function GreatVaultAddon.ScrollFrame.setEmptyFieldStr(key, obj, col,   idx)
 	local str = ""
 
 	if col and idx then
@@ -281,40 +273,38 @@ end
 
 
 function GreatVaultAddon.ScrollFrame.RefreshScroll(self, data, offset, totalLines) 
+
+
+	local function fillLine(key, value, line, data, idx)
+		local col = idx and key .. idx or key
+		local lineFn = value["refresh"]
+		line = lineFn(line, data, idx)
+		if not line[col].text then
+			line = GreatVaultAddon.ScrollFrame.setEmptyFieldStr(key, line, col, idx)
+		end
+		return line
+	end
+
 	for i = 1, totalLines do
 		local index = i + offset
 		local data = data[index]
 		if(data) then 
 			local line = self:GetLine(i)
-            if (data.name == PlayerName) then
-                line:SetBackdropColor(unpack(backdrop_color_inparty))
-            else
-                line:SetBackdropColor(unpack(backdrop_color))
-            end
+			-- highlicht current char
+			local bg = (data.name == PlayerName) and backdrop_color_inparty or backdrop_color
+			line:SetBackdropColor(unpack(bg))
 
-			for col, value in pairs(colConfig) do
-				if value["refresh"] then 
-					local lineFn = value["refresh"]
-					line = lineFn(line, data) 
-					if not line[col].text then
-					 	line = GreatVaultAddon.ScrollFrame.setEmptyFieldStr(line, col)
+			_.forEach(colConfig,function(value, key)
+				if not value["refresh"] then return end
+				if value["subCols"] then
+					-- handle subcoluumn setup
+					for i = 1, value["subCols"], 1 do
+						line = fillLine(key, value, line, data, i)
 					end
+				else
+					line = fillLine(key, value, line, data)
 				end
-			end
-
-			for key, items in pairs(viewTypes) do
-				--print(data.name, key)
-				for idx, col in ipairs(items) do
-					local colData = _.get(data, {key, idx})
-					if colData then 
-						line[col].text = GreatVaultAddon:GetVault(colData, data.lastUpdated, key, idx)
-					end
-
-					if not line[col].text then 
-						line = GreatVaultAddon.ScrollFrame.setEmptyFieldStr(line, col, key,idx)
-					end 
-				end
-			end
+			end)
 
 		end
 	end
@@ -364,46 +354,21 @@ end
 
 
 
-local function GetWeeklyQuestResetTime()
-	local now = time()
-	local region = GetCurrentRegion()
-	if region == 72 then region = 3 end -- fix for ptr
-	local regionDayOffset = {{ 2, 1, 0, 6, 5, 4, 3 }, { 4, 3, 2, 1, 0, 6, 5 }, { 3, 2, 1, 0, 6, 5, 4 }, { 4, 3, 2, 1, 0, 6, 5 }, { 4, 3, 2, 1, 0, 6, 5 } }
-	local nextDailyReset = GetQuestResetTime()
-	local utc = date("!*t", now + nextDailyReset)
-	local reset = regionDayOffset[region][utc.wday] * 86400 + now + nextDailyReset
-	return reset
-end
 
-function GreatVaultAddon:GetVault(activity, lastUpdated, key, idx)
-	if not lastUpdated then
-		lastUpdated = time()
-	end
 
-	local status = nil
-	local activityThisWeek = lastUpdated > GetWeeklyQuestResetTime() - 604800
-	local difficulty
 
-	if activity.progress >= activity.threshold and activityThisWeek then
-		if activity.type == Enum.WeeklyRewardChestThresholdType.Activities then
-			difficulty = " +" .. activity.level .. " "
-		elseif activity.type == Enum.WeeklyRewardChestThresholdType.RankedPvP then
-			difficulty = PVPUtil.GetTierName(activity.level)
-		elseif activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
-			difficulty = DIFFICULTY_NAMES[activity.level]
-		end
 
-		status = GREEN_FONT_COLOR_CODE .. difficulty .. FONT_COLOR_CODE_CLOSE
-	end
 
-    return status
-end
+
+
+
+
+
 
 
 function GreatVaultAddon:SetupColumns()
 
 	CONST_WINDOW_WIDTH = 300
-	viewTypes = {}
 	headerTable = {}
 	headerTableConfig = {}
 
@@ -439,7 +404,6 @@ function GreatVaultAddon:SetupColumns()
 
 		if value.subCols then 
 			if value.header then
-				viewTypes[key] = {}
 				for idx = 1, value.subCols, 1 do
 					local opt = shallowcopy(value.header)
 					opt.key = key .. idx
@@ -449,7 +413,6 @@ function GreatVaultAddon:SetupColumns()
 					local pos = colstart + idx - 1
 					table.insert(headerTable, pos, opt)
 					table.insert(headerTableConfig, pos, opt.key)
-					table.insert(viewTypes[key], opt.key)
 				end
 			end
 		else
@@ -461,6 +424,7 @@ function GreatVaultAddon:SetupColumns()
 		end
 	
 	end)
+
 
 	local newheaderTableConfig = {}
 	local newheaderTable =  {}
@@ -483,8 +447,6 @@ function GreatVaultAddon:SetupColumns()
 
 	--frame options
 	CONST_WINDOW_WIDTH = windowWidth + 30
-
-
 end
 
 
@@ -495,7 +457,6 @@ GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
 
 		GreatVaultAddon.db.global.columns[self.key] = GreatVaultAddon.db.global.columns[self.key] or {}
-
 		GreatVaultAddon.db.global.columns[self.key].key = self.key
 		GreatVaultAddon.db.global.columns[self.key].size =  self.config.subCols or 1
 		GreatVaultAddon.db.global.columns[self.key].position = GreatVaultAddon.db.global.columns[self.key].position or self.config.index
