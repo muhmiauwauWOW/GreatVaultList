@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("GreatVaultList", "itIT")
+local L = LibStub("AceLocale-3.0"):NewLocale("GreatVaultList", "ruRU")
 
 if not L then
 	return
