@@ -3,22 +3,15 @@ local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, 
 local L, _ = GreatVaultAddon:GetLibs()
 
 local DIFFICULTY_NAMES = {
-	[DifficultyUtil.ID.DungeonNormal] = "NHC",
-	[DifficultyUtil.ID.DungeonHeroic] = "HC",
 	[DifficultyUtil.ID.Raid10Normal] = "NHC",
 	[DifficultyUtil.ID.Raid25Normal] = "NHC",
 	[DifficultyUtil.ID.Raid10Heroic] = "HC",
 	[DifficultyUtil.ID.Raid25Heroic] = "HC",
 	[DifficultyUtil.ID.RaidLFR] = "LFR",
-	[DifficultyUtil.ID.DungeonChallenge] = PLAYER_DIFFICULTY_MYTHIC_PLUS,
-	[DifficultyUtil.ID.Raid40] = LEGACY_RAID_DIFFICULTY,
 	[DifficultyUtil.ID.PrimaryRaidNormal] = "NHC",
 	[DifficultyUtil.ID.PrimaryRaidHeroic] = "HC",
 	[DifficultyUtil.ID.PrimaryRaidMythic] = "MTH",
 	[DifficultyUtil.ID.PrimaryRaidLFR] = "LFR",
-	[DifficultyUtil.ID.DungeonMythic] = PLAYER_DIFFICULTY6,
-	[DifficultyUtil.ID.DungeonTimewalker] = PLAYER_DIFFICULTY_TIMEWALKER,
-	[DifficultyUtil.ID.RaidTimewalker] = PLAYER_DIFFICULTY_TIMEWALKER,
 }
 
 
@@ -50,11 +43,18 @@ Column.config = {
         return characterInfo
     end,
     ["refresh"] = function(line, data, idx)
-        local activity = _.get(data, {ColumKey, idx})
+       local activity = _.get(data, {ColumKey, idx})
 
         if activity.progress >= activity.threshold then
             if activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
                 line[ColumKey .. idx].text  = GREEN_FONT_COLOR_CODE .. DIFFICULTY_NAMES[activity.level] .. FONT_COLOR_CODE_CLOSE
+                return line
+            end
+        end
+
+        if activity.progress > 0 then
+            if activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
+                line[ColumKey .. idx].text  = activity.progress .. "/" .. activity.threshold
                 return line
             end
         end

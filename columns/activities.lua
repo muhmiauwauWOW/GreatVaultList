@@ -2,6 +2,14 @@ local ColumKey = "activities"
 local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultAddon:GetLibs()
 
+
+local DIFFICULTY_NAMES = {
+	[DifficultyUtil.ID.DungeonHeroic] = "HC",
+	[DifficultyUtil.ID.DungeonTimewalker] = "TW",
+	[DifficultyUtil.ID.DungeonMythic] = "M",
+}
+
+
 Column.key = ColumKey
 Column.config = {
     ["index"] = 7,
@@ -25,7 +33,15 @@ Column.config = {
 
         if activity.progress >= activity.threshold then
             if activity.type == Enum.WeeklyRewardChestThresholdType.Activities then
-                line[ColumKey .. idx].text  = GREEN_FONT_COLOR_CODE .. " +" .. activity.level .. " " .. FONT_COLOR_CODE_CLOSE
+               local activityStr = DIFFICULTY_NAMES[activity.activityTierID] or  (" +" .. activity.level .. " ")
+               line[ColumKey .. idx].text  = GREEN_FONT_COLOR_CODE .. activityStr .. FONT_COLOR_CODE_CLOSE
+                return line
+            end
+        end
+
+        if activity.progress > 0 then
+            if activity.type == Enum.WeeklyRewardChestThresholdType.Activities then
+                line[ColumKey .. idx].text  = activity.progress .. "/" .. activity.threshold
                 return line
             end
         end
