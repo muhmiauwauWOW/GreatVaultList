@@ -43,23 +43,16 @@ Column.config = {
         return characterInfo
     end,
     ["refresh"] = function(line, data, idx)
-       local activity = _.get(data, {ColumKey, idx})
+        local activity = _.get(data, {ColumKey, idx})
+        local text = nil -- set default
 
         if activity.progress >= activity.threshold then
-            if activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
-                line[ColumKey .. idx].text  = GREEN_FONT_COLOR_CODE .. DIFFICULTY_NAMES[activity.level] .. FONT_COLOR_CODE_CLOSE
-                return line
-            end
+            text  = GREEN_FONT_COLOR_CODE .. DIFFICULTY_NAMES[activity.level] .. FONT_COLOR_CODE_CLOSE
+        elseif activity.progress > 0 then
+            text  = activity.progress .. "/" .. activity.threshold
         end
 
-        if activity.progress > 0 then
-            if activity.type == Enum.WeeklyRewardChestThresholdType.Raid then
-                line[ColumKey .. idx].text  = activity.progress .. "/" .. activity.threshold
-                return line
-            end
-        end
-
-        line[ColumKey .. idx].text  = nil
+        line[ColumKey .. idx].text  = text
         return line
     end
 }
