@@ -33,7 +33,6 @@ Column.config = {
         local text = nil -- set default
         
         if activity.progress >= activity.threshold then
-            print(activity.activityTierID, data.name, DifficultyUtil.ID.DungeonHeroic)
             text =  GREEN_FONT_COLOR_CODE 
                     .. 
                     (
