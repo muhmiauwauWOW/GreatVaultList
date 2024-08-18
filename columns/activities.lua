@@ -33,17 +33,18 @@ Column.config = {
         local text = nil -- set default
         
         if activity.progress >= activity.threshold then
+            print(activity.activityTierID, data.name, DifficultyUtil.ID.DungeonHeroic)
             text =  GREEN_FONT_COLOR_CODE 
                     .. 
                     (
-                        DIFFICULTY_NAMES[activity.activityTierID] 
+                        DIFFICULTY_NAMES[C_WeeklyRewards.GetDifficultyIDForActivityTier(activity.activityTierID)] 
                         or 
                         (" +" .. activity.level .. " ")
                     )
                     .. 
                     FONT_COLOR_CODE_CLOSE
         elseif activity.progress > 0 then
-            text = activity.progress .. "/" .. activity.threshold
+            text = GRAY_FONT_COLOR_CODE .. activity.progress .. "/" .. activity.threshold ..  FONT_COLOR_CODE_CLOSE
         end
 
       
