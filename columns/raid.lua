@@ -40,6 +40,10 @@ Column.config = {
     },
     ["store"] = function(characterInfo)
         characterInfo.raid = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Raid)
+        _.map(characterInfo.raid, function(entry)
+            entry["raidString"] = nil
+            return entry
+        end)
         return characterInfo
     end,
     ["refresh"] = function(line, data, idx)

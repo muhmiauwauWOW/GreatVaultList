@@ -27,6 +27,10 @@ Column.config = {
     },
     ["store"] = function(characterInfo)
         characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
+        _.map(characterInfo.pvp, function(entry)
+            entry["raidString"] = nil
+            return entry
+        end)
         return characterInfo
     end,
     ["refresh"] = function(line, data, idx)
