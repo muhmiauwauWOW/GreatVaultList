@@ -15,7 +15,7 @@ externals:
   Libs/AceTimer-3.0:  https://repos.wowace.com/wow/ace3/trunk/AceTimer-3.0
   Libs/AceBucket-3.0:  https://repos.wowace.com/wow/ace3/trunk/AceBucket-3.0
   Libs/DF: https://github.com/Tercioo/Details-Framework.git
-  Libs/Lodash: https://github.com/muhmiauwau/Lodash.git
+  Libs/LibLodash: https://github.com/muhmiauwauWOW/LibLodash.git
 
 enable-nolib-creation: no
 
