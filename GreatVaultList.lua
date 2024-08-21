@@ -98,7 +98,7 @@ function GreatVaultAddon.data:storeAll()
 
 	local characterInfo = self:get()
 
-	for _, value in pairs(colConfig) do
+	for key, value in pairs(colConfig) do
 		if value["store"] then 
 			local storeFn = value["store"]
 			characterInfo = storeFn(characterInfo) 
@@ -194,6 +194,7 @@ function GreatVaultAddon:createWindow()
 	local options_button_template = DetailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE")
 
 	local function openVault()
+		WeeklyRewardsFrame:UpdateTitle()
 		WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
 	end
 

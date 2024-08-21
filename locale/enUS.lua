@@ -15,7 +15,7 @@ L["activities"] = "Activities"
 L["pvp"] = "PvP"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
-L["Open"] = "Open"
+L["showvault_btn"] = "view"
 
 
 
