@@ -1,6 +1,6 @@
 local ColumKey = "raid"
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
-local L, _ = GreatVaultAddon:GetLibs()
+local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local L, _ = GreatVaultList:GetLibs()
 
 local DIFFICULTY_NAMES = {
 	[DifficultyUtil.ID.Raid10Normal] = "NHC",
@@ -32,9 +32,9 @@ Column.config = {
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
-            self.config.store(GreatVaultAddon.data:get())
+            self.config.store(GreatVaultList.data:get())
             if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultAddon.ScrollFrame.ScollFrame:Refresh()
+                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
             end
         end
     },

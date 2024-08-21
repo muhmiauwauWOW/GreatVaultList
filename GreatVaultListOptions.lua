@@ -1,13 +1,13 @@
-local GreatVaultAddon = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
-local L, _ = GreatVaultAddon:GetLibs()
+local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
+local L, _ = GreatVaultList:GetLibs()
 
 
-GreatVaultAddonOptions = {}
+GreatVaultListOptions = {}
 
 
-function GreatVaultAddonOptions:createOptions()
+function GreatVaultListOptions:createOptions()
     
-    local loadedColumms = _.filter(GreatVaultAddon.db.global.columns, function (col)
+    local loadedColumms = _.filter(GreatVaultList.db.global.columns, function (col)
         return (col.loaded == true)
     end)
 
@@ -15,13 +15,13 @@ function GreatVaultAddonOptions:createOptions()
     local columnLen = _.size(loadedColumms)
     local heightSize = (columnLen * 23) + 65
 
-    local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, L["opt_windowname"], "GreatVaultAddonOptionsPanel")
+    local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, L["opt_windowname"], "GreatVaultListOptionsPanel")
     optionsFrame:SetFrameStrata("DIALOG")
     optionsFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     optionsFrame:Show()
 
-    local scaleBar = DetailsFramework:CreateScaleBar(optionsFrame, GreatVaultAddon.db.global.greatvault_frame)
-    optionsFrame:SetScale(GreatVaultAddon.db.global.greatvault_frame.scale)
+    local scaleBar = DetailsFramework:CreateScaleBar(optionsFrame, GreatVaultList.db.global.greatvault_frame)
+    optionsFrame:SetScale(GreatVaultList.db.global.greatvault_frame.scale)
 
     local bUseSolidColor = true
     DetailsFramework:ApplyStandardBackdrop(optionsFrame, bUseSolidColor)
@@ -46,10 +46,10 @@ function GreatVaultAddonOptions:createOptions()
         {
             type = "range",
             get = function()
-                return GreatVaultAddon.db.global.greatvault_frame.lines
+                return GreatVaultList.db.global.greatvault_frame.lines
             end,
             set = function(self, fixedparam, value)
-                GreatVaultAddon.db.global.greatvault_frame.lines = value
+                GreatVaultList.db.global.greatvault_frame.lines = value
             end,
             min = 1,
             max = 50,
@@ -104,18 +104,18 @@ function GreatVaultAddonOptions:createOptions()
         enabledCheckbox:SetPoint("left", line, "left", 140, 1)
         enabledCheckbox:SetAsCheckBox()
         enabledCheckbox:SetFixedParameter(key)
-        enabledCheckbox:SetValue(GreatVaultAddon.db.global.columns[key].active)
+        enabledCheckbox:SetValue(GreatVaultList.db.global.columns[key].active)
         enabledCheckbox.OnSwitch = function(self, contextId, value) 
-            GreatVaultAddon.db.global.columns[contextId].active = value
+            GreatVaultList.db.global.columns[contextId].active = value
         end
 
 
         local positionSlider = DetailsFramework:CreateSlider(line, 138, 20, 1, columnLen, 1, columnLen, false, nil, nil, nil, options_slider_template)
         positionSlider:SetPoint("left", line, "left", 164, 0)
         positionSlider:SetFixedParameter(key)
-        positionSlider:SetValue(GreatVaultAddon.db.global.columns[key].position)
+        positionSlider:SetValue(GreatVaultList.db.global.columns[key].position)
         positionSlider:SetHook("OnValueChanged", function(self, contextId, value)
-            GreatVaultAddon.db.global.columns[contextId].position = value
+            GreatVaultList.db.global.columns[contextId].position = value
         end)
 
         positionSlider.thumb:SetWidth(32)
@@ -128,9 +128,9 @@ end
 
 
 
-function GreatVaultAddonOptions:toggle()
-    if GreatVaultAddonOptionsPanel then
-        GreatVaultAddonOptionsPanel:SetShown(not GreatVaultAddonOptionsPanel:IsShown()) 
+function GreatVaultListOptions:toggle()
+    if GreatVaultListOptionsPanel then
+        GreatVaultListOptionsPanel:SetShown(not GreatVaultListOptionsPanel:IsShown()) 
     else
         self:createOptions()
     end

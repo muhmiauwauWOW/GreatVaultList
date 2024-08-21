@@ -1,6 +1,6 @@
 local ColumKey = "activities"
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
-local L, _ = GreatVaultAddon:GetLibs()
+local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local L, _ = GreatVaultList:GetLibs()
 
 
 local DIFFICULTY_NAMES = {

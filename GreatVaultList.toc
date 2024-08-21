@@ -3,7 +3,7 @@
 ## Notes: Lists the great vault options for all your alt characters
 ## Version: @project-version@
 ## Author: Muhmiauwau
-## AddonCompartmentFunc: GreatVaultAddon_OnAddonCompartmentClick
+## AddonCompartmentFunc: GreatVaultList_OnAddonCompartmentClick
 ## SavedVariables: GreatVaultListDB
 ## X-Curse-Project-ID: 965814
 ## X-Wago-ID: nGvpV56x

@@ -1,6 +1,6 @@
 local ColumKey = "class"
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
-local L, _ = GreatVaultAddon:GetLibs()
+local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local L, _ = GreatVaultList:GetLibs()
 
 local CONST_SCROLL_LINE_HEIGHT = 20
 Column.key = ColumKey

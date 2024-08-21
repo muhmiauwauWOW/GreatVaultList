@@ -1,6 +1,6 @@
 local ColumKey = "character"
-local Column = GreatVaultAddon:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
-local L, _ = GreatVaultAddon:GetLibs()
+local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
 Column.config = {
