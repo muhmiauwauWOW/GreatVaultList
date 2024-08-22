@@ -19,7 +19,7 @@ Libs\AceDB-3.0\AceDB-3.0.xml
 Libs\AceTimer-3.0\AceTimer-3.0.xml
 Libs\AceBucket-3.0\AceBucket-3.0.xml
 Libs\DF\load.xml
-Libs\Lodash\Lodash.lua
+Libs\LibLodash\LibLodash.lua
 
 
 

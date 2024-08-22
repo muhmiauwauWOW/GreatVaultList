@@ -2,7 +2,7 @@
 ---@class GreatVaultList:AceAddon
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
-local _ = LibStub("LibLodash"):Get()
+local _ = LibStub("LibLodash-1"):Get()
 
 function GreatVaultList:GetLibs()
     return L, _
