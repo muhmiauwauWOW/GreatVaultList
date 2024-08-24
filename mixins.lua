@@ -4,18 +4,6 @@ local _ = LibStub("LibLodash-1"):Get()
 
 
 
-DevTools_Dump(GreatVaultList.List)
-
--- DevTools_Dump(GreatVaultList.data:get())
-
--- -- _.forEach(GreatVaultList.ScrollFrame.ScollFrame.data, function() end)
--- for i = 1, 10 do
---     table.insert(GreatVaultList.List.data, {"lala", "Name" .. i, i })
--- end
-
-
-
-
 GreatVaultListTableCellTextMixin = CreateFromMixins(TableBuilderCellMixin);
 
 function GreatVaultListTableCellTextMixin:Init(owner, dataIndex, columns, columnConfig, width)
@@ -134,6 +122,19 @@ function GreatVaultListMixin:OnLoad()
 
 
 
+    --self:init()
+    local dragarea = GreatVaultListFrame.Drag
+    GreatVaultListFrame:SetMovable(true)
+    GreatVaultListFrame:EnableMouse(true)
+    dragarea:EnableMouse(true)
+    dragarea:RegisterForDrag("LeftButton")
+    dragarea:SetScript("OnDragStart", function(self, button)
+        GreatVaultListFrame:StartMoving()
+    end)
+
+    dragarea:SetScript("OnDragStop", function(self)
+        GreatVaultListFrame:StopMovingOrSizing()
+    end)
 
     --self:UpdateSize();
     
@@ -145,7 +146,6 @@ function GreatVaultListMixin:OnShow()
 end
 
 function GreatVaultListMixin:UpdateTabs()
-    print("UpdateTabs")
 	self.TabSystem:SetTabShown(self.List, true);
 
     
@@ -217,9 +217,6 @@ function GreatVaultListItemListLineMixin:OnClick(button)
 	if button == "LeftButton" then
 		self:GetItemList():SetSelectedEntry(self.rowData);
 	end
-
-    print("OnClick")
-    DevTools_Dump(self.rowData)
 end
 
 
@@ -329,15 +326,9 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-          -- print(elementData.GreatVaultListFrame.BrowseResultsFrame.data[1])
-            -- button.SelectedHighlight:Show()
-
-            print(GreatVaultListFrame.BrowseResultsFrame.currentPlayer, elementData)
             if  GreatVaultListFrame.BrowseResultsFrame.currentPlayer == elementData then 
                 button.CurrentTexture:Show()
             end
-
-
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -420,7 +411,6 @@ function GreatVaultListItemListMixin:DirtyScrollFrame()
 end
 
 function GreatVaultListItemListMixin:RefreshScrollFrame()
-    print("RefreshScrollFrame")
 	self.scrollFrameDirty = false;
 
 	if not self.isInitialized or not self:IsShown() then
@@ -492,33 +482,15 @@ function GreatVaultListBrowseResultsFrameMixin:GetBrowseListLayout(owner, itemLi
 end
 
 function GreatVaultListBrowseResultsFrameMixin:OnLoad()
-	--self:init()
-    local dragarea = GreatVaultListFrame.Drag
-    GreatVaultListFrame:SetMovable(true)
-    GreatVaultListFrame:EnableMouse(true)
-    dragarea:EnableMouse(true)
-    dragarea:RegisterForDrag("LeftButton")
-    dragarea:SetScript("OnDragStart", function(self, button)
-        GreatVaultListFrame:StartMoving()
-    end)
-
-    dragarea:SetScript("OnDragStop", function(self)
-        GreatVaultListFrame:StopMovingOrSizing()
-    end)
+	
 
 end
 
 
 function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
-
-   
-
-   
-
     self.columns = columns
     self.data = data
     self.columnConfig = columnConfig
-
 
     local fidx =  _.findIndex(self.columns, function(entry)
         return entry == "character"
@@ -527,8 +499,6 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.currentPlayer =  _.findIndex(self.data, function(entry)
         return entry[fidx] == UnitName("player")
     end)
-
-
 
 
 	local function GetNumEntries()
@@ -545,16 +515,10 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.ItemList:RefreshScrollFrame();
 
 
- 
-   
-
-
     local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
         width = width + (entry.width or 0)
     end)
-
-    print("width", width)
 
     self:GetParent():UpdateSize(width);
 

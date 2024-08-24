@@ -5,6 +5,12 @@ local L, _ = GreatVaultList:GetLibs()
 GreatVaultListOptions = {}
 
 
+
+function GreatVaultListOptions:init()
+    print("GreatVaultListOptions")
+end
+  
+
 function GreatVaultListOptions:createOptions()
     
     local loadedColumms = _.filter(GreatVaultList.db.global.columns, function (col)
