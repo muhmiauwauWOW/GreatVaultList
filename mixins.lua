@@ -156,13 +156,7 @@ end
 function GreatVaultListMixin:UpdateSize(width)
     width = width or 800
 
-    print("UpdateSize", width)
-
     local height = (GreatVaultList.db.global.greatvault_frame.lines * 22) + 90
-
-
-    local HC  =self.BrowseResultsFrame.ItemList.HeaderContainer
-
     self:SetWidth(width)
     self:SetHeight(height)
 end
@@ -335,6 +329,15 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
+          -- print(elementData.GreatVaultListFrame.BrowseResultsFrame.data[1])
+            -- button.SelectedHighlight:Show()
+
+            print(GreatVaultListFrame.BrowseResultsFrame.currentPlayer, elementData)
+            if  GreatVaultListFrame.BrowseResultsFrame.currentPlayer == elementData then 
+                button.CurrentTexture:Show()
+            end
+
+
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -475,13 +478,11 @@ function GreatVaultListBrowseResultsFrameMixin:GetBrowseListLayout(owner, itemLi
         tableBuilder:SetHeaderContainer(itemList:GetHeaderContainer());
 
         _.forEach(self.columns, function(colName, idx)
-            print(colName)
             local width = _.get(self.columnConfig, {colName, "width"})
             local headerText = _.get(self.columnConfig, {colName, "header", "text"})
             local xpadding = _.get(self.columnConfig, {colName, "xpadding"}, 14)
             local ypadding = _.get(self.columnConfig, {colName, "ypadding"}, 14)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
-            print(colName, template)
             local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, xpadding, ypadding, idx, template, idx, self.columns, self.columnConfig, width);
             col:GetHeaderFrame():SetText(headerText);
         end)
@@ -518,6 +519,18 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.data = data
     self.columnConfig = columnConfig
 
+
+    local fidx =  _.findIndex(self.columns, function(entry)
+        return entry == "character"
+    end)
+
+    self.currentPlayer =  _.findIndex(self.data, function(entry)
+        return entry[fidx] == UnitName("player")
+    end)
+
+
+
+
 	local function GetNumEntries()
 		return #self.data;
 	end
@@ -530,6 +543,10 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
     self.ItemList:DirtyScrollFrame();
     self.ItemList:RefreshScrollFrame();
+
+
+ 
+   
 
 
     local width = 15 + (_.size(self.columnConfig) * 1)

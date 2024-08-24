@@ -16,9 +16,9 @@ Column.config = {
         ["store"] = ColumKey,
     },
     ['emptyStr'] = {
-        "0/1250",
-        "0/2500",
-        "0/5000"
+        "   0/1250",
+        "   0/2500",
+        "   0/5000"
     },
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
