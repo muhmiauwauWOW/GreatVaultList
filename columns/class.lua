@@ -6,6 +6,9 @@ local CONST_SCROLL_LINE_HEIGHT = 20
 Column.key = ColumKey
 Column.config = {
     ["index"] = 1,
+    ["width"] = 30,
+    ["xpadding"] = 0, 
+    ["ypadding"] = 0, 
     ["header"] = {key = ColumKey, text = "", width = 30, canSort = true, dataType = "string", order = "DESC", offset = 0, xpadding = 0, ypadding = 0 },
     ["sort"] = {
         ["key"] = ColumKey,

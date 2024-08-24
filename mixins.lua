@@ -51,7 +51,6 @@ GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCel
 
 
 function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
-    print("TRIPLE")
     _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
         self[entry]:SetWidth(math.floor(self.width/3))
         self[entry].Text:SetJustifyH("CENTER")
@@ -154,12 +153,17 @@ end
 
 
 
-function GreatVaultListMixin:UpdateSize()
+function GreatVaultListMixin:UpdateSize(width)
+    width = width or 800
 
-    print("UpdateSize", GreatVaultList.db.global.greatvault_frame.lines)
+    print("UpdateSize", width)
 
     local height = (GreatVaultList.db.global.greatvault_frame.lines * 22) + 90
-    self:SetWidth(800)
+
+
+    local HC  =self.BrowseResultsFrame.ItemList.HeaderContainer
+
+    self:SetWidth(width)
     self:SetHeight(height)
 end
 
@@ -472,10 +476,10 @@ function GreatVaultListBrowseResultsFrameMixin:GetBrowseListLayout(owner, itemLi
 
         _.forEach(self.columns, function(colName, idx)
             print(colName)
-            local width = _.get(self.columnConfig, {colName, "header", "width"})
+            local width = _.get(self.columnConfig, {colName, "width"})
             local headerText = _.get(self.columnConfig, {colName, "header", "text"})
-            local xpadding = _.get(self.columnConfig, {colName, "header", "xpadding"}, 14)
-            local ypadding = _.get(self.columnConfig, {colName, "header", "ypadding"}, 14)
+            local xpadding = _.get(self.columnConfig, {colName, "xpadding"}, 14)
+            local ypadding = _.get(self.columnConfig, {colName, "ypadding"}, 14)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
             print(colName, template)
             local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, xpadding, ypadding, idx, template, idx, self.columns, self.columnConfig, width);
@@ -527,7 +531,15 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.ItemList:DirtyScrollFrame();
     self.ItemList:RefreshScrollFrame();
 
-    self:GetParent():UpdateSize();
+
+    local width = 15 + (_.size(self.columnConfig) * 1)
+    _.forEach(self.columnConfig, function(entry)
+        width = width + (entry.width or 0)
+    end)
+
+    print("width", width)
+
+    self:GetParent():UpdateSize(width);
 
 end
 

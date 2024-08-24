@@ -5,7 +5,11 @@ local L, _ = GreatVaultList:GetLibs()
 Column.key = ColumKey
 Column.config = {
     ["index"] = 10,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 100, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
+    ["template"] = "GreatVaultListTableCellTripleTextTemplate",
+    ["width"] = 200,
+    ["xpadding"] = 0, 
+    ["ypadding"] = 0, 
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 50, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
@@ -45,5 +49,17 @@ Column.config = {
 
         line[ColumKey .. idx].text  = text
         return line
+    end,
+    ["populate"] = function(self, data, idx)
+        local activity = _.get(data, {idx})
+        local text = nil -- set default
+        
+        if activity.progress >= activity.threshold then
+            text = PVPUtil.GetTierName(activity.level)
+        elseif activity.progress > 0 then
+            text = activity.progress .. "/" .. activity.threshold
+        end
+
+        return text
     end
 }

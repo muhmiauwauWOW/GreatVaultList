@@ -19,7 +19,10 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 4,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 160, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["width"] = 100,
+    ["xpadding"] = 0,
+    ["ypadding"] = 0,
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
@@ -59,5 +62,17 @@ Column.config = {
 
         line[ColumKey .. idx].text  = text
         return line
+    end,
+    ["populate"] = function(self, data, idx)
+        local activity = _.get(data, {idx})
+        local text = nil -- set default
+        
+        if activity.progress >= activity.threshold then
+            text = DIFFICULTY_NAMES[activity.level]
+        elseif activity.progress > 0 then
+            text = activity.progress .. "/" .. activity.threshold
+        end
+
+        return text
     end
 }

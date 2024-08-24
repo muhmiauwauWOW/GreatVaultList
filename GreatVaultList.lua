@@ -545,10 +545,10 @@ function GreatVaultList:lala()
 	local  data = {}
 
 	_.forEach(GreatVaultList.db.global.characters, function(entry, i)
-		table.insert(data, {entry.class, entry.name, entry.averageItemLevel, entry.raid, entry.activities,  entry.keystone })
+		table.insert(data, {entry.class, entry.name, entry.averageItemLevel, entry.raid, entry.activities, entry.pvp,  entry.keystone })
 	end)
 
-	local cols = { "class", "character",  "ilevel", "raid", "activities", "keystone"}
+	local cols = { "class", "character",  "ilevel", "raid", "activities", "pvp", "keystone"}
 	GreatVaultListFrame.BrowseResultsFrame:init(cols, data, GreatVaultList.colConfig)
 
 	--GreatVaultListFrame:SetHeight(CONST_WINDOW_HEIGHT)
