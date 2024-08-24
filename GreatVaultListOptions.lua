@@ -34,7 +34,8 @@ function GreatVaultListOptions:createOptions()
     --local subSectionTitleTextTemplate = DetailsFramework:GetTemplate("font", "ORANGE_FONT_TEMPLATE")
     
     local reloadSettings = function()
-        C_UI.Reload()
+        GreatVaultListFrame:UpdateSize()
+       -- C_UI.Reload()
     end
 
     local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, L["opt_btn_reload"])

@@ -46,7 +46,7 @@ local default_global_data = {
 local headerTable = {}
 local headerTableConfig  = {}
 
-local colConfig = {}
+GreatVaultList.colConfig = {}
 
 local function shallowcopy(orig)
     local orig_type = type(orig)
@@ -98,7 +98,7 @@ function GreatVaultList.data:storeAll()
 
 	local characterInfo = self:get()
 
-	for key, value in pairs(colConfig) do
+	for key, value in pairs(GreatVaultList.colConfig) do
 		if value["store"] then 
 			local storeFn = value["store"]
 			characterInfo = storeFn(characterInfo) 
@@ -109,6 +109,11 @@ function GreatVaultList.data:storeAll()
 end
 
 
+
+GreatVaultList.List = {
+    columns = { "Lala", "Price" ,"Name" },
+    data = {}
+}
 
 
 function GreatVaultList:OnInitialize()
@@ -232,6 +237,8 @@ function GreatVaultList.ScrollFrame.create(f)
 	scrollFrame:SetPoint("topright", f.Header, "bottomright", 0, -1)
     --scrollFrame:Refresh()
 	GreatVaultList.ScrollFrame.ScollFrame = scrollFrame;
+
+	
 end
 
 function GreatVaultList.ScrollFrame.setHeader(f)
@@ -260,9 +267,9 @@ function GreatVaultList.ScrollFrame.setEmptyFieldStr(key, obj, col,   idx)
 	local str = ""
 
 	if col and idx then
-		str = _.get(colConfig, {key, "emptyStr", idx})
+		str = _.get(GreatVaultList.colConfig, {key, "emptyStr", idx})
 	else 
-		str = _.get(colConfig, {col, "emptyStr"})
+		str = _.get(GreatVaultList.colConfig, {col, "emptyStr"})
 	end
 
 	if not str then return obj end
@@ -295,7 +302,7 @@ function GreatVaultList.ScrollFrame.RefreshScroll(self, data, offset, totalLines
 			local bg = (data.name == PlayerName) and backdrop_color_inparty or backdrop_color
 			line:SetBackdropColor(unpack(bg))
 
-			_.forEach(colConfig,function(value, key)
+			_.forEach(GreatVaultList.colConfig,function(value, key)
 				if not value["refresh"] then return end
 				if value["subCols"] then
 					-- handle subcoluumn setup
@@ -310,6 +317,7 @@ function GreatVaultList.ScrollFrame.RefreshScroll(self, data, offset, totalLines
 		end
 	end
 end
+
 
 function GreatVaultList.ScrollFrame.CreateScrollLine(self, lineId)
 	local line = CreateFrame("frame", "$parentLine" .. lineId, self, "BackdropTemplate")
@@ -339,8 +347,8 @@ function GreatVaultList.ScrollFrame.CreateScrollLine(self, lineId)
 	local header = self:GetParent().Header
 
 	for _, value in pairs(headerTableConfig) do
-		if colConfig[value] and colConfig[value]["create"] then
-			local lineFn = colConfig[value]["create"]
+		if GreatVaultList.colConfig[value] and GreatVaultList.colConfig[value]["create"] then
+			local lineFn = GreatVaultList.colConfig[value]["create"]
 			line = lineFn(line)
 		else
 			local obj = DetailsFramework:CreateLabel(line)
@@ -394,7 +402,7 @@ function GreatVaultList:SetupColumns()
 		size = size + col.size
 
 		local key = col.key
-		local value = colConfig[col.key]
+		local value = GreatVaultList.colConfig[col.key]
 
 		if not value then return end
 
@@ -468,7 +476,7 @@ GREATVAULTLIST_COLUMNS = {
 		end
 
 		if GreatVaultList.db.global.columns[self.key].active then 
-			colConfig[self.key] = self.config
+			GreatVaultList.colConfig[self.key] = self.config
 		end
 
 		if self.config.event then 
@@ -518,6 +526,33 @@ function GREATVAULTLIST_COLUMNS__checkModules()
 			end
 
 			GreatVaultList:Initwindow()
+
+			GreatVaultList:lala()	
+			
         end)
     end
+end
+
+
+
+
+
+
+
+
+function GreatVaultList:lala()
+-- DevTools_Dump(GreatVaultList.List)
+	local  data = {}
+
+	_.forEach(GreatVaultList.db.global.characters, function(entry, i)
+		table.insert(data, {entry.class, entry.name, entry.averageItemLevel, entry.raid, entry.activities,  entry.keystone })
+	end)
+
+	local cols = { "class", "character",  "ilevel", "raid", "activities", "keystone"}
+	GreatVaultListFrame.BrowseResultsFrame:init(cols, data, GreatVaultList.colConfig)
+
+	--GreatVaultListFrame:SetHeight(CONST_WINDOW_HEIGHT)
+
+
+
 end

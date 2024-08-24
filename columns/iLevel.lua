@@ -5,7 +5,7 @@ local L, _ = GreatVaultList:GetLibs()
 Column.key = ColumKey
 Column.config = {
     ["index"] = 3,
-    ["header"] = {key = ColumKey, text = L[ColumKey], width = 60, canSort = true, dataType = "number", order = "DESC", offset = 0},
+    ["header"] = {key = ColumKey, text = L[ColumKey], width = 80, canSort = true, dataType = "number", order = "DESC", offset = 0},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
@@ -27,5 +27,8 @@ Column.config = {
     ["refresh"] = function(line, data)
         line[ColumKey].text  = string.format("%.2f", data.averageItemLevel)
         return line
+    end,
+    ["populate"] = function(self, str)
+       return string.format("%.2f", str)
     end
 }

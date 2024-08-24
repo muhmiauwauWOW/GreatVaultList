@@ -22,9 +22,14 @@ Libs\DF\load.xml
 Libs\LibLodash\LibLodash.lua
 
 
-
 locale/locale.xml
 GreatVaultList.lua
+
+mixins.lua
+frames.xml
+
+
+
 GreatVaultListOptions.lua
 
 columns/activities.lua

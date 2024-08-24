@@ -46,5 +46,17 @@ Column.config = {
         fullName = string.sub(fullName, 1, estart-1)  
         line[ColumKey].text = fullName .. " " .. data.keystone.keystoneLevel
         return line
+    end,
+    ["populate"] = function(self, keystone)
+        if not keystone then return keystone end
+
+        local fullName = C_LFGList.GetActivityFullName(keystone.activityID)
+        local estart, _ = string.find(fullName, " %(")
+        local estart2, _ = string.find(fullName, " %- ")
+        if estart2 and estart2 < estart then
+            estart = estart2
+        end
+        fullName = string.sub(fullName, 1, estart-1)  
+        return fullName .. " " .. keystone.keystoneLevel
     end
 }

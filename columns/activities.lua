@@ -13,7 +13,8 @@ local DIFFICULTY_NAMES = {
 Column.key = ColumKey
 Column.config = {
     ["index"] = 7,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 160, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
@@ -55,5 +56,26 @@ Column.config = {
 
         line[ColumKey .. idx].text = text
         return line
+    end,
+    ["populate"] = function(self, data, idx)
+        local activity = _.get(data, {idx})
+        local text = nil -- set default
+        
+        if activity.progress >= activity.threshold then
+            text =  GREEN_FONT_COLOR_CODE 
+                    .. 
+                    (
+                        DIFFICULTY_NAMES[C_WeeklyRewards.GetDifficultyIDForActivityTier(activity.activityTierID)] 
+                        or 
+                        (" +" .. activity.level .. " ")
+                    )
+                    .. 
+                    FONT_COLOR_CODE_CLOSE
+        elseif activity.progress > 0 then
+            text = GRAY_FONT_COLOR_CODE .. activity.progress .. "/" .. activity.threshold ..  FONT_COLOR_CODE_CLOSE
+        end
+
+        return text
     end
+
 }

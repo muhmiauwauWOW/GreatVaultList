@@ -18,7 +18,8 @@ local DIFFICULTY_NAMES = {
 Column.key = ColumKey
 Column.config = {
     ["index"] = 4,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["template"] = "GreatVaultListTableCellTripleTextTemplate",
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 160, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,

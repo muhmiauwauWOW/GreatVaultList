@@ -23,4 +23,5 @@ Column.config = {
         line[ColumKey].text = data.name
         return line
     end
+
 }
