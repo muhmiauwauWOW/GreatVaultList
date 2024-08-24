@@ -1,5 +1,5 @@
 local ColumKey = "keystone"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
@@ -35,21 +35,10 @@ Column.config = {
         return characterInfo
 
     end,
-    ["refresh"] = function(line, data)
-        if not data.keystone then line[ColumKey].text = data.keystone; return line end
-
-        local fullName = C_LFGList.GetActivityFullName(data.keystone.activityID)
-        local estart, _ = string.find(fullName, " %(")
-        local estart2, _ = string.find(fullName, " %- ")
-        if estart2 and estart2 < estart then
-            estart = estart2
-        end
-        fullName = string.sub(fullName, 1, estart-1)  
-        line[ColumKey].text = fullName .. " " .. data.keystone.keystoneLevel
-        return line
-    end,
     ["populate"] = function(self, keystone)
         if not keystone then return keystone end
+        if type(keystone) ~= "table" then return nil end
+        if not keystone.keystoneLevel then return nil end
 
         local fullName = C_LFGList.GetActivityFullName(keystone.activityID)
         local estart, _ = string.find(fullName, " %(")

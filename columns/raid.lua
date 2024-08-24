@@ -1,5 +1,5 @@
 local ColumKey = "raid"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 local DIFFICULTY_NAMES = {
@@ -26,7 +26,7 @@ Column.config = {
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
-        ["store"] = "averageItemLevel",
+        ["store"] = ColumKey,
     },
     ['emptyStr'] = {
         "0/2",
@@ -50,22 +50,13 @@ Column.config = {
         end)
         return characterInfo
     end,
-    ["refresh"] = function(line, data, idx)
-        local activity = _.get(data, {ColumKey, idx})
-        local text = nil -- set default
-
-        if activity.progress >= activity.threshold then
-            text  = GREEN_FONT_COLOR_CODE .. DIFFICULTY_NAMES[activity.level] .. FONT_COLOR_CODE_CLOSE
-        elseif activity.progress > 0 then
-            text  = activity.progress .. "/" .. activity.threshold
-        end
-
-        line[ColumKey .. idx].text  = text
-        return line
-    end,
     ["populate"] = function(self, data, idx)
-        local activity = _.get(data, {idx})
+        if type(data) ~= "table" then return nil end
+        local activity = _.get(data, {idx}, {} )
         local text = nil -- set default
+        
+        if not activity.progress then return nil end
+        if not activity.threshold then return nil end
         
         if activity.progress >= activity.threshold then
             text = DIFFICULTY_NAMES[activity.level]

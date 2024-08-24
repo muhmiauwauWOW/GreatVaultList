@@ -206,7 +206,14 @@
         "TALENT_FRAME_TAB_LABEL_TALENTS",
         "TALENT_FRAME_TAB_LABEL_SPELLBOOK",
         "PlayerSpellsUtil",
-        "PlayerSpellsFrameMixin"
+        "PlayerSpellsFrameMixin",
+        "Settings",
+        "MinimalSliderWithSteppersMixin",
+        "CreateSettingsListSectionHeaderInitializer",
+        "CreateSettingsCheckboxSliderInitializer",
+        "ENABLE_MOUSE_SPEED",
+        "MOUSE_SENSITIVITY",
+        "OPTION_TOOLTIP_MOUSE_SENSITIVITY"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

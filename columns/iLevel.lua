@@ -1,5 +1,5 @@
 local ColumKey = "ilevel"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
@@ -25,11 +25,8 @@ Column.config = {
         characterInfo.averageItemLevel = ilvl
         return characterInfo
     end,
-    ["refresh"] = function(line, data)
-        line[ColumKey].text  = string.format("%.2f", data.averageItemLevel)
-        return line
-    end,
-    ["populate"] = function(self, str)
-       return string.format("%.2f", str)
+    ["populate"] = function(self, number)
+       if type(number) ~= "number" then return number end
+       return string.format("%.2f", number)
     end
 }

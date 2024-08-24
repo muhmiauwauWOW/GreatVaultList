@@ -216,8 +216,7 @@
 	</Frame>
 
 
-   <Frame name="GreatVaultListFrame" enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
-		<!-- <Size x="800" y="538"/> -->
+   <Frame name="GreatVaultListFrame" toplevel="true" hidden="true"  enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>

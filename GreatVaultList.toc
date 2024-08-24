@@ -34,4 +34,3 @@ columns/ilevel.lua
 columns/keystone.lua
 columns/pvp.lua
 columns/raid.lua
-columns/showvault.lua

@@ -26,7 +26,7 @@ function GreatVaultListTableCellTextMixin:PopulateFn(rowData, dataIndex, idx)
         local emptyStr = _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr", idx}, _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr"}, "-"))
         text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
     end
-    return text
+    return tostring(text)
 end
 
 function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
@@ -121,6 +121,7 @@ function GreatVaultListMixin:OnLoad()
     self:SetPortraitToClassIcon(C_CreatureInfo.GetClassInfo(PlayerUtil.GetClassID()).classFile);
 
 
+    self.width = 800
 
     --self:init()
     local dragarea = GreatVaultListFrame.Drag
@@ -135,14 +136,14 @@ function GreatVaultListMixin:OnLoad()
     dragarea:SetScript("OnDragStop", function(self)
         GreatVaultListFrame:StopMovingOrSizing()
     end)
-
-    --self:UpdateSize();
-    
 end
 
 
 function GreatVaultListMixin:OnShow()
     self:UpdateTabs();
+    self:UpdateSize();
+
+    self.BrowseResultsFrame.ItemList:RefreshScrollFrame();
 end
 
 function GreatVaultListMixin:UpdateTabs()
@@ -154,10 +155,11 @@ end
 
 
 function GreatVaultListMixin:UpdateSize(width)
-    width = width or 800
+    self.width = width or self.width
 
-    local height = (GreatVaultList.db.global.greatvault_frame.lines * 22) + 90
-    self:SetWidth(width)
+    if not  GreatVaultList.db then return  end 
+    local height = (GreatVaultList.db.global.Options.lines * 21) + 70 + 19  + 7
+    self:SetWidth(self.width)
     self:SetHeight(height)
 end
 
@@ -431,10 +433,10 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
 end
 
 function GreatVaultListItemListMixin:CallRefreshCallback()
-	if self.refreshCallback ~= nil then
-		local lastDisplayedEntry = self.ScrollBox:GetDataIndexEnd();
-		self.refreshCallback(lastDisplayedEntry);
-	end
+	-- if self.refreshCallback ~= nil then
+	-- 	local lastDisplayedEntry = self.ScrollBox:GetDataIndexEnd();
+	-- 	self.refreshCallback(lastDisplayedEntry);
+	-- end
 end
 
 function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
@@ -486,12 +488,13 @@ function GreatVaultListBrowseResultsFrameMixin:OnLoad()
 
 end
 
-
 function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
     self.columns = columns
     self.data = data
     self.columnConfig = columnConfig
 
+
+    self.currentPlayer = 0
     local fidx =  _.findIndex(self.columns, function(entry)
         return entry == "character"
     end)
@@ -509,10 +512,27 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
 		return self.data[index];
 	end
    
+
+    local width = 15 + (_.size(self.columnConfig) * 1)
+    _.forEach(self.columnConfig, function(entry)
+        width = width + (entry.width or 0)
+    end)
+
+    self:GetParent():UpdateSize(width);
+
+
+
 	self.ItemList:SetDataProvider(GetEntry, GetNumEntries);
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
     self.ItemList:DirtyScrollFrame();
-    self.ItemList:RefreshScrollFrame();
+    self.ItemList:RefreshScrollFrame(); 
+
+end
+
+function GreatVaultListBrowseResultsFrameMixin:update(columns, data, columnConfig)
+    self.columns = columns
+    self.data = data
+    self.columnConfig = columnConfig
 
 
     local width = 15 + (_.size(self.columnConfig) * 1)
@@ -522,5 +542,6 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
 
     self:GetParent():UpdateSize(width);
 
+    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));   
 end
 

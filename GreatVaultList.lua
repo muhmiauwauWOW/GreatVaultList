@@ -8,23 +8,6 @@ function GreatVaultList:GetLibs()
     return L, _
 end 
 
-local PlayerName = UnitName("player")
-
-local sortConfig  = {}
-
---frame options
-local CONST_WINDOW_WIDTH = 0
-local CONST_SCROLL_LINE_HEIGHT = 20
-local CONST_WINDOW_HEIGHT = 0
-
-local backdrop_color = {.2, .2, .2, 0.2}
-local backdrop_color_on_enter = {.8, .8, .8, 0.4}
-local backdrop_color_inparty = {.5, .5, .8, 0.2}
-
-
-
---namespace
-GreatVaultList.ScrollFrame = {}
 
 local default_global_data = {
 	global = {
@@ -38,36 +21,12 @@ local default_global_data = {
 			raid = true,
 			activities = true,
 			pvp = false
+		},
+		Options = {
+			modules = {}
 		}
 	}
 }
-
-
-local headerTable = {}
-local headerTableConfig  = {}
-
-GreatVaultList.colConfig = {}
-
-local function shallowcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in pairs(orig) do
-            copy[orig_key] = orig_value
-        end
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
-function GreatVaultList:addColumn(config)
-	table.insert(headerTableConfig, config.key)
-	table.insert(headerTable, config)
-end
-
-
 
 
 GreatVaultList.data = {}
@@ -117,6 +76,13 @@ function GreatVaultList:OnInitialize()
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 
 	GreatVaultList:slashcommand()
+
+	C_Timer.After(3, function()
+		GreatVaultList.data:storeAll()
+		GreatVaultListOptions:init()
+		GreatVaultList:updateData(true)
+	end)
+
 end
 
 function GreatVaultList_OnAddonCompartmentClick()
@@ -139,21 +105,39 @@ end
 
 
 
+
+
+GreatVaultList.Table = {}
+GreatVaultList.Table.cols = {}
+GreatVaultList.Table.data = {}
+
+
+
+
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
-
-		GreatVaultList.db.global.columns[self.key] = GreatVaultList.db.global.columns[self.key] or {}
-		GreatVaultList.db.global.columns[self.key].key = self.key
-		GreatVaultList.db.global.columns[self.key].size =  self.config.subCols or 1
-		GreatVaultList.db.global.columns[self.key].position = GreatVaultList.db.global.columns[self.key].position or self.config.index
-
-
-		if not _.isBoolean(GreatVaultList.db.global.columns[self.key].active) then
-			GreatVaultList.db.global.columns[self.key].active =  true
+		if not GreatVaultList.db.global.Options.modules[self.key] then
+			GreatVaultList.db.global.Options.modules[self.key] = {
+				active = false,
+				index = 0
+			}
 		end
 
-		if GreatVaultList.db.global.columns[self.key].active then 
-			GreatVaultList.colConfig[self.key] = self.config
+		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
+
+
+		table.insert(GreatVaultList.Table.cols, {
+			key = self.key,
+			index = _.get(GreatVaultList.db.global.Options.modules, {self.key, "index"}, self.index),
+			config = self.config
+		})
+
+
+		if not GreatVaultList.db.global.Options.modules[self.key] then
+			GreatVaultList.db.global.Options.modules[self.key] = {
+				active = false,
+				index = 0
+			}
 		end
 
 		if self.config.event then 
@@ -161,20 +145,13 @@ GREATVAULTLIST_COLUMNS = {
 				self.config.event[2](self, event)
 			end)
 		end
-
-
-		self.loaded = true
-      	GREATVAULTLIST_COLUMNS__checkModules()
     end,
 	OnDisable = function(self)
-
-		if not GreatVaultList.db.global.columns[self.key] then 
-			GreatVaultList.db.global.columns[self.key].active = false
+		local fidx =  _.findIndex(GreatVaultList.Table.cols, function(entry) return entry.key == self.key end)
+		--print("OnDisable", self.key, fidx)
+		if fidx > 0 then 
+			table.remove(GreatVaultList.Table.cols, fidx)
 		end
-
-
-        self.loaded = false
-        GREATVAULTLIST_COLUMNS__checkModules()
     end 
 }
 
@@ -194,17 +171,56 @@ function GREATVAULTLIST_COLUMNS__checkModules()
 			GREATVAULTLIST_COLUMNS__ticker:Cancel()
 
 
+			-- local modules = GreatVaultList:IterateModules()
+			
+
+			local modules = GreatVaultList:IterateModules()
+			for name, module in GreatVaultList:IterateModules() do
+				print(module.config.index)
+				if name == "pvp" then module:Disable()end
+				local  m =  GreatVaultList.db.global.Options.modules[name] or {}
+				m.active = m.active or  module:IsEnabled()
+				if m.active then 
+					--module:OnEnable()
+				else 
+					module:Disable()
+				end
+				m.index = m.index or module.config.index
+				GreatVaultList.db.global.Options.modules[name] = m
+			end
+
+
+
+
+
+
+
+			
+
 			GreatVaultList.db.global.columns = _.forEach(GreatVaultList.db.global.columns, function(col)
 				col.loaded = false
 				return col
 			end)
-			for name, module in GreatVaultList:IterateModules() do
-				GreatVaultList.db.global.columns[module.key].loaded = true
-			end
+			
+			-- for name, module in GreatVaultList:IterateModules() do
+			-- 	GreatVaultList.db.global.columns[module.key].loaded = true
+			-- 	GreatVaultList.db.global.Options.modules[module.key] = {
+			-- 		index = 
+			-- 	}
+			-- end
+
+
+		
+				--print("dddddddddddd")
+
+				--GreatVaultList:updateData()
 
 			--GreatVaultList:Initwindow()
 
-			GreatVaultList:lala()	
+			--DevTools_Dump(GreatVaultList.Table.cols)
+			--GreatVaultListFrame.BrowseResultsFrame:init(GreatVaultList.Table.cols, GreatVaultList.Table.data, GreatVaultList.colConfig)
+
+			
 			
         end)
     end
@@ -214,26 +230,50 @@ end
 
 
 
+function GreatVaultList:updateData(init)
 
+	-- print("updateData")
 
-
-function GreatVaultList:lala()
-
-	GreatVaultListOptions:init()
-	
-	
-	GreatVaultList.data:storeAll()
-
-
-	local  data = {}
-
-
-	_.forEach(GreatVaultList.db.global.characters, function(entry, i)
-		table.insert(data, {entry.class, entry.name, entry.averageItemLevel, entry.raid, entry.activities, entry.pvp,  entry.keystone })
+	 _.map(GreatVaultList.Table.cols, function(entry, key) 
+		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
 	end)
 
-	local cols = { "class", "character",  "ilevel", "raid", "activities", "pvp", "keystone"}
-	GreatVaultListFrame.BrowseResultsFrame:init(cols, data, GreatVaultList.colConfig)
+
+	sort(GreatVaultList.Table.cols,function(a, b)
+		return a.index < b.index
+	end)
+
+	-- DevTools_Dump(GreatVaultList.Table.cols)
+
+	local cols = _.map(GreatVaultList.Table.cols, function(entry) return entry.key end)
+
+	local colConfig = {}
+	_.forEach(GreatVaultList.Table.cols, function(entry,key) 
+		colConfig[entry.key] = entry.config
+	end)
 
 
+
+
+	local data = _.map(GreatVaultList.db.global.characters, function(entry, key)
+		return  _.map(GreatVaultList.Table.cols, function(cEntry)
+			return entry[_.get(cEntry, {"config", "sort", "store"})]
+		end)
+	end)
+
+
+	--  DevTools_Dump(data[1])
+
+	--  DevTools_Dump(cols)
+
+	--  DevTools_Dump(colConfig)
+
+	 if init then
+		GreatVaultListFrame.BrowseResultsFrame:init(cols, data, colConfig)
+	 else
+		GreatVaultListFrame.BrowseResultsFrame:update(cols, data, colConfig)
+
+	 end
 end
+
+
