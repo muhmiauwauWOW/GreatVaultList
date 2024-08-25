@@ -12,8 +12,9 @@ function GreatVaultListOptions:init()
     self.layout = layout
     self.category = category
 
+    
 
-
+    GreatVaultList.OptionsID = category:GetID()
 
 
     -- local setting = Settings.RegisterAddOnSetting(self.category, "checkboxi", "checkboxi", OptionTbl, type(false), "testi checki", false)
@@ -66,5 +67,6 @@ function GreatVaultListOptions:init()
                 sliderSetting, options, "Index", ""
         );
         layout:AddInitializer(initializer);
+
     end
 end

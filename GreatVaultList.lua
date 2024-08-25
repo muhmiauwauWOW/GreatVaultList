@@ -84,8 +84,12 @@ function GreatVaultList:OnInitialize()
 
 end
 
-function GreatVaultList_OnAddonCompartmentClick()
-	GreatVaultListFrame:SetShown(not GreatVaultListFrame:IsShown()) 
+function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
+	if buttonName == "RightButton" then 
+		Settings.OpenToCategory(GreatVaultList.OptionsID)
+	else 
+		GreatVaultListFrame:SetShown(not GreatVaultListFrame:IsShown())
+	end
 end
 
 
