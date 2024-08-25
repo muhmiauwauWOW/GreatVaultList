@@ -113,7 +113,7 @@ GreatVaultListMixin = {}
 function GreatVaultListMixin:OnLoad()
 	TabSystemOwnerMixin.OnLoad(self);
     self:SetTabSystem(self.TabSystem);
-    self.List = self:AddNamedTab("List", self.BrowseResultsFrame);
+    self.List = self:AddNamedTab("List", self.ListFrame);
    -- self.Options = self:AddNamedTab("Options", self.OptionsFrame);
 
     self:SetTab(self.List);
@@ -143,7 +143,7 @@ function GreatVaultListMixin:OnShow()
     self:UpdateTabs();
     self:UpdateSize();
 
-    self.BrowseResultsFrame.ItemList:RefreshScrollFrame();
+    self.ListFrame.ItemList:RefreshScrollFrame();
 end
 
 function GreatVaultListMixin:UpdateTabs()
@@ -328,7 +328,7 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-            if  GreatVaultListFrame.BrowseResultsFrame.currentPlayer == elementData then 
+            if  GreatVaultListFrame.ListFrame.currentPlayer == elementData then 
                 button.CurrentTexture:Show()
             end
 			button:SetEnabled(true);
@@ -460,10 +460,10 @@ end
 
 
 
-GreatVaultListBrowseResultsFrameMixin = {};
+GreatVaultListListMixin = {};
 
 
-function GreatVaultListBrowseResultsFrameMixin:GetBrowseListLayout(owner, itemList)
+function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 
     local function LayoutBrowseListTableBuilder(tableBuilder)
         tableBuilder:SetColumnHeaderOverlap(2);
@@ -483,12 +483,12 @@ function GreatVaultListBrowseResultsFrameMixin:GetBrowseListLayout(owner, itemLi
     return LayoutBrowseListTableBuilder;
 end
 
-function GreatVaultListBrowseResultsFrameMixin:OnLoad()
+function GreatVaultListListMixin:OnLoad()
 	
 
 end
 
-function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
+function GreatVaultListListMixin:init(columns, data, columnConfig)
     self.columns = columns
     self.data = data
     self.columnConfig = columnConfig
@@ -529,7 +529,7 @@ function GreatVaultListBrowseResultsFrameMixin:init(columns, data, columnConfig)
 
 end
 
-function GreatVaultListBrowseResultsFrameMixin:update(columns, data, columnConfig)
+function GreatVaultListListMixin:update(columns, data, columnConfig)
     self.columns = columns
     self.data = data
     self.columnConfig = columnConfig

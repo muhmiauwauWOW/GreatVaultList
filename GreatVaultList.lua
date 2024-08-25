@@ -218,7 +218,7 @@ function GREATVAULTLIST_COLUMNS__checkModules()
 			--GreatVaultList:Initwindow()
 
 			--DevTools_Dump(GreatVaultList.Table.cols)
-			--GreatVaultListFrame.BrowseResultsFrame:init(GreatVaultList.Table.cols, GreatVaultList.Table.data, GreatVaultList.colConfig)
+			--GreatVaultListFrame.ListFrame:init(GreatVaultList.Table.cols, GreatVaultList.Table.data, GreatVaultList.colConfig)
 
 			
 			
@@ -269,9 +269,9 @@ function GreatVaultList:updateData(init)
 	--  DevTools_Dump(colConfig)
 
 	 if init then
-		GreatVaultListFrame.BrowseResultsFrame:init(cols, data, colConfig)
+		GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
 	 else
-		GreatVaultListFrame.BrowseResultsFrame:update(cols, data, colConfig)
+		GreatVaultListFrame.ListFrame:update(cols, data, colConfig)
 
 	 end
 end

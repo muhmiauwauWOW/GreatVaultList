@@ -197,7 +197,7 @@
 	</Frame>
 
 
-   <Frame name="GreatVaultListBrowseResultsFrameTemplate" mixin="GreatVaultListBrowseResultsFrameMixin" virtual="true">
+   <Frame name="GreatVaultListListFrameTemplate" mixin="GreatVaultListListMixin" virtual="true">
 		<Frames>
 			<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
 				<KeyValues>
@@ -227,7 +227,7 @@
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-70"/>
 				</Anchors>
 			</Frame>
-			<Frame parentKey="BrowseResultsFrame" inherits="GreatVaultListBrowseResultsFrameTemplate">
+			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-70"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
