@@ -10,6 +10,7 @@ end
 
 local default_global_data = {
 	global = {
+		sort = 2,
 		greatvault_frame = {
 			scale = 1,
 			position = {},

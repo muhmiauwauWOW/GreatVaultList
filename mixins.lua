@@ -486,7 +486,7 @@ end
 
 function GreatVaultListListMixin:OnLoad()
 	self.sortHeaders = {}
-	self.sort = 1
+	self.sort = -1
 	self.reverseSort = false
 	self.headers = {}
 
@@ -510,6 +510,8 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 		self.reverseSort =  false
 	end
 
+	GreatVaultList.db.global.sort = self.sort
+
 	for i, header in ipairs(self.headers) do
 		header:UpdateArrow(self.reverseSort);
 	end
@@ -519,11 +521,9 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 		return comp( a[self.sort], b[self.sort])
 	end)
 	
-
     local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
     self.currentPlayer =  _.findIndex(self.data, function(entry)  return entry[fidx] == UnitName("player") end)
-	self.ItemList:RefreshScrollFrame(); 
-
+	self.ItemList:RefreshScrollFrame();
 end
 
 
@@ -532,6 +532,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
     self.data = data
     self.columnConfig = columnConfig
 	self.currentPlayer = 0
+
 
     local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
@@ -550,7 +551,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 
 	self.ItemList:SetDataProvider(GetEntry, GetNumEntries);
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
-	self:SetSortOrder(1)
+	self:SetSortOrder(GreatVaultList.db.global.sort)
 
 
 end
@@ -568,6 +569,7 @@ function GreatVaultListListMixin:update(columns, data, columnConfig)
 
     self:GetParent():UpdateSize(width);
 
-    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));   
+    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
+	self:SetSortOrder(self.sort)
 end
 
