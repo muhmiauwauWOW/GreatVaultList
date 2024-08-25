@@ -232,27 +232,17 @@ end
 
 function GreatVaultList:updateData(init)
 
-	-- print("updateData")
-
 	 _.map(GreatVaultList.Table.cols, function(entry, key) 
 		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
 	end)
 
-
-	sort(GreatVaultList.Table.cols,function(a, b)
-		return a.index < b.index
-	end)
-
-	-- DevTools_Dump(GreatVaultList.Table.cols)
-
+	sort(GreatVaultList.Table.cols,function(a, b) return a.index < b.index end)
 	local cols = _.map(GreatVaultList.Table.cols, function(entry) return entry.key end)
 
 	local colConfig = {}
 	_.forEach(GreatVaultList.Table.cols, function(entry,key) 
 		colConfig[entry.key] = entry.config
 	end)
-
-
 
 
 	local data = _.map(GreatVaultList.db.global.characters, function(entry, key)
@@ -262,18 +252,15 @@ function GreatVaultList:updateData(init)
 	end)
 
 
-	--  DevTools_Dump(data[1])
+	-- DevTool:AddData(data, "data")
+	-- DevTool:AddData(cols, "cols")
+	-- DevTool:AddData(colConfig, "colConfig")
 
-	--  DevTools_Dump(cols)
-
-	--  DevTools_Dump(colConfig)
-
-	 if init then
+	if init then
 		GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
-	 else
+	else
 		GreatVaultListFrame.ListFrame:update(cols, data, colConfig)
-
-	 end
+	end
 end
 
 

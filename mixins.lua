@@ -111,13 +111,6 @@ GreatVaultListMixin = {}
 
 
 function GreatVaultListMixin:OnLoad()
-	TabSystemOwnerMixin.OnLoad(self);
-    self:SetTabSystem(self.TabSystem);
-    self.List = self:AddNamedTab("List", self.ListFrame);
-   -- self.Options = self:AddNamedTab("Options", self.OptionsFrame);
-
-    self:SetTab(self.List);
-
     self:SetPortraitToClassIcon(C_CreatureInfo.GetClassInfo(PlayerUtil.GetClassID()).classFile);
 
 
@@ -138,20 +131,10 @@ function GreatVaultListMixin:OnLoad()
     end)
 end
 
-
 function GreatVaultListMixin:OnShow()
-    self:UpdateTabs();
     self:UpdateSize();
-
     self.ListFrame.ItemList:RefreshScrollFrame();
 end
-
-function GreatVaultListMixin:UpdateTabs()
-	self.TabSystem:SetTabShown(self.List, true);
-
-    
-end
-
 
 
 function GreatVaultListMixin:UpdateSize(width)
@@ -167,9 +150,6 @@ end
 function GreatVaultListMixin:OnHide()
 end
 
-
-function GreatVaultListMixin:OnEvent()
-end
 
 
 
