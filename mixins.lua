@@ -114,7 +114,10 @@ GreatVaultListMixin = {}
 
 
 function GreatVaultListMixin:OnLoad()
-    self:SetPortraitToClassIcon(C_CreatureInfo.GetClassInfo(PlayerUtil.GetClassID()).classFile);
+	self:SetPortraitTextureRaw("Interface\\AddOns\\GreatVaultList\\vault.png")
+	self:GetPortrait():ClearAllPoints()
+	self:GetPortrait():SetPoint("TOPLEFT", -2, 5)
+	self:GetPortrait():SetSize(55, 55)
 
 
     self.width = 800

@@ -174,9 +174,9 @@ function GreatVaultList:updateData(init)
 	end)
 
 
-	DevTool:AddData(data, "data")
-	DevTool:AddData(cols, "cols")
-	DevTool:AddData(colConfig, "colConfig")
+	-- DevTool:AddData(data, "data")
+	-- DevTool:AddData(cols, "cols")
+	-- DevTool:AddData(colConfig, "colConfig")
 
 	if init then
 		GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
