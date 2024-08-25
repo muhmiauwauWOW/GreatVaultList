@@ -9,7 +9,7 @@ Column.config = {
     ["width"] = 30,
     ["xpadding"] = 0, 
     ["ypadding"] = 0, 
-    ["header"] = {key = ColumKey, text = "", width = 30, canSort = true, dataType = "string", order = "DESC", offset = 0, xpadding = 0, ypadding = 0 },
+    ["header"] = {key = ColumKey, text = "", width = 30, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,

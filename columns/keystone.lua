@@ -6,7 +6,7 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 13,
     ["width"] = 180,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 180, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
@@ -29,7 +29,7 @@ Column.config = {
             characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
         else
-            characterInfo.keystone = nil
+            characterInfo.keystone = ""
         end
 
         return characterInfo

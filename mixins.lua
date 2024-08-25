@@ -36,8 +36,6 @@ end
 
 GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellTextMixin);
 
-
-
 function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
     _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
         self[entry]:SetWidth(math.floor(self.width/3))
@@ -66,15 +64,17 @@ GreatVaultListSortOrderState = tInvert({
 
 GreatVaultListTableHeaderStringMixin = CreateFromMixins(TableBuilderElementMixin);
 
+
+
 function GreatVaultListTableHeaderStringMixin:OnClick()
 	self.owner:SetSortOrder(self.sortOrder);
-	self:UpdateArrow();
 end
 
 function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder)
 	self:SetText(headerText);
 
-	local interactiveHeader = owner.RegisterHeader and sortOrder ~= nil;
+	local find = _.find(owner.sortHeaders, function(entry) return entry == sortOrder; end)
+	local interactiveHeader = owner.RegisterHeader and find;
 	self:SetEnabled(interactiveHeader);
 	self.owner = owner;
 	self.sortOrder = sortOrder;
@@ -87,16 +87,19 @@ function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder)
 	end
 end
 
-function GreatVaultListTableHeaderStringMixin:UpdateArrow()
-	local sortOrderState = self.owner:GetSortOrderState(self.sortOrder);
-	self:SetArrowState(sortOrderState);
+function GreatVaultListTableHeaderStringMixin:UpdateArrow(reverse)
+	if self.owner.sort == self.sortOrder then 
+		self:SetArrowState(reverse)
+		self.Arrow:Show();
+	else 
+		self.Arrow:Hide();
+	end
 end
 
-function GreatVaultListTableHeaderStringMixin:SetArrowState(sortOrderState)
-	self.Arrow:SetShown(sortOrderState == GreatVaultListSortOrderState.PrimarySorted or sortOrderState == GreatVaultListSortOrderState.PrimaryReversed);
-	if sortOrderState == GreatVaultListSortOrderState.PrimarySorted then
+function GreatVaultListTableHeaderStringMixin:SetArrowState(reverse)
+	if reverse then
 		self.Arrow:SetTexCoord(0, 1, 1, 0);
-	elseif sortOrderState == GreatVaultListSortOrderState.PrimaryReversed then
+	else 
 		self.Arrow:SetTexCoord(0, 1, 0, 1);
 	end
 end
@@ -164,7 +167,7 @@ function GreatVaultListTableBuilderMixin:AddColumnInternal(owner, sortOrder, cel
 	local column = self:AddColumn();
 
 	if sortOrder then
-		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, owner.columns[sortOrder], sortOrder);
+		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder);
 	end
 
 	column:ConstructCells("FRAME", cellTemplate, owner, ...);
@@ -200,7 +203,6 @@ function GreatVaultListItemListLineMixin:OnClick(button)
 		self:GetItemList():SetSelectedEntry(self.rowData);
 	end
 end
-
 
 function GreatVaultListItemListLineMixin:OnEnter()
 	self.HighlightTexture:Show();
@@ -308,9 +310,7 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-            if  GreatVaultListFrame.ListFrame.currentPlayer == elementData then 
-                button.CurrentTexture:Show()
-            end
+			button.CurrentTexture:SetShown(GreatVaultListFrame.ListFrame.currentPlayer == elementData)
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -408,7 +408,7 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
     
 	local dataProvider = CreateIndexRangeDataProvider(numResults);
 	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
-	
+
 	self:CallRefreshCallback();
 end
 
@@ -436,6 +436,13 @@ end
 
 
 
+GreatVaultListSortOrderState = tInvert({
+	"None",
+	"PrimarySorted",
+	"PrimaryReversed",
+	"Sorted",
+	"Reversed",
+});
 
 
 
@@ -444,7 +451,10 @@ GreatVaultListListMixin = {};
 
 
 function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
-
+	owner.headers = {}
+	owner.sort = 1
+	owner.reverseSort = false
+	owner.sortHeaders = {}
     local function LayoutBrowseListTableBuilder(tableBuilder)
         tableBuilder:SetColumnHeaderOverlap(2);
         tableBuilder:SetHeaderContainer(itemList:GetHeaderContainer());
@@ -455,8 +465,16 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
             local xpadding = _.get(self.columnConfig, {colName, "xpadding"}, 14)
             local ypadding = _.get(self.columnConfig, {colName, "ypadding"}, 14)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
+
+			local canSort = _.get(self.columnConfig, {colName, "header", "canSort"}, false)
+			if canSort then 
+				table.insert(self.sortHeaders, idx);
+			end
+
+
+
             local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, xpadding, ypadding, idx, template, idx, self.columns, self.columnConfig, width);
-            col:GetHeaderFrame():SetText(headerText);
+			col:GetHeaderFrame():SetText(headerText);
         end)
     end
 
@@ -464,34 +482,53 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 end
 
 function GreatVaultListListMixin:OnLoad()
-	
+	self.sortHeaders = {}
+	self.sort = 1
+	self.reverseSort = false
+	self.headers = {}
 
 end
+
+
+function GreatVaultListListMixin:RegisterHeader(header)
+	local find = _.find(self.sortHeaders, function(entry) return entry == header.sortOrder; end)
+	if find and  find > 0 then 
+		DevTool:AddData(header, "header")
+		table.insert(self.headers, header);
+	end
+end
+
+
+function GreatVaultListListMixin:SetSortOrder(sortOrder)
+	if self.sort == sortOrder then 
+		self.reverseSort = not self.reverseSort
+	else
+		self.sort = sortOrder
+		self.reverseSort =  false
+	end
+
+	for i, header in ipairs(self.headers) do
+		header:UpdateArrow(self.reverseSort);
+	end
+
+	local comp = (self.reverseSort) and _.gt or _.lt
+	sort(self.data, function(a, b)
+		return comp( a[self.sort], b[self.sort])
+	end)
+	
+
+    local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
+    self.currentPlayer =  _.findIndex(self.data, function(entry)  return entry[fidx] == UnitName("player") end)
+	self.ItemList:RefreshScrollFrame(); 
+
+end
+
 
 function GreatVaultListListMixin:init(columns, data, columnConfig)
     self.columns = columns
     self.data = data
     self.columnConfig = columnConfig
-
-
-    self.currentPlayer = 0
-    local fidx =  _.findIndex(self.columns, function(entry)
-        return entry == "character"
-    end)
-
-    self.currentPlayer =  _.findIndex(self.data, function(entry)
-        return entry[fidx] == UnitName("player")
-    end)
-
-
-	local function GetNumEntries()
-		return #self.data;
-	end
-
-	local function GetEntry(index)
-		return self.data[index];
-	end
-   
+	self.currentPlayer = 0
 
     local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
@@ -500,12 +537,18 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 
     self:GetParent():UpdateSize(width);
 
+	local function GetNumEntries()
+		return #self.data;
+	end
 
+	local function GetEntry(index)
+		return self.data[index];
+	end
 
 	self.ItemList:SetDataProvider(GetEntry, GetNumEntries);
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
-    self.ItemList:DirtyScrollFrame();
-    self.ItemList:RefreshScrollFrame(); 
+	self:SetSortOrder(1)
+
 
 end
 

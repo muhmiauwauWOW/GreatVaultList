@@ -6,7 +6,7 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 2,
     ["width"] = 120,
-    ["header"] = {key = ColumKey, text = L[ColumKey], width = 120, canSort = true, dataType = "string", order = "DESC", offset = 0},
+    ["header"] = {key = ColumKey, text = L[ColumKey], width = 120, canSort = true},
     ["sort"] = {
         ["key"] = "character",
         ["store"] = "name",

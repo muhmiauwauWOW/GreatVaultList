@@ -213,7 +213,12 @@
         "CreateSettingsCheckboxSliderInitializer",
         "ENABLE_MOUSE_SPEED",
         "MOUSE_SENSITIVITY",
-        "OPTION_TOOLTIP_MOUSE_SENSITIVITY"
+        "OPTION_TOOLTIP_MOUSE_SENSITIVITY",
+        "GreatVaultListFrame",
+        "DevTool",
+        "AuctionHouseSystemMixin",
+        "AuctionHouseBuySystemMixin",
+        "g_auctionHouseSortsBySearchContext"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

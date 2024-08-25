@@ -1,4 +1,3 @@
----@diagnostic disable: deprecated
 ---@class GreatVaultList:AceAddon
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
@@ -109,10 +108,6 @@ end
 
 GreatVaultList.Table = {}
 GreatVaultList.Table.cols = {}
-GreatVaultList.Table.data = {}
-
-
-
 
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
@@ -156,79 +151,6 @@ GREATVAULTLIST_COLUMNS = {
 }
 
 
-function GREATVAULTLIST_COLUMNS__checkModules()
-    local modules = GreatVaultList:IterateModules()
-    local check = _.every(modules, function(module)
-        return module.loaded
-    end)
-
-    if GREATVAULTLIST_COLUMNS__ticker then
-        GREATVAULTLIST_COLUMNS__ticker:Cancel()
-	end
-
-    if check then
-        GREATVAULTLIST_COLUMNS__ticker = C_Timer.NewTimer(0.1, function()
-			GREATVAULTLIST_COLUMNS__ticker:Cancel()
-
-
-			-- local modules = GreatVaultList:IterateModules()
-			
-
-			local modules = GreatVaultList:IterateModules()
-			for name, module in GreatVaultList:IterateModules() do
-				print(module.config.index)
-				if name == "pvp" then module:Disable()end
-				local  m =  GreatVaultList.db.global.Options.modules[name] or {}
-				m.active = m.active or  module:IsEnabled()
-				if m.active then 
-					--module:OnEnable()
-				else 
-					module:Disable()
-				end
-				m.index = m.index or module.config.index
-				GreatVaultList.db.global.Options.modules[name] = m
-			end
-
-
-
-
-
-
-
-			
-
-			GreatVaultList.db.global.columns = _.forEach(GreatVaultList.db.global.columns, function(col)
-				col.loaded = false
-				return col
-			end)
-			
-			-- for name, module in GreatVaultList:IterateModules() do
-			-- 	GreatVaultList.db.global.columns[module.key].loaded = true
-			-- 	GreatVaultList.db.global.Options.modules[module.key] = {
-			-- 		index = 
-			-- 	}
-			-- end
-
-
-		
-				--print("dddddddddddd")
-
-				--GreatVaultList:updateData()
-
-			--GreatVaultList:Initwindow()
-
-			--DevTools_Dump(GreatVaultList.Table.cols)
-			--GreatVaultListFrame.ListFrame:init(GreatVaultList.Table.cols, GreatVaultList.Table.data, GreatVaultList.colConfig)
-
-			
-			
-        end)
-    end
-end
-
-
-
-
 
 function GreatVaultList:updateData(init)
 
@@ -252,9 +174,9 @@ function GreatVaultList:updateData(init)
 	end)
 
 
-	-- DevTool:AddData(data, "data")
-	-- DevTool:AddData(cols, "cols")
-	-- DevTool:AddData(colConfig, "colConfig")
+	DevTool:AddData(data, "data")
+	DevTool:AddData(cols, "cols")
+	DevTool:AddData(colConfig, "colConfig")
 
 	if init then
 		GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
