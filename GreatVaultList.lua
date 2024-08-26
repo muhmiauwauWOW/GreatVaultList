@@ -18,7 +18,7 @@ local default_global_data = {
 		Options = {
 			modules = {},
 			position = {},
-			scale = 100,
+			scale = 1,
 		}
 	}
 }
@@ -35,7 +35,7 @@ function GreatVaultList:OnEnable()
 	GreatVaultList:slashcommand()
 
 	-- set Options
-	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale / 100)
+	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale)
 end
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)

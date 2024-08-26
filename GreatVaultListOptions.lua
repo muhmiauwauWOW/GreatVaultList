@@ -1,3 +1,5 @@
+local addonName = ...
+
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
 
@@ -7,43 +9,36 @@ GreatVaultListOptions = {}
 
 
 function GreatVaultListOptions:init()
-    local category, layout = Settings.RegisterVerticalLayoutCategory("Great Vault List")
+    local category, layout = Settings.RegisterVerticalLayoutCategory(addonName)
     Settings.RegisterAddOnCategory(category)
-    self.layout = layout
-    self.category = category
-
-    
-
     GreatVaultList.OptionsID = category:GetID()
 
 
-    -- local setting = Settings.RegisterAddOnSetting(self.category, "checkboxi", "checkboxi", OptionTbl, type(false), "testi checki", false)
-    -- setting:SetValueChangedCallback(valueChangedCallback)
-	-- Settings.CreateCheckbox(self.category, setting, "tooltip?")
+    -- scale
+    local setting = Settings.RegisterAddOnSetting(category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 1)
+    setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
+    
+    local function FormatScaledPercentage(value)
+        return FormatPercentage(value);
+    end
+    local options = Settings.CreateSliderOptions(.4, 2, .01)
+    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage);
+    Settings.CreateSlider(category, setting, options, L["opt_scale_desc"])
 
 
-    local setting = Settings.RegisterAddOnSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 100)
-    setting:SetValueChangedCallback(function(self)
-       local value = self:GetValue()
-       GreatVaultListFrame:SetScale(value / 100)
-    end)
-
-    local options = Settings.CreateSliderOptions(40, 200, 1)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
-    Settings.CreateSlider(self.category, setting, options, L["opt_scale_desc"])
-
-
-
-    local setting = Settings.RegisterAddOnSetting(self.category, "lines", "lines", GreatVaultList.db.global.Options, "number", L["opt_lines_name"], 12)
+    -- lines
+    local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number", L["opt_lines_name"], 12)
     setting:SetValueChangedCallback(function(self)
         GreatVaultListFrame:UpdateSize()
     end)
+
+
   
     local options = Settings.CreateSliderOptions(4, 24, 1)
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
-    Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
+    Settings.CreateSlider(category, setting, options, L["opt_lines_desc"])
 
-    self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
+    layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
 
 
 
@@ -74,9 +69,11 @@ function GreatVaultListOptions:init()
         local options = Settings.CreateSliderOptions(0, 10, 1)
         options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
     
+
+        
         local initializer = CreateSettingsCheckboxSliderInitializer(
-                cbSetting, module.key .. " Module", "Activate or Deactivate this Module",
-                sliderSetting, options, "Module position", "Change the position of the Column of this Module"
+                cbSetting, string.format(L["opt_module_name"], module.key), L["opt_module_desc"],
+                sliderSetting, options, L["opt_position_name"], L["opt_position_desc"]
         );
         layout:AddInitializer(initializer);
 
