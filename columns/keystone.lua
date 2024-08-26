@@ -6,12 +6,26 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 13,
     ["width"] = 180,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 180, canSort = true},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 200, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     }, 
     ['emptyStr'] = "-",
+    ["demo"] = function(idx)
+        local mapChallengeModeIDs = {}
+        table.foreach(C_LFGList.GetAvailableActivities(2), function(k, id)
+            local info = C_LFGList.GetActivityInfoTable(id)
+            if info.isMythicPlusActivity then
+                tinsert(mapChallengeModeIDs,id)
+            end
+        end)
+
+        return {
+            activityID = mapChallengeModeIDs[math.random(#mapChallengeModeIDs)],
+            keystoneLevel = math.random(5,15)
+        }
+    end,
     event = {
         "CHALLENGE_MODE_COMPLETED",
         function(self)
@@ -26,7 +40,6 @@ Column.config = {
         if activityID then 
             characterInfo.keystone = {}
             characterInfo.keystone.activityID = activityID
-            characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
         else
             characterInfo.keystone = ""

@@ -7,12 +7,16 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 1,
     ["width"] = 30,
-    ["padding"] = 0, 
+    ["padding"] = 0,
     ["header"] = {key = ColumKey, text = "", width = 30, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
+    ["demo"] = function(idx)
+        local classes = {"HUNTER", "WARLOCK", "PRIEST", "PALADIN", "MAGE", "ROGUE", "DRUID", "SHAMAN", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER"};
+        return classes[math.random(#classes)]
+    end,
     ["populate"] = function(self, class)
         if type(class) ~= "string" then return nil end
         local icon = CLASS_ICON_TCOORDS[class] or CLASS_ICON_TCOORDS["PALADIN"]

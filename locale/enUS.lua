@@ -13,11 +13,7 @@ L["pvp"] = "PvP"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
-
-
 L["OpenVault"] = "Open Vault"
-
-
 
 L["opt_lines_name"] = "Lines"
 L["opt_lines_desc"] = "Amount of lines to display"

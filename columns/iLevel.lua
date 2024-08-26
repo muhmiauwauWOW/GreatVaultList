@@ -11,6 +11,9 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
+    ["demo"] = function(idx)
+        return math.random(50000, 60000)/100
+    end,
     ["store"] = function(characterInfo)
         local _, ilvl = GetAverageItemLevel();
         characterInfo.averageItemLevel = ilvl

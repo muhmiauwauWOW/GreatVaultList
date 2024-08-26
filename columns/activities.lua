@@ -27,6 +27,20 @@ Column.config = {
         "0/4",
         "0/8"
     },
+    ["demo"] = function(idx)
+
+        local level = math.random(5,15)
+        local obj = {}
+        for i = 1, 3, 1 do
+            table.insert(obj, {
+                progress = 2,
+                threshold = 1,
+                level = level + (i*2),
+                activityTierID = 0
+            })
+        end
+        return obj
+    end,
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
@@ -59,7 +73,7 @@ Column.config = {
             text =  (
                         DIFFICULTY_NAMES[C_WeeklyRewards.GetDifficultyIDForActivityTier(activity.activityTierID)] 
                         or 
-                        (" +" .. activity.level .. " ")
+                        ("+" .. activity.level)
                     )
         elseif activity.progress > 0 then
             text = activity.progress .. "/" .. activity.threshold

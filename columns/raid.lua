@@ -32,6 +32,24 @@ Column.config = {
         "0/4",
         "0/6"
     },
+    ["demo"] = function(idx)
+        local keys =  _.keys(DIFFICULTY_NAMES)
+        local level = keys[math.random(_.size(keys))]
+        local obj = {}
+
+        local progress = math.random(7) - 1
+        local threshold = {2, 4, 6}
+
+        for i = 1, 3, 1 do
+            
+            table.insert(obj, {
+                progress = progress,
+                threshold = threshold[i],
+                level = level
+            })
+        end
+        return obj
+    end,
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
@@ -60,7 +78,7 @@ Column.config = {
         if activity.progress >= activity.threshold then
             text = DIFFICULTY_NAMES[activity.level]
         elseif activity.progress > 0 then
-            text = activity.progress .. "/" .. activity.threshold
+            text =  GRAY_FONT_COLOR:WrapTextInColorCode(activity.progress .. "/" .. activity.threshold)
         end
 
         return text

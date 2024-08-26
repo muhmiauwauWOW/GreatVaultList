@@ -11,6 +11,10 @@ Column.config = {
         ["key"] = "character",
         ["store"] = "name",
     },
+    ["demo"] = function(idx)
+        local names = {"Jesternar", "Mishenani", "Martiners", "Mydraciea", "Monzorust", "Ysedbelly", "Connerrig", "Trauddled", "Groldrold", "Shillenton", "Ravenf", "Reginotta", "Groldrold"};
+        return names[idx]
+    end,
     ["store"] = function(characterInfo)
         local _, className = UnitClass("player")
         characterInfo.name = UnitName("player")

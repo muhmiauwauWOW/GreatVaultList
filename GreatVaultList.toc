@@ -4,7 +4,7 @@
 ## Version: @project-version@
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultList_OnAddonCompartmentClick
-## SavedVariables: GreatVaultListColdStart3DB
+## SavedVariables: GreatVaultList2DB
 ## IconTexture: Interface\AddOns\GreatVaultList\vault.png
 ## X-Curse-Project-ID: 965814
 ## X-Wago-ID: nGvpV56x

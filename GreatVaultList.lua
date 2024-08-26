@@ -29,12 +29,13 @@ local default_global_data = {
 function GreatVaultList:OnEnable()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
-	
+	GreatVaultList:slashcommand()
 	GreatVaultList.Data:init()
 	GreatVaultList.Data:storeAll()
 	GreatVaultListOptions:init()
+
 	GreatVaultList:updateData(true)
-	GreatVaultList:slashcommand()
+	-- GreatVaultList:demoMode()
 
 	-- set Options
 	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale)
@@ -94,7 +95,6 @@ GREATVAULTLIST_COLUMNS = {
     end,
 	OnDisable = function(self)
 		local fidx =  _.findIndex(GreatVaultList.Table.cols, function(entry) return entry.key == self.key end)
-		--print("OnDisable", self.key, fidx)
 		if fidx > 0 then 
 			table.remove(GreatVaultList.Table.cols, fidx)
 		end
@@ -129,4 +129,35 @@ function GreatVaultList:updateData(refresh)
 	-- DevTool:AddData(colConfig, "colConfig")
 
 	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
+end
+
+
+
+function GreatVaultList:demoMode()
+	_.map(GreatVaultList.Table.cols, function(entry, key) 
+		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
+	end)
+
+	sort(GreatVaultList.Table.cols, function(a, b) return a.index < b.index end)
+
+	local colConfig = {}
+	local cols = _.map(GreatVaultList.Table.cols, function(entry) 
+		colConfig[entry.key] =  entry.config
+		return entry.key 
+	end)
+
+	local demoData = {}
+	for i = 1, 10, 1 do
+		local d = _.map(GreatVaultList.Table.cols, function(cEntry)
+			local demoFn = _.get(cEntry, {"config", "demo"}, function(e) return e end)
+			return demoFn(i)
+		end)
+
+		table.insert(demoData, d)
+	end
+
+	-- DevTool:AddData(demoData, "demoData")
+	-- DevTool:AddData(cols, "cols")
+	-- DevTool:AddData(colConfig, "colConfig")
+	GreatVaultListFrame.ListFrame:init(cols, demoData, colConfig, true)
 end

@@ -6,7 +6,7 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 10,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
-    ["width"] = 200,
+    ["width"] = 250,
     ["padding"] = 0, 
     ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
     ["subCols"] = 3,
@@ -19,6 +19,23 @@ Column.config = {
         "   0/2500",
         "   0/5000"
     },
+    ["demo"] = function(idx)
+
+        local obj = {}
+
+        local progress = math.random(5000)
+        local threshold = {1250, 2500, 5000}
+
+        for i = 1, 3, 1 do
+            
+            table.insert(obj, {
+                progress = progress,
+                threshold = threshold[i],
+                level = math.random(9)
+            })
+        end
+        return obj
+    end,
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
@@ -47,7 +64,7 @@ Column.config = {
         if activity.progress >= activity.threshold then
             text = PVPUtil.GetTierName(activity.level)
         elseif activity.progress > 0 then
-            text = activity.progress .. "/" .. activity.threshold
+            text = GRAY_FONT_COLOR:WrapTextInColorCode(activity.progress .. "/" .. activity.threshold)
         end
 
         return text
