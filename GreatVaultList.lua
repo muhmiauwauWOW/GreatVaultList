@@ -101,6 +101,10 @@ GREATVAULTLIST_COLUMNS = {
     end 
 }
 
+
+
+
+
 function GreatVaultList:updateData(refresh)
 
 	_.map(GreatVaultList.Table.cols, function(entry, key) 
