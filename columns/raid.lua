@@ -1,5 +1,5 @@
 local ColumKey = "raid"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 local DIFFICULTY_NAMES = {
@@ -18,23 +18,44 @@ local DIFFICULTY_NAMES = {
 Column.key = ColumKey
 Column.config = {
     ["index"] = 4,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false, dataType = "string", order = "DESC", offset = 20, align = "center"},
+    ["template"] = "GreatVaultListTableCellTripleTextTemplate",
+    ["width"] = 100,
+    ["padding"] = 0, 
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
-        ["store"] = "averageItemLevel",
+        ["store"] = ColumKey,
     },
     ['emptyStr'] = {
         "0/2",
         "0/4",
         "0/6"
     },
+    ["demo"] = function(idx)
+        local keys =  _.keys(DIFFICULTY_NAMES)
+        local level = keys[math.random(_.size(keys))]
+        local obj = {}
+
+        local progress = math.random(7) - 1
+        local threshold = {2, 4, 6}
+
+        for i = 1, 3, 1 do
+            
+            table.insert(obj, {
+                progress = progress,
+                threshold = threshold[i],
+                level = level
+            })
+        end
+        return obj
+    end,
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
-            self.config.store(GreatVaultList.data:get())
-            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
+            GreatVaultList.Data:store(ColumKey, true)
+            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultListFrame:RefreshScrollFrame()
             end
         end
     },
@@ -46,17 +67,20 @@ Column.config = {
         end)
         return characterInfo
     end,
-    ["refresh"] = function(line, data, idx)
-        local activity = _.get(data, {ColumKey, idx})
+    ["populate"] = function(self, data, idx)
+        if type(data) ~= "table" then return nil end
+        local activity = _.get(data, {idx}, {} )
         local text = nil -- set default
-
+        
+        if not activity.progress then return nil end
+        if not activity.threshold then return nil end
+        
         if activity.progress >= activity.threshold then
-            text  = GREEN_FONT_COLOR_CODE .. DIFFICULTY_NAMES[activity.level] .. FONT_COLOR_CODE_CLOSE
+            text = DIFFICULTY_NAMES[activity.level]
         elseif activity.progress > 0 then
-            text  = activity.progress .. "/" .. activity.threshold
+            text =  GRAY_FONT_COLOR:WrapTextInColorCode(activity.progress .. "/" .. activity.threshold)
         end
 
-        line[ColumKey .. idx].text  = text
-        return line
+        return text
     end
 }

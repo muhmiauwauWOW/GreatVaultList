@@ -1,27 +1,27 @@
 local ColumKey = "class"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 local CONST_SCROLL_LINE_HEIGHT = 20
 Column.key = ColumKey
 Column.config = {
     ["index"] = 1,
-    ["header"] = {key = ColumKey, text = "", width = 25, canSort = true, dataType = "string", order = "DESC", offset = 0},
+    ["width"] = 30,
+    ["padding"] = 0,
+    ["header"] = {key = ColumKey, text = "", width = 30, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
-    ["create"] = function(line)
-        local icon = line:CreateTexture("$parentClassIcon", "overlay")
-        icon:SetSize(CONST_SCROLL_LINE_HEIGHT - 2, CONST_SCROLL_LINE_HEIGHT - 2)
-        icon:SetTexture("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES")
-        line[ColumKey] = icon
-        line:AddFrameToHeaderAlignment(icon)
-        return line
+    ["demo"] = function(idx)
+        local classes = {"HUNTER", "WARLOCK", "PRIEST", "PALADIN", "MAGE", "ROGUE", "DRUID", "SHAMAN", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER"};
+        return classes[math.random(#classes)]
     end,
-    ["refresh"] = function(line, data)
-        local L, R, T, B = unpack(CLASS_ICON_TCOORDS[data.class])
-        line[ColumKey]:SetTexCoord(L+0.02, R-0.02, T+0.02, B-0.02)
-        return line
+    ["populate"] = function(self, class)
+        if type(class) ~= "string" then return nil end
+        local icon = CLASS_ICON_TCOORDS[class] or CLASS_ICON_TCOORDS["PALADIN"]
+        local L, R, T, B = unpack(icon)
+        return CreateTextureMarkup("Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES", 1024,1024, 20, 20, L+0.02, R-0.02, T+0.02, B-0.02)
     end
+
 }

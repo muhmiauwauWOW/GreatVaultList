@@ -6,7 +6,6 @@ ignore:
 
 externals:
   Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
-  Libs/LibWindow-1.1: https://repos.wowace.com/wow/libwindow-1-1/trunk/LibWindow-1.1
   Libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
   Libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
   Libs/AceEvent-3.0: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
@@ -14,7 +13,6 @@ externals:
   Libs/AceDB-3.0:  https://repos.wowace.com/wow/ace3/trunk/AceDB-3.0
   Libs/AceTimer-3.0:  https://repos.wowace.com/wow/ace3/trunk/AceTimer-3.0
   Libs/AceBucket-3.0:  https://repos.wowace.com/wow/ace3/trunk/AceBucket-3.0
-  Libs/DF: https://github.com/Tercioo/Details-Framework.git
   Libs/LibLodash: https://github.com/muhmiauwauWOW/LibLodash.git
 
 enable-nolib-creation: no

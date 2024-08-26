@@ -1,3 +1,5 @@
+local addonName = ...
+
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
 
@@ -5,133 +7,75 @@ local L, _ = GreatVaultList:GetLibs()
 GreatVaultListOptions = {}
 
 
-function GreatVaultListOptions:createOptions()
+
+function GreatVaultListOptions:init()
+    local category, layout = Settings.RegisterVerticalLayoutCategory(addonName)
+    Settings.RegisterAddOnCategory(category)
+    GreatVaultList.OptionsID = category:GetID()
+
+
+    -- scale
+    local setting = Settings.RegisterAddOnSetting(category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 1)
+    setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
     
-    local loadedColumms = _.filter(GreatVaultList.db.global.columns, function (col)
-        return (col.loaded == true)
+    local function FormatScaledPercentage(value)
+        return FormatPercentage(value);
+    end
+    local options = Settings.CreateSliderOptions(.4, 2, .01)
+    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage);
+    Settings.CreateSlider(category, setting, options, L["opt_scale_desc"])
+
+
+    -- lines
+    local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number", L["opt_lines_name"], 12)
+    setting:SetValueChangedCallback(function(self)
+        GreatVaultListFrame:UpdateSize()
     end)
 
 
-    local columnLen = _.size(loadedColumms)
-    local heightSize = (columnLen * 23) + 65
+  
+    local options = Settings.CreateSliderOptions(4, 24, 1)
+    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    Settings.CreateSlider(category, setting, options, L["opt_lines_desc"])
 
-    local optionsFrame = DetailsFramework:CreateSimplePanel(UIParent, 600, heightSize, L["opt_windowname"], "GreatVaultListOptionsPanel")
-    optionsFrame:SetFrameStrata("DIALOG")
-    optionsFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    optionsFrame:Show()
+    layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
 
-    local scaleBar = DetailsFramework:CreateScaleBar(optionsFrame, GreatVaultList.db.global.greatvault_frame)
-    optionsFrame:SetScale(GreatVaultList.db.global.greatvault_frame.scale)
 
-    local bUseSolidColor = true
-    DetailsFramework:ApplyStandardBackdrop(optionsFrame, bUseSolidColor)
 
-    local options_text_template = DetailsFramework:GetTemplate("font", "OPTIONS_FONT_TEMPLATE")
-    local options_dropdown_template = DetailsFramework:GetTemplate("dropdown", "OPTIONS_DROPDOWN_TEMPLATE")
-    local options_switch_template = DetailsFramework:GetTemplate("switch", "OPTIONS_CHECKBOX_TEMPLATE")
-    local options_slider_template = DetailsFramework:GetTemplate("slider", "OPTIONS_SLIDER_TEMPLATE")
-    local options_button_template = DetailsFramework:GetTemplate("button", "OPTIONS_BUTTON_TEMPLATE")
-    --local subSectionTitleTextTemplate = DetailsFramework:GetTemplate("font", "ORANGE_FONT_TEMPLATE")
+    local modules = GreatVaultList:IterateModules()
+    for name, module in GreatVaultList:IterateModules() do
     
-    local reloadSettings = function()
-        C_UI.Reload()
-    end
-
-    local reloadSettingsButton = DetailsFramework:CreateButton(optionsFrame, reloadSettings, 130, 20, L["opt_btn_reload"])
-    reloadSettingsButton:SetPoint("bottomleft", optionsFrame, "bottomleft", 15, 15)
-    reloadSettingsButton:SetTemplate(options_button_template)
-    
-    local optionsTable = {
-        {type = "label", get = function() return L["opt_option"] end},
-        {
-            type = "range",
-            get = function()
-                return GreatVaultList.db.global.greatvault_frame.lines
-            end,
-            set = function(self, fixedparam, value)
-                GreatVaultList.db.global.greatvault_frame.lines = value
-            end,
-            min = 1,
-            max = 50,
-            step = 1,
-            name = L["opt_lines_name"],
-            desc = L["opt_lines_desc"],
-        },
-    }
-
-    --build the menu
-    optionsTable.always_boxfirst = true
-
-    local startX = 15
-    local startY = -32
-    DetailsFramework:BuildMenu(optionsFrame, optionsTable, startX, startY, heightSize, false, options_text_template, options_dropdown_template, options_switch_template, true, options_slider_template, options_button_template)
+        local cbSetting = Settings.RegisterAddOnSetting(self.category, "moduleactive"..name, "active", GreatVaultList.db.global.Options.modules[name], "boolean", name, true)
+        local sliderSetting = Settings.RegisterAddOnSetting(self.category, "moduleindex"..name, "index", GreatVaultList.db.global.Options.modules[name], "number", name, module.config.index)
 
 
+        cbSetting:SetValueChangedCallback(function(self)
+            local value = self:GetValue()
 
 
-    local sectionFrame = optionsFrame
-    sectionFrame.AutoHideOptions = {}
-
-
-    local header1Label = _G.DetailsFramework:CreateLabel(sectionFrame, L["opt_column"])
-    local header3Label = _G.DetailsFramework:CreateLabel(sectionFrame,L["opt_enabled"])
-    local header4Label = _G.DetailsFramework:CreateLabel(sectionFrame, L["opt_position"])
-
-    
-    local right_start_at = 250
-    header1Label:SetPoint("topleft", sectionFrame, "topleft", right_start_at, startY)
-    header3Label:SetPoint("topright", sectionFrame, "topleft", right_start_at + 160, startY)
-    header4Label:SetPoint("topleft", sectionFrame, "topleft", right_start_at + 164, startY)
-
-    
-    local i = 0
-    _.forEach(loadedColumms, function(column)
-        i = i + 1
-
-        local key = column.key
-
-        local line = _G.CreateFrame("frame", nil, sectionFrame,"BackdropTemplate")
-        line:SetSize(302, 22)
-        line:SetPoint("topleft", sectionFrame, "topleft", right_start_at, startY + ((i) * -23) + 4)
-        DetailsFramework:ApplyStandardBackdrop(line)
-
-        local contextLabel = DetailsFramework:CreateLabel(line, L[key])
-        contextLabel:SetPoint("left", line, "left", 2, 0)
-        contextLabel.textsize = 10
-
-
-        local enabledCheckbox = DetailsFramework:NewSwitch(line, nil, nil, nil, 20, 20, nil, nil, false, nil, nil, nil, nil, options_switch_template)
-        enabledCheckbox:SetPoint("left", line, "left", 140, 1)
-        enabledCheckbox:SetAsCheckBox()
-        enabledCheckbox:SetFixedParameter(key)
-        enabledCheckbox:SetValue(GreatVaultList.db.global.columns[key].active)
-        enabledCheckbox.OnSwitch = function(self, contextId, value) 
-            GreatVaultList.db.global.columns[contextId].active = value
-        end
-
-
-        local positionSlider = DetailsFramework:CreateSlider(line, 138, 20, 1, columnLen, 1, columnLen, false, nil, nil, nil, options_slider_template)
-        positionSlider:SetPoint("left", line, "left", 164, 0)
-        positionSlider:SetFixedParameter(key)
-        positionSlider:SetValue(GreatVaultList.db.global.columns[key].position)
-        positionSlider:SetHook("OnValueChanged", function(self, contextId, value)
-            GreatVaultList.db.global.columns[contextId].position = value
+            if value == true then 
+                module:Enable()
+            else 
+                module:Disable()
+            end
+            
+            GreatVaultList:updateData()
         end)
 
-        positionSlider.thumb:SetWidth(32)
+        sliderSetting:SetValueChangedCallback(function(self)
+            GreatVaultList:updateData()
+        end)
+
+        local options = Settings.CreateSliderOptions(0, 10, 1)
+        options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    
+
         
-    end)
+        local initializer = CreateSettingsCheckboxSliderInitializer(
+                cbSetting, string.format(L["opt_module_name"], module.key), L["opt_module_desc"],
+                sliderSetting, options, L["opt_position_name"], L["opt_position_desc"]
+        );
+        layout:AddInitializer(initializer);
 
-
-
-end
-
-
-
-function GreatVaultListOptions:toggle()
-    if GreatVaultListOptionsPanel then
-        GreatVaultListOptionsPanel:SetShown(not GreatVaultListOptionsPanel:IsShown()) 
-    else
-        self:createOptions()
     end
 end

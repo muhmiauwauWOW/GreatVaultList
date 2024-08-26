@@ -1,16 +1,31 @@
 local ColumKey = "keystone"
-local Column = GreatVaultList:NewModule("GREATVAULTLIST_COLUMNS_" .. ColumKey, GREATVAULTLIST_COLUMNS)
+local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
 Column.config = {
     ["index"] = 13,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 180, canSort = false, dataType = "string", order = "DESC", offset = 0},
+    ["width"] = 180,
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 200, canSort = true},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     }, 
     ['emptyStr'] = "-",
+    ["demo"] = function(idx)
+        local mapChallengeModeIDs = {}
+        table.foreach(C_LFGList.GetAvailableActivities(2), function(k, id)
+            local info = C_LFGList.GetActivityInfoTable(id)
+            if info.isMythicPlusActivity then
+                tinsert(mapChallengeModeIDs,id)
+            end
+        end)
+
+        return {
+            activityID = mapChallengeModeIDs[math.random(#mapChallengeModeIDs)],
+            keystoneLevel = math.random(5,15)
+        }
+    end,
     event = {
         "CHALLENGE_MODE_COMPLETED",
         function(self)
@@ -25,26 +40,26 @@ Column.config = {
         if activityID then 
             characterInfo.keystone = {}
             characterInfo.keystone.activityID = activityID
-            characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
         else
-            characterInfo.keystone = nil
+            characterInfo.keystone = ""
         end
 
         return characterInfo
 
     end,
-    ["refresh"] = function(line, data)
-        if not data.keystone then line[ColumKey].text = data.keystone; return line end
+    ["populate"] = function(self, keystone)
+        if not keystone then return keystone end
+        if type(keystone) ~= "table" then return nil end
+        if not keystone.keystoneLevel then return nil end
 
-        local fullName = C_LFGList.GetActivityFullName(data.keystone.activityID)
+        local fullName = C_LFGList.GetActivityFullName(keystone.activityID)
         local estart, _ = string.find(fullName, " %(")
         local estart2, _ = string.find(fullName, " %- ")
         if estart2 and estart2 < estart then
             estart = estart2
         end
         fullName = string.sub(fullName, 1, estart-1)  
-        line[ColumKey].text = fullName .. " " .. data.keystone.keystoneLevel
-        return line
+        return fullName .. " " .. keystone.keystoneLevel
     end
 }
