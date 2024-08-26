@@ -33,7 +33,7 @@ function GreatVaultList:OnEnable()
 	GreatVaultList.Data:init()
 	GreatVaultList.Data:storeAll()
 	GreatVaultListOptions:init()
-	GreatVaultList:updateData()
+	GreatVaultList:updateData(true)
 	GreatVaultList:slashcommand()
 	Settings.OpenToCategory(GreatVaultList.OptionsID)
 end
@@ -111,9 +111,9 @@ GREATVAULTLIST_COLUMNS = {
 
 
 
-function GreatVaultList:updateData()
+function GreatVaultList:updateData(refresh)
 
-	 _.map(GreatVaultList.Table.cols, function(entry, key) 
+	_.map(GreatVaultList.Table.cols, function(entry, key) 
 		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
 	end)
 
@@ -134,11 +134,11 @@ function GreatVaultList:updateData()
 	end)
 
 
-	-- DevTool:AddData(data, "data")
-	-- DevTool:AddData(cols, "cols")
-	-- DevTool:AddData(colConfig, "colConfig")
+	DevTool:AddData(data, "data")
+	DevTool:AddData(cols, "cols")
+	DevTool:AddData(colConfig, "colConfig")
 
-	GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
+	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
 end
 
 

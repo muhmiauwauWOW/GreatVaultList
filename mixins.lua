@@ -217,7 +217,7 @@ end
 
 function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
 	if self.tableBuilderLayoutDirty then
-		--self.tableBuilder:Reset();
+		self.tableBuilder:Reset();
 		self.tableBuilderLayoutFunction(self.tableBuilder);
 		self.tableBuilder:SetTableWidth(self.ScrollBox:GetWidth());
 		self.tableBuilder:Arrange();
@@ -270,16 +270,12 @@ function GreatVaultListItemListMixin:OnShow()
 	self:UpdateTableBuilderLayout();
 end
 
-function GreatVaultListItemListMixin:Reset()
-	self.ScrollBox:ScrollToBegin();
-	self:RefreshScrollFrame();
-end
-
 function GreatVaultListItemListMixin:DirtyScrollFrame()
 	self.scrollFrameDirty = true;
 end
 
 function GreatVaultListItemListMixin:RefreshScrollFrame()
+	print("RefreshScrollFrame")
 	self.scrollFrameDirty = false;
 
 	if not self.isInitialized or not self:IsShown() then
@@ -376,13 +372,11 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 end
 
 
-function GreatVaultListListMixin:init(columns, data, columnConfig)
-
+function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
     self.columns = columns
-    self.ItemList.data = data
+	self.ItemList.data = data
     self.columnConfig = columnConfig
 	self.currentPlayer = 0
-
 
     local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
@@ -392,5 +386,9 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
     self:GetParent():UpdateSize(width);
 
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
-	self:SetSortOrder(GreatVaultList.db.global.sort)
+	if refresh then 
+		self:SetSortOrder(GreatVaultList.db.global.sort)
+	else
+		self.ItemList:RefreshScrollFrame();
+	end
 end
