@@ -260,17 +260,9 @@ GreatVaultListItemListMixin = {};
 
 function GreatVaultListItemListMixin:OnLoad()
 	GreatVaultListBackgroundMixin.OnLoad(self);
+	self.data = {}
 	self.NineSlice:SetPoint("BOTTOMRIGHT", -22, 0);
 	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
-end
-
-function GreatVaultListItemListMixin:SetDataProvider(getEntry, getNumEntries)
-	self.getEntry = getEntry;
-	self.getNumEntries = getNumEntries;
-
-	if self.tableBuilder then
-		self.tableBuilder:SetDataProvider(self.getEntry);
-	end
 end
 
 function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction)
@@ -334,7 +326,16 @@ function GreatVaultListItemListMixin:Init()
 	end;
 	ScrollUtil.RegisterTableBuilder(self.ScrollBox, tableBuilder, ElementDataTranslator);
 
-	if self.getEntry then
+
+	self.getNumEntries = function()
+		return #self.data;
+	end
+
+	self.getEntry = function(index)
+		return self.data[index];
+	end
+
+	if self.tableBuilder then
 		self.tableBuilder:SetDataProvider(self.getEntry);
 	end
 
@@ -493,7 +494,6 @@ end
 function GreatVaultListListMixin:RegisterHeader(header)
 	local find = _.find(self.sortHeaders, function(entry) return entry == header.sortOrder; end)
 	if find and  find > 0 then 
-		DevTool:AddData(header, "header")
 		table.insert(self.headers, header);
 	end
 end
@@ -514,19 +514,19 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 	end
 
 	local comp = (self.reverseSort) and _.gt or _.lt
-	sort(self.data, function(a, b)
+	sort(self.ItemList.data, function(a, b)
 		return comp( a[self.sort], b[self.sort])
 	end)
 	
     local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-    self.currentPlayer =  _.findIndex(self.data, function(entry)  return entry[fidx] == UnitName("player") end)
+    self.currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
 	self.ItemList:RefreshScrollFrame();
 end
 
 
 function GreatVaultListListMixin:init(columns, data, columnConfig)
     self.columns = columns
-    self.data = data
+    self.ItemList.data = data
     self.columnConfig = columnConfig
 	self.currentPlayer = 0
 
@@ -538,15 +538,6 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 
     self:GetParent():UpdateSize(width);
 
-	local function GetNumEntries()
-		return #self.data;
-	end
-
-	local function GetEntry(index)
-		return self.data[index];
-	end
-
-	self.ItemList:SetDataProvider(GetEntry, GetNumEntries);
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 	self:SetSortOrder(GreatVaultList.db.global.sort)
 end
