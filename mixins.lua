@@ -275,7 +275,6 @@ function GreatVaultListItemListMixin:DirtyScrollFrame()
 end
 
 function GreatVaultListItemListMixin:RefreshScrollFrame()
-	print("RefreshScrollFrame")
 	self.scrollFrameDirty = false;
 
 	if not self.isInitialized or not self:IsShown() then

@@ -22,6 +22,17 @@ function GreatVaultListOptions:init()
 	-- Settings.CreateCheckbox(self.category, setting, "tooltip?")
 
 
+    local setting = Settings.RegisterAddOnSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 100)
+    setting:SetValueChangedCallback(function(self)
+       local value = self:GetValue()
+       GreatVaultListFrame:SetScale(value / 100)
+    end)
+
+    local options = Settings.CreateSliderOptions(40, 200, 1)
+    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    Settings.CreateSlider(self.category, setting, options, L["opt_scale_desc"])
+
+
 
     local setting = Settings.RegisterAddOnSetting(self.category, "lines", "lines", GreatVaultList.db.global.Options, "number", L["opt_lines_name"], 12)
     setting:SetValueChangedCallback(function(self)
@@ -42,8 +53,10 @@ function GreatVaultListOptions:init()
         local cbSetting = Settings.RegisterAddOnSetting(self.category, "moduleactive"..name, "active", GreatVaultList.db.global.Options.modules[name], "boolean", name, true)
         local sliderSetting = Settings.RegisterAddOnSetting(self.category, "moduleindex"..name, "index", GreatVaultList.db.global.Options.modules[name], "number", name, module.config.index)
 
+
         cbSetting:SetValueChangedCallback(function(self)
             local value = self:GetValue()
+
 
             if value == true then 
                 module:Enable()
@@ -62,8 +75,8 @@ function GreatVaultListOptions:init()
         options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
     
         local initializer = CreateSettingsCheckboxSliderInitializer(
-                cbSetting, module.key, "",
-                sliderSetting, options, "Index", ""
+                cbSetting, module.key .. " Module", "Activate or Deactivate this Module",
+                sliderSetting, options, "Module position", "Change the position of the Column of this Module"
         );
         layout:AddInitializer(initializer);
 

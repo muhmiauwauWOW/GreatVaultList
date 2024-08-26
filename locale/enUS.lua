@@ -31,6 +31,9 @@ L["opt_option"] = "Options"
 L["opt_lines_name"] = "Lines"
 L["opt_lines_desc"] = "Amount of lines to display"
 
+L["opt_scale_name"] = "Scale"
+L["opt_scale_desc"] = "Scale of the window"
+
 L["opt_column"] = "Column"
 L["opt_enabled"] = "Enabled"
 L["opt_position"] = "Position"

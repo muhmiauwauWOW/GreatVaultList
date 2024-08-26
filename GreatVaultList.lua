@@ -11,8 +11,6 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
-
-
 local default_global_data = {
 	global = {
 		sort = 2,
@@ -20,7 +18,7 @@ local default_global_data = {
 		Options = {
 			modules = {},
 			position = {},
-			scale = 1,
+			scale = 100,
 		}
 	}
 }
@@ -35,7 +33,9 @@ function GreatVaultList:OnEnable()
 	GreatVaultListOptions:init()
 	GreatVaultList:updateData(true)
 	GreatVaultList:slashcommand()
-	Settings.OpenToCategory(GreatVaultList.OptionsID)
+
+	-- set Options
+	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale / 100)
 end
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
@@ -58,10 +58,6 @@ function GreatVaultList:slashcommand()
         end
 	end 
 end
-
-
-
-
 
 
 GreatVaultList.Table = {}
@@ -109,8 +105,6 @@ GREATVAULTLIST_COLUMNS = {
     end 
 }
 
-
-
 function GreatVaultList:updateData(refresh)
 
 	_.map(GreatVaultList.Table.cols, function(entry, key) 
@@ -134,11 +128,9 @@ function GreatVaultList:updateData(refresh)
 	end)
 
 
-	DevTool:AddData(data, "data")
-	DevTool:AddData(cols, "cols")
-	DevTool:AddData(colConfig, "colConfig")
+	-- DevTool:AddData(data, "data")
+	-- DevTool:AddData(cols, "cols")
+	-- DevTool:AddData(colConfig, "colConfig")
 
 	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
 end
-
-
