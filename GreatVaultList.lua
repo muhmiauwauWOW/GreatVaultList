@@ -16,7 +16,9 @@ local default_global_data = {
 		sort = 2,
 		characters = {},
 		Options = {
-			modules = {},
+			modules = {
+
+			},
 			position = {},
 			scale = 1,
 		}
@@ -25,7 +27,7 @@ local default_global_data = {
 
 
 function GreatVaultList:OnEnable()
-    self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
+    self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	
 	GreatVaultList.Data:init()
@@ -65,16 +67,17 @@ GreatVaultList.Table.cols = {}
 
 GREATVAULTLIST_COLUMNS = {
     OnEnable = function(self)
+		
+		-- init is not found
 		if not GreatVaultList.db.global.Options.modules[self.key] then
-			GreatVaultList.db.global.Options.modules[self.key] = {
-				active = false,
-				index = 0
-			}
+			GreatVaultList.db.global.Options.modules[self.key] = { active = true }
 		end
 
+		-- return if already active
 		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
 
 
+		-- register col
 		table.insert(GreatVaultList.Table.cols, {
 			key = self.key,
 			index = _.get(GreatVaultList.db.global.Options.modules, {self.key, "index"}, self.index),
@@ -82,14 +85,7 @@ GREATVAULTLIST_COLUMNS = {
 		})
 
 
-
-		if not GreatVaultList.db.global.Options.modules[self.key] then
-			GreatVaultList.db.global.Options.modules[self.key] = {
-				active = false,
-				index = 0
-			}
-		end
-
+		-- register events
 		if self.config.event then 
 			GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event) 
 				self.config.event[2](self, event)
