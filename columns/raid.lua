@@ -20,8 +20,7 @@ Column.config = {
     ["index"] = 4,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 100,
-    ["xpadding"] = 0,
-    ["ypadding"] = 0,
+    ["padding"] = 0, 
     ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
     ["subCols"] = 3,
     ["sort"] = {

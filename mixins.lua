@@ -170,7 +170,6 @@ function GreatVaultListTableBuilderMixin:AddColumnInternal(owner, sortOrder, cel
 	end
 
 	column:ConstructCells("FRAME", cellTemplate, owner, ...);
-
 	return column;
 end
 
@@ -313,8 +312,7 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
         _.forEach(self.columns, function(colName, idx)
             local width = _.get(self.columnConfig, {colName, "width"})
             local headerText = _.get(self.columnConfig, {colName, "header", "text"})
-            local xpadding = _.get(self.columnConfig, {colName, "xpadding"}, 14)
-            local ypadding = _.get(self.columnConfig, {colName, "ypadding"}, 14)
+            local padding = _.get(self.columnConfig, {colName, "padding"}, 14)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
 
 			local canSort = _.get(self.columnConfig, {colName, "header", "canSort"}, false)
@@ -322,7 +320,7 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 				table.insert(self.sortHeaders, idx);
 			end
 
-            local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, xpadding, ypadding, idx, template, idx, self.columns, self.columnConfig, width);
+            local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
 			col:GetHeaderFrame():SetText(headerText);
         end)
     end

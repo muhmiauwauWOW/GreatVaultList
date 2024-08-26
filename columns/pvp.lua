@@ -7,8 +7,7 @@ Column.config = {
     ["index"] = 10,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 200,
-    ["xpadding"] = 0, 
-    ["ypadding"] = 0, 
+    ["padding"] = 0, 
     ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
     ["subCols"] = 3,
     ["sort"] = {
