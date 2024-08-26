@@ -36,9 +36,9 @@ Column.config = {
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
-            self.config.store(GreatVaultList.data:get())
-            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
+            GreatVaultList.Data:store(ColumKey, true)
+            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultListFrame:RefreshScrollFrame()
             end
         end
     },

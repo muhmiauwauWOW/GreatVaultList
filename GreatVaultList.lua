@@ -8,81 +8,33 @@ function GreatVaultList:GetLibs()
 end 
 
 
+GVL_OPEN_VAULT = L["OpenVault"]
+
+
+
+
 local default_global_data = {
 	global = {
 		sort = 2,
-		greatvault_frame = {
-			scale = 1,
-			position = {},
-			lines = 12
-		},
 		characters = {},
-		view = {
-			raid = true,
-			activities = true,
-			pvp = false
-		},
 		Options = {
-			modules = {}
+			modules = {},
+			position = {},
+			scale = 1,
 		}
 	}
 }
 
 
-GreatVaultList.data = {}
-
-function GreatVaultList.data:get()
-	if self.characterInfo then return self.characterInfo end
-	
-	local characterInfo = _.find(GreatVaultList.db.global.characters, function(v)
-		return v.name == PlayerName
-	end)
-
-	if not characterInfo then 
-		table.insert(GreatVaultList.db.global.characters, { name = PlayerName })
-		characterInfo = _.find(GreatVaultList.db.global.characters, function(v)
-			return v.name == PlayerName
-		end)
-	end
-
-	self.characterInfo = characterInfo
-
-	return characterInfo
-end
-
-function GreatVaultList.data:storeAll()
-	if UnitLevel("player") < GetMaxLevelForLatestExpansion() then
-		return
-	end
-
-	local characterInfo = self:get()
-
-	for key, value in pairs(GreatVaultList.colConfig) do
-		if value["store"] then 
-			local storeFn = value["store"]
-			characterInfo = storeFn(characterInfo) 
-		end
-	end
-
-	characterInfo.lastUpdate = time()
-end
-
-
-
-function GreatVaultList:OnInitialize()
+function GreatVaultList:OnEnable()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultListDB", default_global_data, true)
-	GreatVaultList.db.global.columns = GreatVaultList.db.global.columns or {}
-
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
-
+	
+	GreatVaultList.Data:init()
+	GreatVaultList.Data:storeAll()
+	GreatVaultListOptions:init()
+	GreatVaultList:updateData()
 	GreatVaultList:slashcommand()
-
-	C_Timer.After(3, function()
-		GreatVaultList.data:storeAll()
-		GreatVaultListOptions:init()
-		GreatVaultList:updateData(true)
-	end)
-
 end
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
@@ -133,6 +85,7 @@ GREATVAULTLIST_COLUMNS = {
 		})
 
 
+
 		if not GreatVaultList.db.global.Options.modules[self.key] then
 			GreatVaultList.db.global.Options.modules[self.key] = {
 				active = false,
@@ -157,25 +110,26 @@ GREATVAULTLIST_COLUMNS = {
 
 
 
-function GreatVaultList:updateData(init)
+function GreatVaultList:updateData()
 
 	 _.map(GreatVaultList.Table.cols, function(entry, key) 
 		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
 	end)
 
-	sort(GreatVaultList.Table.cols,function(a, b) return a.index < b.index end)
-	local cols = _.map(GreatVaultList.Table.cols, function(entry) return entry.key end)
+	sort(GreatVaultList.Table.cols, function(a, b) return a.index < b.index end)
 
 	local colConfig = {}
-	_.forEach(GreatVaultList.Table.cols, function(entry,key) 
-		colConfig[entry.key] = entry.config
+	local cols = _.map(GreatVaultList.Table.cols, function(entry) 
+		colConfig[entry.key] =  entry.config
+		return entry.key 
 	end)
 
-
-	local data = _.map(GreatVaultList.db.global.characters, function(entry, key)
-		return  _.map(GreatVaultList.Table.cols, function(cEntry)
+	local data = {}
+	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
+		local d = _.map(GreatVaultList.Table.cols, function(cEntry)
 			return entry[_.get(cEntry, {"config", "sort", "store"})]
 		end)
+		table.insert(data, d)
 	end)
 
 
@@ -183,11 +137,7 @@ function GreatVaultList:updateData(init)
 	-- DevTool:AddData(cols, "cols")
 	-- DevTool:AddData(colConfig, "colConfig")
 
-	if init then
-		GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
-	else
-		GreatVaultListFrame.ListFrame:update(cols, data, colConfig)
-	end
+	GreatVaultListFrame.ListFrame:init(cols, data, colConfig)
 end
 
 

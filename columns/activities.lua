@@ -28,6 +28,15 @@ Column.config = {
         "0/4",
         "0/8"
     },
+    event = {
+        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
+        function(self)
+            GreatVaultList.Data:store(ColumKey, true)
+            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultListFrame:RefreshScrollFrame()
+            end
+        end
+    },
     ["store"] = function(characterInfo)
         characterInfo.activities = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.Activities)
         _.map(characterInfo.activities, function(entry)

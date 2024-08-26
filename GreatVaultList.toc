@@ -24,6 +24,7 @@ Libs\LibLodash\LibLodash.lua
 locale/locale.xml
 
 GreatVaultList.lua
+GreatVaultListData.lua
 GreatVaultListOptions.lua
 mixins.lua
 frames.xml

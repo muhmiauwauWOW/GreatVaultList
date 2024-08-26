@@ -51,12 +51,11 @@ function GreatVaultListOptions:init()
                 module:Disable()
             end
             
-            GreatVaultList:updateData(true)
-
+            GreatVaultList:updateData()
         end)
 
         sliderSetting:SetValueChangedCallback(function(self)
-            GreatVaultList:updateData(true)
+            GreatVaultList:updateData()
         end)
 
         local options = Settings.CreateSliderOptions(0, 10, 1)

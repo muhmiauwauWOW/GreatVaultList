@@ -221,6 +221,17 @@
 			<Anchor point="CENTER"/>
 		</Anchors>
 		<Frames>
+			<Button parentKey="OpenVault" parent="GreatVaultListFrame" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
+				<Size x="0" y="30"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-35"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Frame parentKey="Drag"  parent="GreatVaultListFrame" >
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="0"/>

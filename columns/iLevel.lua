@@ -11,15 +11,6 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
-    event = {
-        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
-        function(self)
-            self.config.store(GreatVaultList.data:get())
-            if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
-            end
-        end
-    },
     ["store"] = function(characterInfo)
         local _, ilvl = GetAverageItemLevel();
         characterInfo.averageItemLevel = ilvl

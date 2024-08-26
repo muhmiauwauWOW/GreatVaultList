@@ -157,6 +157,11 @@ function GreatVaultListMixin:OnHide()
 end
 
 
+function GreatVaultListMixin:RefreshScrollFrame()
+	self.ListFrame.ItemList:RefreshScrollFrame();
+end
+
+
 
 
 
@@ -412,18 +417,10 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
 	local dataProvider = CreateIndexRangeDataProvider(numResults);
 	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
 
-	self:CallRefreshCallback();
-end
-
-function GreatVaultListItemListMixin:CallRefreshCallback()
-	-- if self.refreshCallback ~= nil then
-	-- 	local lastDisplayedEntry = self.ScrollBox:GetDataIndexEnd();
-	-- 	self.refreshCallback(lastDisplayedEntry);
-	-- end
 end
 
 function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
-	self:CallRefreshCallback();
+
 end
 
 function GreatVaultListItemListMixin:GetHeaderContainer()
@@ -552,24 +549,4 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 	self.ItemList:SetDataProvider(GetEntry, GetNumEntries);
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 	self:SetSortOrder(GreatVaultList.db.global.sort)
-
-
 end
-
-function GreatVaultListListMixin:update(columns, data, columnConfig)
-    self.columns = columns
-    self.data = data
-    self.columnConfig = columnConfig
-
-
-    local width = 15 + (_.size(self.columnConfig) * 1)
-    _.forEach(self.columnConfig, function(entry)
-        width = width + (entry.width or 0)
-    end)
-
-    self:GetParent():UpdateSize(width);
-
-    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
-	self:SetSortOrder(self.sort)
-end
-
