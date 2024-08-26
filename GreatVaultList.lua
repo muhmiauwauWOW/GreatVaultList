@@ -35,6 +35,7 @@ function GreatVaultList:OnEnable()
 	GreatVaultListOptions:init()
 	GreatVaultList:updateData()
 	GreatVaultList:slashcommand()
+	Settings.OpenToCategory(GreatVaultList.OptionsID)
 end
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)

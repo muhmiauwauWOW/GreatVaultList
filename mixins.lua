@@ -194,40 +194,6 @@ end
 
 
 
-GreatVaultListItemListLineMixin = {};
-
-function GreatVaultListItemListLineMixin:OnClick(button)
-	-- Overrides register for right click as well, ensure this is a left click. 
-	if button == "LeftButton" then
-		self:GetItemList():SetSelectedEntry(self.rowData);
-	end
-end
-
-function GreatVaultListItemListLineMixin:OnEnter()
-	self.HighlightTexture:Show();
-end
-
-function GreatVaultListItemListLineMixin:OnLeave()
-	self.HighlightTexture:Hide();
-end
-
-function GreatVaultListItemListLineMixin:GetItemList()
-	return self:GetParent():GetParent():GetParent();
-end
-
-function GreatVaultListItemListLineMixin:GetRowData()
-	return self.rowData;
-end
-
-
-
-
-
-
-
-
-
-
 GreatVaultListItemListMixin = {};
 
 function GreatVaultListItemListMixin:OnLoad()
@@ -427,21 +393,4 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 	self:SetSortOrder(GreatVaultList.db.global.sort)
-end
-
-
-
-function GreatVaultListListMixin:updateTableBuilder(columns, data, columnConfig)
-    self.columns = columns
-    self.ItemList.data = data
-    self.columnConfig = columnConfig;
-
-    local width = 15 + (_.size(self.columnConfig) * 1)
-    _.forEach(self.columnConfig, function(entry)
-        width = width + (entry.width or 0)
-    end)
-
-    self:GetParent():UpdateSize(width);
-
-    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 end
