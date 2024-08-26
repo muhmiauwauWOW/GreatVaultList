@@ -53,15 +53,6 @@ end
 
 
 
-
-GreatVaultListSortOrderState = tInvert({
-	"None",
-	"PrimarySorted",
-	"PrimaryReversed",
-	"Sorted",
-	"Reversed",
-});
-
 GreatVaultListTableHeaderStringMixin = CreateFromMixins(TableBuilderElementMixin);
 
 
@@ -235,34 +226,18 @@ end
 
 
 
-GreatVaultListBackgroundMixin = {};
-
-function GreatVaultListBackgroundMixin:OnLoad()
-	local xOffset = self.backgroundXOffset or 0;
-	local yOffset = self.backgroundYOffset or 0;
-	self.Background:SetAtlas(self.backgroundAtlas, true);
-	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
-
-	self.NineSlice:ClearAllPoints();
-	self.NineSlice:SetPoint("TOPLEFT", xOffset, yOffset);
-	self.NineSlice:SetPoint("BOTTOMRIGHT");
-end
-
-
-
-
-
-
-
 
 
 GreatVaultListItemListMixin = {};
 
 function GreatVaultListItemListMixin:OnLoad()
-	GreatVaultListBackgroundMixin.OnLoad(self);
 	self.data = {}
-	self.NineSlice:SetPoint("BOTTOMRIGHT", -22, 0);
 	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
+
+	local xOffset = 0;
+	local yOffset = -20;
+	self.Background:SetAtlas("auctionhouse-background-index", true);
+	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
 end
 
 function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction)
@@ -276,30 +251,12 @@ end
 
 function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
 	if self.tableBuilderLayoutDirty then
-		self.tableBuilder:Reset();
+		--self.tableBuilder:Reset();
 		self.tableBuilderLayoutFunction(self.tableBuilder);
 		self.tableBuilder:SetTableWidth(self.ScrollBox:GetWidth());
 		self.tableBuilder:Arrange();
 		self.tableBuilderLayoutDirty = false;
 	end
-end
-
-function GreatVaultListItemListMixin:SetSelectionCallback(selectionCallback)
-	self.selectionCallback = selectionCallback;
-end
-
-function GreatVaultListItemListMixin:SetHighlightCallback(highlightCallback)
-	self.highlightCallback = highlightCallback;
-end
-
-function GreatVaultListItemListMixin:SetLineTemplate(lineTemplate, ...)
-	self.lineTemplate = lineTemplate;
-	self.initArgs = { ... };
-end
-
-function GreatVaultListItemListMixin:SetCustomError(errorText)
-	self.ResultsText:Show();
-	self.ResultsText:SetText(errorText);
 end
 
 function GreatVaultListItemListMixin:Init()
@@ -342,59 +299,14 @@ function GreatVaultListItemListMixin:Init()
 	self.isInitialized = true;
 end
 
-function GreatVaultListItemListMixin:SetLineOnEnterCallback(callback)
-	self.lineOnEnterCallback = callback;
-end
-
-function GreatVaultListItemListMixin:OnEnterListLine(line, rowData)
-	if self.lineOnEnterCallback then
-		self.lineOnEnterCallback(line, rowData);
-	end
-end
-
-function GreatVaultListItemListMixin:SetLineOnLeaveCallback(callback)
-	self.lineOnLeaveCallback = callback;
-end
-
-function GreatVaultListItemListMixin:OnLeaveListLine(line, rowData)
-	if self.lineOnLeaveCallback then
-		self.lineOnLeaveCallback(line, rowData);
-	end
-end
-
-function GreatVaultListItemListMixin:SetSelectedEntry(rowData)
-	if self.selectionCallback then
-		if not self.selectionCallback(rowData) then
-			return;
-		end
-	end
-
-	self.selectedRowData = rowData;
-	self:DirtyScrollFrame();
-end
-
-function GreatVaultListItemListMixin:GetSelectedEntry()
-	return self.selectedRowData;
-end
-
 function GreatVaultListItemListMixin:OnShow()
 	self:Init();
 	self:UpdateTableBuilderLayout();
 end
 
-function GreatVaultListItemListMixin:OnUpdate()
-	if self.scrollFrameDirty then
-		self:RefreshScrollFrame();
-	end
-end
-
 function GreatVaultListItemListMixin:Reset()
 	self.ScrollBox:ScrollToBegin();
 	self:RefreshScrollFrame();
-end
-
-function GreatVaultListItemListMixin:GetScrollBoxDataIndexBegin()
-	return self.ScrollBox:GetDataIndexBegin();
 end
 
 function GreatVaultListItemListMixin:DirtyScrollFrame()
@@ -408,16 +320,9 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
 		return;
 	end
 
-	if not self.getNumEntries then
-		error("Data provider not set. Use GreatVaultListItemListMixin:SetDataProvider.");
-		return;
-	end
-
 	local numResults = self.getNumEntries();
-    
 	local dataProvider = CreateIndexRangeDataProvider(numResults);
 	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
-
 end
 
 function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
@@ -428,22 +333,6 @@ function GreatVaultListItemListMixin:GetHeaderContainer()
 	return self.HeaderContainer;
 end
 
-
-
-
-
-
-
-
-
-
-GreatVaultListSortOrderState = tInvert({
-	"None",
-	"PrimarySorted",
-	"PrimaryReversed",
-	"Sorted",
-	"Reversed",
-});
 
 
 
@@ -472,8 +361,6 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 				table.insert(self.sortHeaders, idx);
 			end
 
-
-
             local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, xpadding, ypadding, idx, template, idx, self.columns, self.columnConfig, width);
 			col:GetHeaderFrame():SetText(headerText);
         end)
@@ -487,7 +374,6 @@ function GreatVaultListListMixin:OnLoad()
 	self.sort = -1
 	self.reverseSort = false
 	self.headers = {}
-
 end
 
 
@@ -525,6 +411,7 @@ end
 
 
 function GreatVaultListListMixin:init(columns, data, columnConfig)
+
     self.columns = columns
     self.ItemList.data = data
     self.columnConfig = columnConfig
@@ -540,4 +427,21 @@ function GreatVaultListListMixin:init(columns, data, columnConfig)
 
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 	self:SetSortOrder(GreatVaultList.db.global.sort)
+end
+
+
+
+function GreatVaultListListMixin:updateTableBuilder(columns, data, columnConfig)
+    self.columns = columns
+    self.ItemList.data = data
+    self.columnConfig = columnConfig;
+
+    local width = 15 + (_.size(self.columnConfig) * 1)
+    _.forEach(self.columnConfig, function(entry)
+        width = width + (entry.width or 0)
+    end)
+
+    self:GetParent():UpdateSize(width);
+
+    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
 end

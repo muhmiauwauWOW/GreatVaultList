@@ -87,56 +87,13 @@
 
 
 
-   <Frame name="GreatVaultListBackgroundTemplate" mixin="GreatVaultListBackgroundMixin" virtual="true">
+   <Frame name="GreatVaultListItemListTemplate" mixin="GreatVaultListItemListMixin"  virtual="true">
 		<KeyValues>
 			<KeyValue key="layoutType" value="InsetFrameTemplate" type="string"/>
-
-			<!--
-			backgroundAtlas: atlas to be set in OnLoad.
-			backgroundXOffset: X offset for the background image and nine slice.
-			backgroundYOffset: Y offset for the background image and nine slice.
-
-			<KeyValue key="backgroundAtlas" value="GreatVaultList-background-sell-left" type="string"/>
-			<KeyValue key="backgroundXOffset" value="0" type="string"/>
-			<KeyValue key="backgroundYOffset" value="0" type="string"/>
-			-->
-		</KeyValues>
-		<Layers>
-			<Layer>
-				<Texture parentKey="Background">
-					<Anchors>
-						<Anchor point="TOPLEFT" x="3" y="-3"/>
-                  <Anchor point="BOTTOMRIGHT" x="-20" y="0"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-		</Layers>
-		<Frames>
-			<Frame parentKey="NineSlice" useParentLevel="true" inherits="NineSlicePanelTemplate"/>
-		</Frames>
-		<Scripts>
-			<OnLoad method="OnLoad"/>
-		</Scripts>
-	</Frame>
-
-
-
-
-   <Frame name="GreatVaultListItemListHeadersTemplate" virtual="true">
-		<Size x="0" y="19"/>
-	</Frame>
-
-
-
-
-   <Frame name="GreatVaultListItemListTemplate" mixin="GreatVaultListItemListMixin" inherits="GreatVaultListBackgroundTemplate" virtual="true">
-		<KeyValues>
-			<KeyValue key="layoutType" value="InsetFrameTemplate" type="string"/>
-			<KeyValue key="backgroundYOffset" value="-19" type="number"/>
 		</KeyValues>
 		<Frames>
-
-			<Frame parentKey="HeaderContainer" inherits="GreatVaultListItemListHeadersTemplate">
+			<Frame parentKey="HeaderContainer">
+				<Size x="0" y="19"/>
 				<Anchors>
 					<Anchor point="TOPLEFT" x="4" y="-1"/>
 					<Anchor point="TOPRIGHT" x="-26" y="-1"/>
@@ -155,66 +112,22 @@
 					<Anchor point="BOTTOMLEFT" relativeKey="$parent.ScrollBox" relativePoint="BOTTOMRIGHT" x="9" y="4"/>
 				</Anchors>
 			</EventFrame>
-			<Frame parentKey="LoadingSpinner" inherits="SpinnerTemplate" hidden="true">
-				<Size x="90" y="90"/>
-				<Anchors>
-					<Anchor point="CENTER" x="-12" y="-15"/>
-				</Anchors>
-				<Layers>
-					<Layer level="OVERLAY">
-						<FontString parentKey="SearchingText" inherits="GameFontNormalHuge4" text="SEARCHING">
-							<Anchors>
-								<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="10"/>
-							</Anchors>
-						</FontString>
-					</Layer>
-				</Layers>
-			</Frame>
 		</Frames>
 		<Layers>
-			<Layer level="OVERLAY">
-				<FontString parentKey="ResultsText" inherits="GameFontNormal" hidden="true">
+			<Layer>
+				<Texture parentKey="Background">
 					<Anchors>
-						<Anchor point="TOP" relativeKey="$parent.ScrollBox" relativePoint="TOP" x="0" y="-45"/>
-						<Anchor point="LEFT" x="45"/>
-						<Anchor point="RIGHT" x="-67"/>
+						<Anchor point="TOPLEFT" x="3" y="-3"/>
+                  		<Anchor point="BOTTOMRIGHT" x="-20" y="0"/>
 					</Anchors>
-					<Color color="NORMAL_FONT_COLOR"/>
-					<Shadow>
-						<Offset>
-							<AbsDimension x="1" y="-1"/>
-						</Offset>
-						<Color r="0" g="0" b="0"/>
-					</Shadow>
-				</FontString>
+				</Texture>
 			</Layer>
 		</Layers>
 		<Scripts>
 			<OnLoad method="OnLoad"/>
 			<OnShow method="OnShow"/>
-			<OnUpdate method="OnUpdate"/>
 		</Scripts>
 	</Frame>
-
-
-   <Frame name="GreatVaultListListFrameTemplate" mixin="GreatVaultListListMixin" virtual="true">
-		<Frames>
-			<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-				<KeyValues>
-					<KeyValue key="hideStripes" value="true" type="boolean"/>
-					<KeyValue key="backgroundAtlas" value="auctionhouse-background-index" type="string"/>
-				</KeyValues>
-				<Anchors>
-					<Anchor point="TOPLEFT" y="-1"/>
-					<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-				</Anchors>
-			</Frame>
-		</Frames>
-		<Scripts>
-			<OnLoad method="OnLoad"/>
-		</Scripts>
-	</Frame>
-
 
    <Frame name="GreatVaultListFrame" toplevel="true" hidden="true"  enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate" >
 		<Anchors>
@@ -238,11 +151,22 @@
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-70"/>
 				</Anchors>
 			</Frame>
-			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate">
+			<Frame parentKey="ListFrame" mixin="GreatVaultListListMixin">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-70"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
 				</Anchors>
+				<Frames>
+					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" y="-1"/>
+							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
+						</Anchors>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnLoad method="OnLoad"/>
+				</Scripts>
 			</Frame>
 		</Frames>
 		<Scripts>
@@ -251,7 +175,5 @@
 			<OnHide method="OnHide"/>
 		</Scripts>
 	</Frame>
-
-   
 
 </Ui>
