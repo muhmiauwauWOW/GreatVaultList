@@ -6,9 +6,7 @@ end
 
 
 
-L["activities"] = "Attività"
 L["character"] = "Personaggio "
 L["ilevel"] = "Liv. Oggetto"
 L["keystone"] = "Chiave del Potere"
-L["raid"] = "Incursioni"
 

@@ -218,7 +218,10 @@
         "DevTool",
         "AuctionHouseSystemMixin",
         "AuctionHouseBuySystemMixin",
-        "g_auctionHouseSortsBySearchContext"
+        "g_auctionHouseSortsBySearchContext",
+        "RAIDS",
+        "DUNGEONS",
+        "WORLD"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

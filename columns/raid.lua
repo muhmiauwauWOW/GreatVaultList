@@ -21,7 +21,7 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
+    ["header"] =  { key = ColumKey, text = RAIDS, width = 40, canSort = false},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,

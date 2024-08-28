@@ -7,9 +7,6 @@ end
 
 L["class"] = "Класс"
 L["character"] = "Персонаж"
-L["raid"] = "Рейды"
-L["activities"] = "Ключи М+"
-L["pvp"] = "PvP"
 L["ilevel"] = "ilvl"
 L["keystone"] = "Ключ"
 

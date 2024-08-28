@@ -1,37 +1,42 @@
-local ColumKey = "pvp"
+local ColumKey = "world"
 local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
+
+local DIFFICULTY_NAMES = {
+	[DifficultyUtil.ID.DungeonHeroic] = "HC",
+	[DifficultyUtil.ID.DungeonTimewalker] = "TW",
+	[DifficultyUtil.ID.DungeonMythic] = "M",
+}
+
+
 Column.key = ColumKey
 Column.config = {
-    ["index"] = 10,
-    ["template"] = "GreatVaultListTableCellTripleTextTemplate",
-    ["width"] = 250,
+    ["index"] = 7,
+    ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
+    ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 40, canSort = false},
+    ["header"] =  { key = ColumKey, text = WORLD, width = 40, canSort = false},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
     ['emptyStr'] = {
-        "   0/1250",
-        "   0/2500",
-        "   0/5000"
+        "0/1",
+        "0/4",
+        "0/9"
     },
     ["demo"] = function(idx)
 
+        local level = math.random(5,15)
         local obj = {}
-
-        local progress = math.random(5000)
-        local threshold = {1250, 2500, 5000}
-
         for i = 1, 3, 1 do
-            
             table.insert(obj, {
-                progress = progress,
-                threshold = threshold[i],
-                level = math.random(9)
+                progress = 2,
+                threshold = 1,
+                level = level + (i*2),
+                activityTierID = 0
             })
         end
         return obj
@@ -46,11 +51,12 @@ Column.config = {
         end
     },
     ["store"] = function(characterInfo)
-        characterInfo.pvp = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.RankedPvP)
-        _.map(characterInfo.pvp, function(entry)
+        characterInfo.world = C_WeeklyRewards.GetActivities(Enum.WeeklyRewardChestThresholdType.World)
+        _.map(characterInfo.world, function(entry)
             entry["raidString"] = nil
             return entry
         end)
+        
         return characterInfo
     end,
     ["populate"] = function(self, data, idx)
@@ -60,13 +66,20 @@ Column.config = {
         
         if not activity.progress then return nil end
         if not activity.threshold then return nil end
-        
+        if not activity.activityTierID then return nil end
+        if not activity.level then return nil end
+
         if activity.progress >= activity.threshold then
-            text = PVPUtil.GetTierName(activity.level)
+            text =  (
+                        DIFFICULTY_NAMES[C_WeeklyRewards.GetDifficultyIDForActivityTier(activity.activityTierID)] 
+                        or 
+                        ("+" .. activity.level)
+                    )
         elseif activity.progress > 0 then
-            text = GRAY_FONT_COLOR:WrapTextInColorCode(activity.progress .. "/" .. activity.threshold)
+            text = activity.progress .. "/" .. activity.threshold
         end
 
         return text
     end
+
 }

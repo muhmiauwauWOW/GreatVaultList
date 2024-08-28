@@ -7,9 +7,6 @@ end
 
 L["class"] = "Class"
 L["character"] = "Character"
-L["raid"] = "Raids"
-L["activities"] = "Activities"
-L["pvp"] = "PvP"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
