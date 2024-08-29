@@ -1,3 +1,6 @@
+local addonName = ...
+local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+
 local _ = LibStub("LibLodash-1"):Get()
 
 
@@ -110,10 +113,10 @@ function GreatVaultListMixin:OnLoad()
 	self:GetPortrait():SetPoint("TOPLEFT", -2, 5)
 	self:GetPortrait():SetSize(55, 55)
 
+	self:SetTitle(AddOnInfo[2]) -- set addon name as title
 
     self.width = 800
 
-    --self:init()
     local dragarea = GreatVaultListFrame.Drag
     GreatVaultListFrame:SetMovable(true)
     GreatVaultListFrame:EnableMouse(true)
