@@ -8,6 +8,7 @@
 ## IconTexture: Interface\AddOns\GreatVaultList\vault.png
 ## X-Curse-Project-ID: 965814
 ## X-Wago-ID: nGvpV56x
+## X-WoWI-ID: 26838
 
 
 Libs\LibStub\LibStub.lua
