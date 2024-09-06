@@ -3,8 +3,10 @@ GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 
-local TableBuilderLib = LibStub:GetLibrary("TableBuilderLib")
-TableBuilderLib = TableBuilderLib:Setup("GreatVaultList", "GreatVaultListHeaderTemplate", "GreatVaultListLineTemplate", "GreatVaultListTableCellTextTemplate")
+local TableBuilderLibd = LibStub:GetLibrary("TableBuilderLib")
+TableBuilderLib = TableBuilderLibd:Setup("GreatVaultList", "GreatVaultListHeaderTemplate", "GreatVaultListLineTemplate", "GreatVaultListTableCellTextTemplate")
+
+print("TableBuilderLib", TableBuilderLib.name)
 
 
 
@@ -141,9 +143,9 @@ function GreatVaultList:updateData(refresh)
 	end)
 
 
-	DevTool:AddData(data, "data")
+	-- DevTool:AddData(data, "data")
 	-- DevTool:AddData(cols, "cols")
-	DevTool:AddData(colConfig, "colConfig")
+	-- DevTool:AddData(colConfig, "colConfig")
 
 	GreatVaultListFrame.ListFrame:init(data, colConfig, refresh)
 end

@@ -19,15 +19,6 @@
 		</Scripts>
 	</Button>
 
-    <Frame name="GreatVaultListCellTemplate" mixin="TableBuilderLibCellMixin" virtual="true">
-		<Size x="0" y="16"/>
-		<Layers>
-			<Layer level="BACKGROUND">
-				<FontString parentKey="Text" inherits="Number14FontWhite" justifyH="LEFT" setAllPoints="true"/>
-			</Layer>
-		</Layers>
-	</Frame>
-
 	<Frame name="GreatVaultListLineTemplate" mixin="TableBuilderLibLineMixin" virtual="true">
 		<Size x="0" y="20"/>
 		<Anchors>
@@ -74,96 +65,10 @@
 
 
 
-	<Button name="GreatVaultListTableHeaderStringTemplate" mixin="GreatVaultListTableHeaderStringMixin" inherits="ColumnDisplayButtonShortTemplate" virtual="true">
-		<Size x="0" y="19"/>
-		<Layers>
-			<Layer level="OVERLAY">
-				<Texture parentKey="Arrow" atlas="auctionhouse-ui-sortarrow" useAtlasSize="true">
-					<Anchors>
-						<Anchor point="LEFT" relativeKey="$parent.Text" relativePoint="RIGHT" x="3" y="0"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-		</Layers>
-		<Scripts>
-			<OnClick method="OnClick"/>
-		</Scripts>
-	</Button>
-
-
-
-   <Button name="GreatVaultListItemListLineTemplate" virtual="true">
-		<Size x="0" y="20"/>
-		<Anchors>
-			<Anchor point="LEFT"/>
-			<Anchor point="RIGHT"/>
-		</Anchors>
-		<Layers>
-			<Layer level="OVERLAY">
-				<Texture parentKey="CurrentTexture" atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" hidden="true" alpha="0.8">
-				<Color r="0.4" g="1" b="0.4" a="1" />
-				</Texture>
-				<Texture parentKey="HighlightTexture" atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" hidden="true" alpha="0.5" />
-			</Layer>
-		</Layers>
-		<Scripts>
-			<OnEnter>
-				self.HighlightTexture:Show();
-			</OnEnter>
-			<OnLeave>
-				self.HighlightTexture:Hide();
-			</OnLeave>
-		</Scripts>
-		<NormalTexture parentKey="NormalTexture" atlas="auctionhouse-rowstripe-1" setAllPoints="true"/>
-	</Button>
 
 
 
 
-
-
-
-   <Frame name="GreatVaultListItemListTemplate" mixin="GreatVaultListItemListMixin"  virtual="true">
-		<KeyValues>
-			<KeyValue key="layoutType" value="InsetFrameTemplate" type="string"/>
-		</KeyValues>
-		<Frames>
-			<Frame parentKey="HeaderContainer">
-				<Size x="0" y="19"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" x="4" y="-1"/>
-					<Anchor point="TOPRIGHT" x="-26" y="-1"/>
-				</Anchors>
-			</Frame>
-			<Frame parentKey="ScrollBox" inherits="WowScrollBoxList">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HeaderContainer" relativePoint="BOTTOMLEFT" x="0" y="-6"/>
-					<Anchor point="RIGHT" relativeKey="$parent.HeaderContainer" relativePoint="RIGHT"/>
-					<Anchor point="BOTTOM" x="0" y="3"/>
-				</Anchors>
-			</Frame>
-			<EventFrame parentKey="ScrollBar" inherits="MinimalScrollBar">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.ScrollBox" relativePoint="TOPRIGHT" x="9" y="0"/>
-					<Anchor point="BOTTOMLEFT" relativeKey="$parent.ScrollBox" relativePoint="BOTTOMRIGHT" x="9" y="4"/>
-				</Anchors>
-			</EventFrame>
-		</Frames>
-		<Layers>
-			<Layer>
-				<Texture parentKey="Background">
-					<Anchors>
-						<Anchor point="TOPLEFT" x="3" y="-3"/>
-                  		<Anchor point="BOTTOMRIGHT" x="-20" y="0"/>
-					</Anchors>
-				</Texture>
-			</Layer>
-		</Layers>
-		<Scripts>
-			<OnLoad method="OnLoad"/>
-			<OnShow method="OnShow"/>
-		</Scripts>
-	</Frame>
 
    <Frame name="GreatVaultListFrame" toplevel="true" hidden="true"  enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate" >
 		<Anchors>
@@ -190,16 +95,18 @@
 			<Frame parentKey="ListFrame" mixin="GreatVaultListListMixin">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-70"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
 				</Anchors>
-				<!-- <Frames>
-					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" y="-1"/>
-							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-						</Anchors>
-					</Frame>
-				</Frames> -->
+				<Layers>
+					<Layer>
+						<Texture parentKey="Background" atlas="auctionhouse-background-index" useAtlasSize="true">
+							<Anchors>
+								<Anchor point="TOPLEFT" x="3" y="-3"/>
+								<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
 				<Scripts>
 					<OnLoad method="OnLoad"/>
 				</Scripts>
