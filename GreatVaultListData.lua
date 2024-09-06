@@ -2,6 +2,8 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
 
+
+
 GreatVaultList.Data = {}
 
 

@@ -11,6 +11,7 @@ Column.config = {
         ["key"] = "character",
         ["store"] = "name",
     },
+    ["sortable"] = true, 
     ["demo"] = function(idx)
         local names = {"Jesternar", "Mishenani", "Martiners", "Mydraciea", "Monzorust", "Ysedbelly", "Connerrig", "Trauddled", "Groldrold", "Shillenton", "Ravenf", "Reginotta", "Groldrold"};
         return names[idx]

@@ -1,7 +1,6 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
-
-local _ = LibStub("LibLodash-1"):Get()
+local L, _, TableBuilderLib = GreatVaultList:GetLibs()
 
 
 
@@ -9,25 +8,25 @@ local _ = LibStub("LibLodash-1"):Get()
 
 GreatVaultListTableCellTextMixin = CreateFromMixins(TableBuilderCellMixin);
 
-function GreatVaultListTableCellTextMixin:Init(owner, dataIndex, columns, columnConfig, width)
-    self.columns = columns or {}
+function GreatVaultListTableCellTextMixin:Init(owner, columnConfig)
     self.columnConfig = columnConfig or {}
-    self.width = width
 end
 
 function GreatVaultListTableCellTextMixin:PopulateFn(rowData, dataIndex, idx)
     idx = idx or 1
     local text
-    local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
-    if fn then 
+    local fn = self.columnConfig.populate
+    if fn then
         text = fn(self, rowData[dataIndex], idx)
     else 
         text = rowData[dataIndex]
     end
 
+
     if not text then 
-        local emptyStr = _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr", idx}, _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr"}, "-"))
-        text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+        local emptyStr = _.get(self.columnConfig, {"emptyStr", idx}, _.get(self.columnConfig, {"emptyStr"}, "-"))
+		text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+		return text
     end
     return tostring(text)
 end
@@ -40,9 +39,10 @@ end
 GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellTextMixin);
 
 function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
-    _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
-        self[entry]:SetWidth(math.floor(self.width/3))
+    _.forEach({"Text1","Text2","Text3"}, function(entry, idx)
+        self[entry]:SetWidth(math.floor(self.columnConfig.width/3))
         self[entry].Text:SetJustifyH("CENTER")
+		local text = self:PopulateFn(rowData, dataIndex, idx)
         self[entry].Text:SetText(self:PopulateFn(rowData, dataIndex, idx))
     end)
 end
@@ -133,16 +133,19 @@ end
 
 function GreatVaultListMixin:OnShow()
     self:UpdateSize();
-    self.ListFrame.ItemList:RefreshScrollFrame();
+	
+	local width = TableBuilderLib:GetWidth("GreatVaultListTable")
+	self:SetWidth(width)
+   -- self.ListFrame.ItemList:RefreshScrollFrame();
 end
 
 
 function GreatVaultListMixin:UpdateSize(width)
-    self.width = width or self.width
+    -- self.width = width or self.width
 
     if not  GreatVaultList.db then return  end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 70 + 19  + 7
-    self:SetWidth(self.width)
+    -- self:SetWidth(self.width)
     self:SetHeight(height)
 end
 
@@ -168,9 +171,9 @@ GreatVaultListTableBuilderMixin = {};
 function GreatVaultListTableBuilderMixin:AddColumnInternal(owner, sortOrder, cellTemplate, ...)
 	local column = self:AddColumn();
 
-	if sortOrder then
-		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder);
-	end
+	-- if sortOrder then
+	-- 	column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder);
+	-- end
 
 	column:ConstructCells("FRAME", cellTemplate, owner, ...);
 	return column;
@@ -336,6 +339,15 @@ function GreatVaultListListMixin:OnLoad()
 	self.sort = -1
 	self.reverseSort = false
 	self.headers = {}
+
+
+
+
+	self.Texture = self:CreateTexture()
+	self.Texture:SetAllPoints()
+	self.Texture:SetColorTexture(0, 0, 0, 0.8)
+  
+
 end
 
 
@@ -372,7 +384,20 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 end
 
 
-function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
+function GreatVaultListListMixin:init(data, columnConfig, refresh)
+
+  
+	local config = {
+	} 
+  
+  
+	TableBuilderLib:New("GreatVaultListTable", self, config, columnConfig, data)
+
+
+	-- TableBuilderLib:SetData("GreatVaultListTable", data)
+
+
+	if true then return end
     self.columns = columns
 	self.ItemList.data = data
     self.columnConfig = columnConfig

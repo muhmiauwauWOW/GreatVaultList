@@ -3,7 +3,23 @@
 
 
 
-   <Frame name="GreatVaultListTableCellTextTemplate" mixin="GreatVaultListTableCellTextMixin" virtual="true">
+	<Button name="GreatVaultListHeaderTemplate" mixin="TableBuilderLibHeaderMixin" inherits="ColumnDisplayButtonShortTemplate" virtual="true">
+		<Size x="0" y="19"/>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Arrow" atlas="auctionhouse-ui-sortarrow" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Text" relativePoint="RIGHT" x="3" y="0"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnClick method="OnClick"/>
+		</Scripts>
+	</Button>
+
+    <Frame name="GreatVaultListCellTemplate" mixin="TableBuilderLibCellMixin" virtual="true">
 		<Size x="0" y="16"/>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -12,15 +28,36 @@
 		</Layers>
 	</Frame>
 
+	<Frame name="GreatVaultListLineTemplate" mixin="TableBuilderLibLineMixin" virtual="true">
+		<Size x="0" y="20"/>
+		<Anchors>
+			<Anchor point="LEFT"/>
+			<Anchor point="RIGHT"/>
+		</Anchors>
+	</Frame>
+
+
+
+
+   <Frame name="GreatVaultListTableCellTextTemplate" mixin="GreatVaultListTableCellTextMixin" virtual="true">
+		<Size x="0" y="16"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString parentKey="Text" inherits="Number14FontWhite" justifyH="LEFT" setAllPoints="true"/>
+			</Layer>
+		</Layers>
+	</Frame>
+	
+
 
    <Frame name="GreatVaultListTableCellTripleTextTemplate" mixin="GreatVaultListTableCellTripleTextMixin" virtual="true">
 		<Size x="0" y="16"/>
       <Frames>
-			<Frame parentKey="Text1" inherits="GreatVaultListTableCellTextTemplate">
-				<Anchors>
-					<Anchor point="LEFT"  x="0" y="0"/>
-				</Anchors>
-			</Frame>
+		<Frame parentKey="Text1" inherits="GreatVaultListTableCellTextTemplate">
+			<Anchors>
+				<Anchor point="LEFT"  x="0" y="0"/>
+			</Anchors>
+		</Frame>
          <Frame parentKey="Text2" inherits="GreatVaultListTableCellTextTemplate">
 				<Anchors>
 					<Anchor point="CENTER" x="0" y="0"/>
@@ -155,14 +192,14 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-70"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
 				</Anchors>
-				<Frames>
+				<!-- <Frames>
 					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" y="-1"/>
 							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
 						</Anchors>
 					</Frame>
-				</Frames>
+				</Frames> -->
 				<Scripts>
 					<OnLoad method="OnLoad"/>
 				</Scripts>

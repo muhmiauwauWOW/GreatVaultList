@@ -3,8 +3,13 @@ GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 
+local TableBuilderLib = LibStub:GetLibrary("TableBuilderLib")
+TableBuilderLib = TableBuilderLib:Setup("GreatVaultList", "GreatVaultListHeaderTemplate", "GreatVaultListLineTemplate", "GreatVaultListTableCellTextTemplate")
+
+
+
 function GreatVaultList:GetLibs()
-    return L, _
+    return L, _, TableBuilderLib
 end 
 
 
@@ -39,6 +44,11 @@ function GreatVaultList:OnEnable()
 
 	-- set Options
 	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale)
+
+
+
+	GreatVaultListFrame:SetShown(not GreatVaultListFrame:IsShown())
+
 end
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
@@ -113,26 +123,29 @@ function GreatVaultList:updateData(refresh)
 
 	sort(GreatVaultList.Table.cols, function(a, b) return a.index < b.index end)
 
-	local colConfig = {}
-	local cols = _.map(GreatVaultList.Table.cols, function(entry) 
-		colConfig[entry.key] =  entry.config
-		return entry.key 
+	local colConfig = _.map(GreatVaultList.Table.cols, function(entry)
+
+		entry.config.id = entry.key
+		entry.config.headerText = entry.config.header.text
+		entry.config.cellTemplate = entry.config.template
+		return entry.config
 	end)
 
 	local data = {}
-	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
-		local d = _.map(GreatVaultList.Table.cols, function(cEntry)
-			return entry[_.get(cEntry, {"config", "sort", "store"})]
+	_.forEach(GreatVaultList.db.global.characters, function(entry,  key)
+		local d = {}
+		_.forEach(GreatVaultList.Table.cols, function(cEntry, ckey)
+			d[cEntry.key] = entry[_.get(cEntry, {"config", "sort", "store"})]
 		end)
 		table.insert(data, d)
 	end)
 
 
-	-- DevTool:AddData(data, "data")
+	DevTool:AddData(data, "data")
 	-- DevTool:AddData(cols, "cols")
-	-- DevTool:AddData(colConfig, "colConfig")
+	DevTool:AddData(colConfig, "colConfig")
 
-	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
+	GreatVaultListFrame.ListFrame:init(data, colConfig, refresh)
 end
 
 
@@ -147,6 +160,7 @@ function GreatVaultList:demoMode()
 	local colConfig = {}
 	local cols = _.map(GreatVaultList.Table.cols, function(entry) 
 		colConfig[entry.key] =  entry.config
+
 		return entry.key 
 	end)
 

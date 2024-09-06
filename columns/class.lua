@@ -13,6 +13,7 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
+    ["sortable"] = true, 
     ["demo"] = function(idx)
         local classes = {"HUNTER", "WARLOCK", "PRIEST", "PALADIN", "MAGE", "ROGUE", "DRUID", "SHAMAN", "WARRIOR", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "EVOKER"};
         return classes[math.random(#classes)]

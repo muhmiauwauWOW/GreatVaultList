@@ -21,6 +21,8 @@ Libs\AceTimer-3.0\AceTimer-3.0.xml
 Libs\AceBucket-3.0\AceBucket-3.0.xml
 Libs\LibLodash\LibLodash.lua
 
+Libs\TableBuilderLib\TableBuilderLib.xml
+
 
 locale/locale.xml
 

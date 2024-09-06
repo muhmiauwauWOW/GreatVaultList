@@ -11,6 +11,7 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = "averageItemLevel",
     },
+    ["sortable"] = true, 
     ["demo"] = function(idx)
         return math.random(50000, 60000)/100
     end,
