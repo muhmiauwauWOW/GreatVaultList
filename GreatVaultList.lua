@@ -16,30 +16,33 @@ local default_global_data = {
 		sort = 2,
 		characters = {},
 		Options = {
-			modules = {
-
-			},
+			modules = {},
 			position = {},
 			scale = 1,
+			lines = 12
 		}
 	}
 }
 
 
-function GreatVaultList:OnEnable()
+function GreatVaultList:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
-	GreatVaultList:slashcommand()
 	GreatVaultList.Data:init()
-	GreatVaultList.Data:storeAll()
-	GreatVaultListOptions:init()
-
-	GreatVaultList:updateData(true)
-	-- GreatVaultList:demoMode()
-
-	-- set Options
-	GreatVaultListFrame:SetScale(GreatVaultList.db.global.Options.scale)
+	GreatVaultList:slashcommand()
 end
+
+function GreatVaultList:OnEnable()
+	GreatVaultListOptions:init()
+	GreatVaultListFrame:SetScale(self.db.global.Options.scale)
+	GreatVaultList.Data:storeAll()
+	GreatVaultList:updateData(true)
+end
+
+
+
+
+
 
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
 	if buttonName == "RightButton" then 
@@ -71,17 +74,16 @@ GREATVAULTLIST_COLUMNS = {
 		
 		-- init is not found
 		if not GreatVaultList.db.global.Options.modules[self.key] then
-			GreatVaultList.db.global.Options.modules[self.key] = { active = true }
+			GreatVaultList.db.global.Options.modules[self.key] = { active = true, index = self.config.index }
 		end
 
 		-- return if already active
 		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
 
-
 		-- register col
 		table.insert(GreatVaultList.Table.cols, {
 			key = self.key,
-			index = _.get(GreatVaultList.db.global.Options.modules, {self.key, "index"}, self.index),
+			index = _.get(GreatVaultList.db.global.Options.modules, {self.key, "index"}, self.config.index),
 			config = self.config
 		})
 
@@ -107,7 +109,7 @@ GREATVAULTLIST_COLUMNS = {
 
 function GreatVaultList:updateData(refresh)
 
-	_.map(GreatVaultList.Table.cols, function(entry, key) 
+	_.map(GreatVaultList.Table.cols, function(entry, key)
 		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
 	end)
 
