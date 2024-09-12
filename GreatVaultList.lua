@@ -1,6 +1,7 @@
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
+local BlizzMoveAPI = _G.BlizzMoveAPI
 
 function GreatVaultList:GetLibs()
 	return L, _
@@ -45,16 +46,34 @@ function GreatVaultList:assert(check, fn, text, ...)
 	if not check then return end
 end
 
+
+
+
+
+
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	GreatVaultList.Data:init()
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	GreatVaultList:slashcommand()
+
+
+	if BlizzMoveAPI then 
+
+		GreatVaultListFrame.Drag:Hide()
+		BlizzMoveAPI:RegisterAddOnFrames({
+			["GreatVaultList"] = { 
+				["GreatVaultListFrame"] = {}
+			},
+		});
+	else
+		GreatVaultListFrame:SetScale(self.db.global.Options.scale)
+	end
 end
 
 function GreatVaultList:OnEnable()
 	GreatVaultListOptions:init()
-	GreatVaultListFrame:SetScale(self.db.global.Options.scale)
+	-- GreatVaultListFrame:SetScale(self.db.global.Options.scale)
 end
 
 

@@ -2,6 +2,7 @@ local addonName = ...
 
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
+local BlizzMoveAPI = _G.BlizzMoveAPI
 
 
 GreatVaultListOptions = {}
@@ -16,16 +17,17 @@ function GreatVaultListOptions:init()
 
 
     -- scale
-    local setting = Settings.RegisterAddOnSetting(category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 1)
-    setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
-    
-    local function FormatScaledPercentage(value)
-        return FormatPercentage(value);
-    end
-    local options = Settings.CreateSliderOptions(.4, 2, .01)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage);
-    Settings.CreateSlider(category, setting, options, L["opt_scale_desc"])
+    if not BlizzMoveAPI then 
+        local setting = Settings.RegisterAddOnSetting(category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 1)
+        setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
 
+        local function FormatScaledPercentage(value)
+            return FormatPercentage(value);
+        end
+        local options = Settings.CreateSliderOptions(.4, 2, .01)
+        options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage);
+        Settings.CreateSlider(category, setting, options, L["opt_scale_desc"])
+    end
 
     -- lines
     local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number", L["opt_lines_name"], 12)
