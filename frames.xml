@@ -12,6 +12,15 @@
 		</Layers>
 	</Frame>
 
+	<Frame name="GreatVaultListTableCellIconTemplate" mixin="GreatVaultListTableCellIconMixin" virtual="true">
+		<Size x="0" y="16"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon" atlas="classicon-paladin" />
+			</Layer>
+		</Layers>
+	</Frame>
+
 
    <Frame name="GreatVaultListTableCellTripleTextTemplate" mixin="GreatVaultListTableCellTripleTextMixin" virtual="true">
 		<Size x="0" y="16"/>
@@ -43,7 +52,7 @@
 			<Layer level="OVERLAY">
 				<Texture parentKey="Arrow" atlas="auctionhouse-ui-sortarrow" useAtlasSize="true">
 					<Anchors>
-						<Anchor point="LEFT" relativeKey="$parent.Text" relativePoint="RIGHT" x="3" y="0"/>
+						<Anchor point="RIGHT" x="-5" y="0"/>
 					</Anchors>
 				</Texture>
 			</Layer>
@@ -143,7 +152,7 @@
 			<Button parentKey="OpenVault" parent="GreatVaultListFrame" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
 				<Size x="0" y="27"/>
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-48" y="-28"/>
+					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-48" y="-30"/>
 				</Anchors>
 				<Scripts>
 					<OnClick>
@@ -155,7 +164,7 @@
 			<Button parentKey="RefreshButton" inherits="BigRedRefreshButtonTemplate">
 				<Size x="28" y="28"/>
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-28"/>
+					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-30"/>
 				</Anchors>
 				<Scripts>
 					<OnClick>

@@ -9,6 +9,12 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
+
+GreatVaultList.config = {
+	defaultCellPadding = 6
+}
+
+
 local default_global_data = {
 	global = {
 		sort = 2,

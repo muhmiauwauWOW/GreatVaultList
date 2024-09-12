@@ -7,15 +7,15 @@ local _ = LibStub("LibLodash-1"):Get()
 
 
 
-GreatVaultListTableCellTextMixin = CreateFromMixins(TableBuilderCellMixin);
+GreatVaultListTableCellBaseMixin = CreateFromMixins(TableBuilderCellMixin);
 
-function GreatVaultListTableCellTextMixin:Init(owner, dataIndex, columns, columnConfig, width)
+function GreatVaultListTableCellBaseMixin:Init(owner, dataIndex, columns, columnConfig, width)
     self.columns = columns or {}
     self.columnConfig = columnConfig or {}
     self.width = width
 end
 
-function GreatVaultListTableCellTextMixin:PopulateFn(rowData, dataIndex, idx)
+function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     idx = idx or 1
     local text
     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
@@ -25,6 +25,7 @@ function GreatVaultListTableCellTextMixin:PopulateFn(rowData, dataIndex, idx)
         text = rowData[dataIndex]
     end
 
+
     if not text then 
         local emptyStr = _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr", idx}, _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr"}, "-"))
         text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
@@ -32,12 +33,15 @@ function GreatVaultListTableCellTextMixin:PopulateFn(rowData, dataIndex, idx)
     return tostring(text)
 end
 
+GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+
+
 function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
 end
 
 
-GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellTextMixin);
+GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
 
 function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
     _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
@@ -46,6 +50,17 @@ function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
         self[entry].Text:SetText(self:PopulateFn(rowData, dataIndex, idx))
     end)
 end
+
+
+
+GreatVaultListTableCellIconMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+
+function GreatVaultListTableCellIconMixin:Populate(rowData, dataIndex)
+	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
+	local icon = fn(rowData, rowData[dataIndex])
+    self.Icon:SetAtlas(icon)
+end
+
 
 
 
@@ -209,9 +224,10 @@ function GreatVaultListItemListMixin:OnLoad()
 	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
 end
 
-function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction)
+function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction, columnConfig)
 	self.tableBuilderLayoutFunction = tableBuilderLayoutFunction;
 	self.tableBuilderLayoutDirty = true;
+	self.columnConfig = columnConfig
 
 	if self.isInitialized and self:IsShown() then
 		self:UpdateTableBuilderLayout();
@@ -316,7 +332,7 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
         _.forEach(self.columns, function(colName, idx)
             local width = _.get(self.columnConfig, {colName, "width"})
             local headerText = _.get(self.columnConfig, {colName, "header", "text"})
-            local padding = _.get(self.columnConfig, {colName, "padding"}, 14)
+            local padding = _.get(self.columnConfig, {colName, "padding"}, GreatVaultList.config.defaultCellPadding)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
 
 			local canSort = _.get(self.columnConfig, {colName, "header", "canSort"}, false)
@@ -326,6 +342,8 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 
             local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
 			col:GetHeaderFrame():SetText(headerText);
+			
+			if colName ~= "character" then  return end		
         end)
     end
 
@@ -333,6 +351,10 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 end
 
 function GreatVaultListListMixin:OnLoad()
+
+	self.tframe = self.tframe or CreateFrame("Frame", nil, self, "GreatVaultListTableCellTextTemplate")
+	self.tframe:Hide()
+
 	self.sortHeaders = {}
 	self.sort = -1
 	self.reverseSort = false
@@ -373,6 +395,29 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 end
 
 
+function GreatVaultListListMixin:calcAutoWidthColumns(data, columnConfig, columns)
+	
+	return _.forEach(columnConfig, function(column, key)
+		if not column.autoWidth then return column end
+
+		self.tframe.Text:SetText(column.header.text)
+		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + 10 -- 10 for arrow 
+
+		_.forEach(data, function(entry)
+			self.tframe:Init(self, column.index, columns, columnConfig)
+			self.tframe:Populate(entry, column.index)
+			local w = math.ceil(self.tframe.Text:GetStringWidth())
+			maxWidth = w > maxWidth and w or maxWidth
+		end)
+
+		column.width = maxWidth + ( (column.padding or GreatVaultList.config.defaultCellPadding ) * 2)
+		return column
+	end)
+end
+
+
+
+
 function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 	local asserttext = "variable \"%s\" size is 0"
 	GreatVaultList:assert(_.size(columns) > 0, "GreatVaultListListMixin:init", asserttext, "columns")
@@ -384,6 +429,8 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
     self.columnConfig = columnConfig
 	self.currentPlayer = 0
 
+	self.columnConfig = self:calcAutoWidthColumns(self.ItemList.data, self.columnConfig, self.columns)
+
     local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
         width = width + (entry.width or 0)
@@ -391,7 +438,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 
     self:GetParent():UpdateSize(width);
 
-    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList));
+    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList), self.columnConfig);
 	if refresh then 
 		self:SetSortOrder(GreatVaultList.db.global.sort)
 	else

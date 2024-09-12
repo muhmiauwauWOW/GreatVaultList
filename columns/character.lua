@@ -5,7 +5,8 @@ local L, _ = GreatVaultList:GetLibs()
 Column.key = ColumKey
 Column.config = {
     ["index"] = 2,
-    ["width"] = 120,
+    ["width"] = 100,
+    ["autoWidth"] = true,
     ["header"] = {key = ColumKey, text = L[ColumKey], width = 120, canSort = true},
     ["sort"] = {
         ["key"] = "character",

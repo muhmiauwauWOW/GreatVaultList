@@ -221,7 +221,8 @@
         "g_auctionHouseSortsBySearchContext",
         "RAIDS",
         "DUNGEONS",
-        "WORLD"
+        "WORLD",
+        "GetClassAtlas"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
