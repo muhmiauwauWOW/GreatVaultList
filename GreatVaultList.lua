@@ -57,11 +57,32 @@ function GreatVaultList:OnEnable()
 	GreatVaultListFrame:SetScale(self.db.global.Options.scale)
 end
 
+
+
+function GreatVaultList:hideWindow()
+	GreatVaultListFrame:Hide()
+end
+
+function GreatVaultList:showWindow()
+	GreatVaultList.Data:storeAll()
+	GreatVaultList:updateData(true)
+	--GreatVaultList:demoMode()
+	GreatVaultListFrame:Show()
+end
+
+function GreatVaultList:toggleWindow()
+	if GreatVaultListFrame:IsShown() then
+		self:hideWindow()
+	else
+		self:showWindow()
+	end
+end
+
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
 	if buttonName == "RightButton" then
 		Settings.OpenToCategory(GreatVaultList.OptionsID)
 	else
-		GreatVaultListFrame:SetShown(not GreatVaultListFrame:IsShown())
+		GreatVaultList:toggleWindow()
 	end
 end
 
@@ -69,13 +90,7 @@ function GreatVaultList:slashcommand()
 	SLASH_GV1 = "/gv"
 	SLASH_GV2 = "/greatvault"
 	SlashCmdList["GV"] = function(msg)
-		if GreatVaultListFrame:IsShown() then
-			GreatVaultListFrame:Hide()
-		else
-			GreatVaultList.Data:storeAll()
-			GreatVaultList:updateData(true)
-			GreatVaultListFrame:Show()
-		end
+		GreatVaultList:toggleWindow()
 	end
 end
 
