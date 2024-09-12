@@ -9,7 +9,8 @@ GreatVaultListOptions = {}
 
 
 function GreatVaultListOptions:init()
-    local category, layout = Settings.RegisterVerticalLayoutCategory(addonName)
+    local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+    local category, layout = Settings.RegisterVerticalLayoutCategory(AddOnInfo[2])
     Settings.RegisterAddOnCategory(category)
     GreatVaultList.OptionsID = category:GetID()
 
