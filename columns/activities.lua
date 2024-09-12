@@ -16,12 +16,26 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = DUNGEONS, width = 40, canSort = false},
+    ["header"] =  { key = ColumKey, text = DUNGEONS, width = 40, canSort = true},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
+    ["sortFn"] = function(a, b, comp)
+        if a[1].level == b[1].level and a[2].level == b[2].level and a[3].level == b[3].level  then
+            return comp(a[3].progress, b[3].progress)
+        end
+       
+        if a[3].level == b[3].level then
+            if a[2].level == b[2].level then
+                return comp(a[1].level, b[1].level)
+            end
+            return comp(a[2].level, b[2].level)
+        end
+        
+        return comp(a[3].level, b[3].level)
+    end,
     ['emptyStr'] = {
         "0/1",
         "0/4",
@@ -29,13 +43,17 @@ Column.config = {
     },
     ["demo"] = function(idx)
 
+        local progress = math.random(7) - 1
         local level = math.random(5,15)
         local obj = {}
+        local threshold = {1, 4, 8}
+
         for i = 1, 3, 1 do
+            local level = (progress>= threshold[i]) and level or 0
             table.insert(obj, {
-                progress = 2,
-                threshold = 1,
-                level = level + (i*2),
+                progress = progress,
+                threshold = threshold[i],
+                level = level,
                 activityTierID = 0
             })
         end

@@ -15,7 +15,7 @@ Column.config = {
     },
     ["demo"] = function(idx)
         local classes = _.keys(CLASS_ICON_TCOORDS);
-        return GetClassAtlas(string.lower(math.random(#classes)))
+        return string.lower(classes[math.random(#classes)])
     end,
     ["populate"] = function(self, class)
         if type(class) ~= "string" then return nil end

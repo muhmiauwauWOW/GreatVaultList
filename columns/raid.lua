@@ -27,6 +27,20 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     },
+    ["sortFn"] = function(a, b, comp)
+        if a[1].level == b[1].level and a[2].level == b[2].level and a[3].level == b[3].level  then
+            return comp(a[3].progress, b[3].progress)
+        end
+       
+        if a[3].level == b[3].level then
+            if a[2].level == b[2].level then
+                return comp(a[1].level, b[1].level)
+            end
+            return comp(a[2].level, b[2].level)
+        end
+        
+        return comp(a[3].level, b[3].level)
+    end,
     ['emptyStr'] = {
         "0/2",
         "0/4",
@@ -34,14 +48,14 @@ Column.config = {
     },
     ["demo"] = function(idx)
         local keys =  _.keys(DIFFICULTY_NAMES)
-        local level = keys[math.random(_.size(keys))]
+        -- local level = keys[math.random(_.size(keys))]
         local obj = {}
 
         local progress = math.random(7) - 1
         local threshold = {2, 4, 6}
 
         for i = 1, 3, 1 do
-            
+            local level = keys[math.random(_.size(keys))]
             table.insert(obj, {
                 progress = progress,
                 threshold = threshold[i],
