@@ -29,7 +29,7 @@ Column.config = {
     event = {
         "CHALLENGE_MODE_COMPLETED",
         function(self)
-            self.config.store(GreatVaultList.data:get())
+            GreatVaultList.Data:store(self.config, true)
             if GreatVaultInfoFrame:IsShown() then  -- refresh view if window is open
                 GreatVaultList.ScrollFrame.ScollFrame:Refresh()
             end

@@ -44,7 +44,7 @@ Column.config = {
     event = {
         {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
         function(self)
-            GreatVaultList.Data:store(ColumKey, true)
+            GreatVaultList.Data:store(self.config, true)
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
                 GreatVaultListFrame:RefreshScrollFrame()
             end
@@ -76,7 +76,7 @@ Column.config = {
                         ("+" .. activity.level)
                     )
         elseif activity.progress > 0 then
-            text = activity.progress .. "/" .. activity.threshold
+            text = GreatVaultList.utility:formatActivityProgress(activity)
         end
 
         return text

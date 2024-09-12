@@ -138,10 +138,11 @@ end
 
 
 function GreatVaultListMixin:UpdateSize(width)
+	if not width then return end
     self.width = width or self.width
 
-    if not  GreatVaultList.db then return  end 
-    local height = (GreatVaultList.db.global.Options.lines * 21) + 70 + 19  + 7
+    if not GreatVaultList.db then return  end 
+    local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7
     self:SetWidth(self.width)
     self:SetHeight(height)
 end
@@ -373,6 +374,11 @@ end
 
 
 function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
+	local asserttext = "variable \"%s\" size is 0"
+	GreatVaultList:assert(_.size(columns) > 0, "GreatVaultListListMixin:init", asserttext, "columns")
+	GreatVaultList:assert(_.size(data) > 0, "GreatVaultListListMixin:init", asserttext, "data")
+	GreatVaultList:assert(_.size(columnConfig) > 0, "GreatVaultListListMixin:init", asserttext, "columnConfig")
+
     self.columns = columns
 	self.ItemList.data = data
     self.columnConfig = columnConfig

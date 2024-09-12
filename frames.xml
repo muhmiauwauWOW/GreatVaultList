@@ -51,6 +51,13 @@
 		<Scripts>
 			<OnClick method="OnClick"/>
 		</Scripts>
+		<HighlightTexture atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" alpha="0.8">
+		    <Color r="0.4" g="1" b="0.4" a="1" />
+			<Anchors>
+				<Anchor point="TOPLEFT" x="0" y="0"/>
+				<Anchor point="BOTTOMRIGHT" x="4" y="-2"/>
+			</Anchors>
+		</HighlightTexture>
 	</Button>
 
 
@@ -64,9 +71,9 @@
 		<Layers>
 			<Layer level="OVERLAY">
 				<Texture parentKey="CurrentTexture" atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" hidden="true" alpha="0.8">
-				<Color r="0.4" g="1" b="0.4" a="1" />
+					<Color r="0.4" g="1" b="0.4" a="1" />
 				</Texture>
-				<Texture parentKey="HighlightTexture" atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" hidden="true" alpha="0.5" />
+				<Texture parentKey="HighlightTexture" atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" hidden="true" alpha="0.2" />
 			</Layer>
 		</Layers>
 		<Scripts>
@@ -134,9 +141,9 @@
 		</Anchors>
 		<Frames>
 			<Button parentKey="OpenVault" parent="GreatVaultListFrame" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
-				<Size x="0" y="30"/>
+				<Size x="0" y="27"/>
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-35"/>
+					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-48" y="-28"/>
 				</Anchors>
 				<Scripts>
 					<OnClick>
@@ -144,15 +151,30 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+
+			<Button parentKey="RefreshButton" inherits="BigRedRefreshButtonTemplate">
+				<Size x="28" y="28"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-28"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+					    GreatVaultList.Data:storeAll()
+					    GreatVaultList:updateData(true)
+					</OnClick>
+				</Scripts>
+			</Button>
+
+
 			<Frame parentKey="Drag"  parent="GreatVaultListFrame" >
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="0"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-70"/>
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-60"/>
 				</Anchors>
 			</Frame>
 			<Frame parentKey="ListFrame" mixin="GreatVaultListListMixin">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-70"/>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
 				</Anchors>
 				<Frames>
