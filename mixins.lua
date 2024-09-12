@@ -153,7 +153,6 @@ end
 
 
 function GreatVaultListMixin:UpdateSize(width)
-	if not width then return end
     self.width = width or self.width
 
     if not GreatVaultList.db then return  end 
