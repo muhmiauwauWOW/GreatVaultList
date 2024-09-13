@@ -1,3 +1,4 @@
+local addonName = ...
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
@@ -221,3 +222,17 @@ end
 
 
 
+
+-- add data broker support 
+local ldb =  LibStub("LibDataBroker-1.1")
+if ldb then
+	local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+	DevTools_Dump(AddOnInfo)
+	print(C_AddOns.GetAddOnMetadata(addonName, "IconTexture"))
+	ldb:NewDataObject(AddOnInfo[2], {
+		type = "data source",
+		text = AddOnInfo[2],
+		icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
+		OnClick = GreatVaultList_OnAddonCompartmentClick,
+	})
+end
