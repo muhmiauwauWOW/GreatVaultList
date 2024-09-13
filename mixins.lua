@@ -151,6 +151,10 @@ function GreatVaultListMixin:OnLoad()
     dragarea:SetScript("OnDragStop", function(self)
         GreatVaultListFrame:StopMovingOrSizing()
     end)
+
+
+
+	tinsert(UISpecialFrames, self:GetName())
 end
 
 function GreatVaultListMixin:OnShow()
