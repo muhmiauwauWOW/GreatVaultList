@@ -205,6 +205,26 @@
 			</Frame>
 
 
+			<Frame parentKey="MythicPlusLootList" mixin="GreatVaultListMythicPlusLootListMixin" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" y="-1"/>
+							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
+						</Anchors>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnLoad method="OnLoad"/>
+					<OnShow method="OnShow"/>
+				</Scripts>
+			</Frame>
+
+
 			<Frame parentKey="DelvesLootList" mixin="GreatVaultListDelvesLootListMixin" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>

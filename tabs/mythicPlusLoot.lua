@@ -1,18 +1,19 @@
 local addonName = ...
 local _ = LibStub("LibLodash-1"):Get()
 
-GreatVaultListDelvesLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
 
-function GreatVaultListDelvesLootListMixin:OnLoad()
+GreatVaultListMythicPlusLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
+
+function GreatVaultListMythicPlusLootListMixin:OnLoad()
 	GreatVaultListListMixin.OnLoad(self)
     self.itemlvl = 0
 	self:BuildDataAndInit()
 	GreatVaultListFrame:HookScript("OnLoad", function() 
-		GreatVaultListFrame:AddTabFn("Delves Loot", self); --Delves Item Level Loot Table
+		GreatVaultListFrame:AddTabFn("Mythic Plus Loot", self); --Delves Item Level Loot Table
 	end)
 end
 
-function GreatVaultListDelvesLootListMixin:OnShow()
+function GreatVaultListMythicPlusLootListMixin:OnShow()
     self.itemlvl = select(2, GetAverageItemLevel())
 	self.reverseSort = true
     self:GetParent().currentPlayer = 0
@@ -21,7 +22,7 @@ function GreatVaultListDelvesLootListMixin:OnShow()
 end
 
 
-function GreatVaultListDelvesLootListMixin:init(columns, data, columnConfig)
+function GreatVaultListMythicPlusLootListMixin:init(columns, data, columnConfig)
 	local asserttext = "variable \"%s\" size is 0"
 	GreatVaultList:assert(_.size(columns) > 0, "GreatVaultListListMixin:init", asserttext, "columns")
 	GreatVaultList:assert(_.size(data) > 0, "GreatVaultListListMixin:init", asserttext, "data")
@@ -43,7 +44,7 @@ end
 
 
 
-function GreatVaultListDelvesLootListMixin:colorItemLvl(itemlvl, ilvl)
+function GreatVaultListMythicPlusLootListMixin:colorItemLvl(itemlvl, ilvl)
 
     local function ColorGradient(perc, r1, g1, b1, r2, g2, b2)
         if perc >= 1 then
@@ -82,7 +83,7 @@ function GreatVaultListDelvesLootListMixin:colorItemLvl(itemlvl, ilvl)
 end
 
 
-function GreatVaultListDelvesLootListMixin:BuildDataAndInit()
+function GreatVaultListMythicPlusLootListMixin:BuildDataAndInit()
 	local cols = {}
 
 	local i = 0
@@ -108,92 +109,78 @@ function GreatVaultListDelvesLootListMixin:BuildDataAndInit()
 
 
 	local colConfig = {
-		col1 = getColconfig("Delve Tier"),
-		col2 = getColconfig("Bountiful"),
+		col1 = getColconfig("Keystone Level"),
+		col2 = getColconfig("EoD"),
 		col3 = getColconfig("Upgrade Level"),
 		col4 = getColconfig("Great Vault"),
 		col5 = getColconfig("Upgrade Level")
 	}
 
 	local data = {
-		{
-			1,
-			561,
-			"Explorer 2/8",
-			584,
-			"Veteran 1/8"
-		},
-		{
-			2, 
-			564,
-			"Explorer 3/8",        
-			584,
-			"Veteran 1/8"
-		},
-		{
-			3, 
-			571,
-			"Adventurer 1/8",      
-			587,
-			"Veteran 2/8"
-		},
-		{
-			4, 
-			577,
-			"Adventurer 3/8",      
+		{ 
+			2,
 			597,
-			"Champion 1/8"
-		},
-		{
-			5, 
-			584,
-			"Veteran 1/8",     
-			603,
-			"Champion 3/8"
-		},
-		{
-			6, 
-			590,
-			"Veteran 3/8",     
+			"Champion 1/8",
 			606,
 			"Champion 4/8"
 		},
-		{
-			7, 
+		{ 
+			3,
 			597,
-			"Champion 1/8",        
+			"Champion 1/8",
 			610,
 			"Hero 1/6"
 		},
-		{
-			8, 
+		{ 
+			4,
+			600,
+			"Champion 2/8",
+			610,
+			"Hero 1/6"
+		},
+		{ 
+			5,
 			603,
-			"Champion 3/8",        
+			"Champion 3/8",
+			613,
+			"Hero 2/6"
+		},
+		{ 
+			6,
+			606,
+			"Champion 4/8",
+			613,
+			"Hero 2/6"
+		},
+		{ 
+			7,
+			610,
+			"Hero 1/6",
 			616,
 			"Hero 3/6"
 		},
-		{
-			9, 
-			603,
-			"Champion 3/8",        
-			616,
-			"Hero 3/6"
+		{ 
+			8,
+			610,
+			"Hero 1/6",
+			619,
+			"Hero 4/6"
 		},
-		{
+		{ 
+			9,
+			613,
+			"Hero 1/6",
+			619,
+			"Hero 4/6"
+		},
+		{ 
 			10,
-			603, 
-			"Champion 3/8",        
-			616,
-			"Hero 3/6"
-		},
-		{
-			11,
-			603, 
-			"Champion 3/8",        
-			616, 
-			"Hero 3/6"
-		},
+			613,
+			"Hero 1/6",
+			623,
+			"Myth 1/6"
+		}
 	}
 
-	GreatVaultListFrame.DelvesLootList:init(cols, data, colConfig)
+	GreatVaultListFrame.MythicPlusLootList:init(cols, data, colConfig)
 end
