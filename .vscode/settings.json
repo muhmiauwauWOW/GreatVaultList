@@ -222,7 +222,8 @@
         "RAIDS",
         "DUNGEONS",
         "WORLD",
-        "GetClassAtlas"
+        "GetClassAtlas",
+        "TabSystemMixin"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
