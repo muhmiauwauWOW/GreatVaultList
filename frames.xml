@@ -7,7 +7,7 @@
 		<Size x="0" y="16"/>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<FontString parentKey="Text" inherits="Number14FontWhite" justifyH="LEFT" setAllPoints="true"/>
+				<FontString parentKey="Text" inherits="Number13FontWhite" justifyH="LEFT" setAllPoints="true"/>
 			</Layer>
 		</Layers>
 	</Frame>

@@ -270,7 +270,7 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-			button.CurrentTexture:SetShown(GreatVaultListFrame.ListFrame.currentPlayer == elementData)
+			button.CurrentTexture:SetShown(GreatVaultListFrame.currentPlayer == elementData)
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -435,7 +435,7 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder, main)
 		GreatVaultList.db.global.sort = self.sort
 		
 		local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-		self.currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+		self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
 	end
 	self.ItemList:RefreshScrollFrame();
 end
@@ -446,8 +446,10 @@ function GreatVaultListListMixin:calcAutoWidthColumns(data, columnConfig, column
 	return _.forEach(columnConfig, function(column, key)
 		if not column.autoWidth then return column end
 
+		local addSpace = column.header.canSort and 12 or 0
+		print(column.header.text, addSpace)
 		self.tframe.Text:SetText(column.header.text)
-		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + 10 -- 10 for arrow 
+		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + addSpace -- addSpace for arrow 
 
 		_.forEach(data, function(entry)
 			self.tframe:Init(self, column.index, columns, columnConfig)
@@ -473,7 +475,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
     self.columns = columns
 	self.ItemList.data = data
     self.columnConfig = columnConfig
-	self.currentPlayer = 0
+	self:GetParent().currentPlayer = 0
 
 	self.columnConfig = self:calcAutoWidthColumns(self.ItemList.data, self.columnConfig, self.columns)
 
