@@ -11,6 +11,10 @@
 ## X-WoWI-ID: 26838
 
 
+# fix blizzard bug 
+Fix_BlizzTabsystemTabWidth.lua
+
+
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
 Libs\AceAddon-3.0\AceAddon-3.0.xml
@@ -28,6 +32,12 @@ GreatVaultList.lua
 GreatVaultListData.lua
 GreatVaultListOptions.lua
 mixins.lua
+
+tabs\mixin.lua
+tabs\raidLoot.lua
+tabs\dungeonLoot.lua
+tabs\delvesLoot.lua
+
 frames.xml
 
 columns/activities.lua

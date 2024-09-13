@@ -217,3 +217,7 @@ function GreatVaultList:demoMode()
 	-- DevTool:AddData(colConfig, "colConfig")
 	GreatVaultListFrame.ListFrame:init(cols, demoData, colConfig, true)
 end
+
+
+
+

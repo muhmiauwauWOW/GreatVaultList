@@ -222,7 +222,19 @@
         "RAIDS",
         "DUNGEONS",
         "WORLD",
-        "GetClassAtlas"
+        "GetClassAtlas",
+        "TabSystemMixin",
+        "RETRIEVING_DATA",
+        "TooltipDataProcessor",
+        "INSPECT",
+        "ITEM_LEVEL",
+        "ITEM_LEVEL_ALT",
+        "CLUB_FINDER_PENDING",
+        "InspectFrame",
+        "DUNGEON_SCORE",
+        "Rare",
+        "Add",
+        "TabSystemButtonMixin"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

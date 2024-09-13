@@ -19,7 +19,7 @@ function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     idx = idx or 1
     local text
     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
-    if fn then 
+    if fn and type(fn) == "function" then 
         text = fn(self, rowData[dataIndex], idx)
     else 
         text = rowData[dataIndex]
@@ -37,6 +37,7 @@ GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseM
 
 
 function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
+	if not dataIndex then return end
     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
 end
 
@@ -123,6 +124,12 @@ GreatVaultListMixin = {}
 
 
 function GreatVaultListMixin:OnLoad()
+	TabSystemOwnerMixin.OnLoad(self);
+	self:SetTabSystem(self.TabSystem);
+	self:AddTabFn("List", self.ListFrame);
+	self:SetTab(1)
+
+
 	self:SetPortraitTextureRaw("Interface\\AddOns\\GreatVaultList\\vault.png")
 	self:GetPortrait():ClearAllPoints()
 	self:GetPortrait():SetPoint("TOPLEFT", -2, 5)
@@ -152,8 +159,16 @@ function GreatVaultListMixin:OnShow()
 end
 
 
+function GreatVaultListMixin:AddTabFn(key, ...)
+    self:AddNamedTab(key, ...);
+end
+
+
 function GreatVaultListMixin:UpdateSize(width)
     self.width = width or self.width
+
+	local tabsWidth = self.TabSystem:GetWidth() + 50
+	self.width = tabsWidth > self.width and tabsWidth or self.width
 
     if not GreatVaultList.db then return  end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7
@@ -251,7 +266,7 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-			button.CurrentTexture:SetShown(GreatVaultListFrame.ListFrame.currentPlayer == elementData)
+			button.CurrentTexture:SetShown(GreatVaultListFrame.currentPlayer == elementData)
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -319,7 +334,7 @@ end
 GreatVaultListListMixin = {};
 
 
-function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
+function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList, useFill)
 	owner.headers = {}
 	owner.sort = 1
 	owner.reverseSort = false
@@ -339,7 +354,12 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList)
 				table.insert(self.sortHeaders, idx);
 			end
 
-            local col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
+			local col
+			if useFill then
+				col = tableBuilder:AddFillColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
+			else
+				col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
+			end
 			col:GetHeaderFrame():SetText(headerText);
 			
 			if colName ~= "character" then  return end		
@@ -358,6 +378,27 @@ function GreatVaultListListMixin:OnLoad()
 	self.sort = -1
 	self.reverseSort = false
 	self.headers = {}
+
+end
+
+
+function GreatVaultListListMixin:OnShow()
+	self.reverseSort = not self.reverseSort 
+	self:SetSortOrder(GreatVaultList.db.global.sort)
+	
+
+	local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
+	self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+
+
+	local width = 15 + (_.size(self.columnConfig) * 1)
+    _.forEach(self.columnConfig, function(entry)
+        width = width + (entry.width or 0)
+    end)
+
+    self:GetParent():UpdateSize(width);
+
+	self.ItemList:RefreshScrollFrame();
 end
 
 
@@ -369,15 +410,13 @@ function GreatVaultListListMixin:RegisterHeader(header)
 end
 
 
-function GreatVaultListListMixin:SetSortOrder(sortOrder)
+function GreatVaultListListMixin:SetSortOrder(sortOrder, main)
 	if self.sort == sortOrder then 
 		self.reverseSort = not self.reverseSort
 	else
 		self.sort = sortOrder
 		self.reverseSort =  false
 	end
-
-	GreatVaultList.db.global.sort = self.sort
 
 	for i, header in ipairs(self.headers) do
 		header:UpdateArrow(self.reverseSort);
@@ -394,9 +433,13 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder)
 	sort(self.ItemList.data, function(a, b)
 		return sortFn(a[self.sort], b[self.sort], comp)
 	end)
-	
-    local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-    self.currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+
+	if main then
+		GreatVaultList.db.global.sort = self.sort
+		
+		local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
+		self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+	end
 	self.ItemList:RefreshScrollFrame();
 end
 
@@ -406,8 +449,9 @@ function GreatVaultListListMixin:calcAutoWidthColumns(data, columnConfig, column
 	return _.forEach(columnConfig, function(column, key)
 		if not column.autoWidth then return column end
 
+		local addSpace = column.header.canSort and 12 or 0
 		self.tframe.Text:SetText(column.header.text)
-		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + 10 -- 10 for arrow 
+		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + addSpace -- addSpace for arrow 
 
 		_.forEach(data, function(entry)
 			self.tframe:Init(self, column.index, columns, columnConfig)
@@ -433,7 +477,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
     self.columns = columns
 	self.ItemList.data = data
     self.columnConfig = columnConfig
-	self.currentPlayer = 0
+	self:GetParent().currentPlayer = 0
 
 	self.columnConfig = self:calcAutoWidthColumns(self.ItemList.data, self.columnConfig, self.columns)
 
@@ -444,10 +488,15 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 
     self:GetParent():UpdateSize(width);
 
-    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList), self.columnConfig);
+    self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList, false), self.columnConfig);
 	if refresh then 
-		self:SetSortOrder(GreatVaultList.db.global.sort)
+		self:SetSortOrder(GreatVaultList.db.global.sort, true)
 	else
 		self.ItemList:RefreshScrollFrame();
 	end
+
 end
+
+
+
+
