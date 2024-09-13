@@ -385,6 +385,11 @@ end
 function GreatVaultListListMixin:OnShow()
 	self.reverseSort = not self.reverseSort 
 	self:SetSortOrder(GreatVaultList.db.global.sort)
+	
+
+	local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
+	self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+
 
 	local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
@@ -392,6 +397,8 @@ function GreatVaultListListMixin:OnShow()
     end)
 
     self:GetParent():UpdateSize(width);
+
+	self.ItemList:RefreshScrollFrame();
 end
 
 
