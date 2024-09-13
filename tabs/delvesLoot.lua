@@ -4,6 +4,7 @@ local _ = LibStub("LibLodash-1"):Get()
 GreatVaultListDelvesLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
 
 GreatVaultListDelvesLootListMixin.tabName = string.format("%s Loot", "Delves")
+GreatVaultListDelvesLootListMixin.sortOrder = 1
 
 
 function GreatVaultListDelvesLootListMixin:OnLoad()

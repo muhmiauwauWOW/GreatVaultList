@@ -5,7 +5,7 @@ local _ = LibStub("LibLodash-1"):Get()
 GreatVaultListLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
 
 GreatVaultListLootListMixin.tabName = ""
-GreatVaultListLootListMixin.sortOrder = 4
+GreatVaultListLootListMixin.sortOrder = 1
 
 function GreatVaultListLootListMixin:OnLoad()
 	GreatVaultListListMixin.OnLoad(self)
