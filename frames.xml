@@ -271,9 +271,8 @@
 
 			<Frame parentKey="TabSystem" inherits="TabSystemTemplate">
 				<KeyValues>
-					<KeyValue key="minTabWidth" value="100" type="number"/>
-					<KeyValue key="maxTabWidth" value="350" type="number"/>
-					<KeyValue key="tabSelectSound" value="SOUNDKIT.UI_CLASS_TALENT_TAB" type="global"/>
+					<KeyValue key="minTabWidth" value="70" type="number"/>
+					<KeyValue key="maxTabWidth" value="320" type="number"/>
 				</KeyValues>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="22" y="2"/>

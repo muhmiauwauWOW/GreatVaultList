@@ -126,17 +126,9 @@ GreatVaultListMixin = {}
 function GreatVaultListMixin:OnLoad()
 	TabSystemOwnerMixin.OnLoad(self);
 	self:SetTabSystem(self.TabSystem);
-	-- self:AddNamedTab(TALENT_FRAME_TAB_LABEL_SPEC, self.ListFrame);
-	-- self:AddNamedTab(TALENT_FRAME_TAB_LABEL_TALENTS, self.DelvesLootList);
-	-- self:SetTab(1)
-
-
 	self:AddTabFn("List", self.ListFrame);
 	self:SetTab(1)
 
---	GreatVaultListFrame:AddTabFn(TALENT_FRAME_TAB_LABEL_TALENTS, GreatVaultListFrame.DelvesLootList);
-
-	-- self:AddTab("lalaal", self.DelvesLootList);
 
 	self:SetPortraitTextureRaw("Interface\\AddOns\\GreatVaultList\\vault.png")
 	self:GetPortrait():ClearAllPoints()
