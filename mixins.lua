@@ -19,7 +19,7 @@ function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     idx = idx or 1
     local text
     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
-    if fn then 
+    if fn and type(fn) == "function" then 
         text = fn(self, rowData[dataIndex], idx)
     else 
         text = rowData[dataIndex]
@@ -37,6 +37,7 @@ GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseM
 
 
 function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
+	if not dataIndex then return end
     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
 end
 
@@ -450,7 +451,6 @@ function GreatVaultListListMixin:calcAutoWidthColumns(data, columnConfig, column
 		if not column.autoWidth then return column end
 
 		local addSpace = column.header.canSort and 12 or 0
-		print(column.header.text, addSpace)
 		self.tframe.Text:SetText(column.header.text)
 		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + addSpace -- addSpace for arrow 
 

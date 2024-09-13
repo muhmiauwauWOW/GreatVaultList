@@ -28,8 +28,12 @@ GreatVaultList.lua
 GreatVaultListData.lua
 GreatVaultListOptions.lua
 mixins.lua
-tabs\mythicPlusLoot.lua
+
+tabs\mixin.lua
+tabs\raidLoot.lua
+tabs\dungeonLoot.lua
 tabs\delvesLoot.lua
+
 frames.xml
 
 columns/activities.lua

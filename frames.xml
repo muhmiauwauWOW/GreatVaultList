@@ -149,30 +149,8 @@
 			<Anchor point="CENTER"/>
 		</Anchors>
 		<Frames>
-			<Button parentKey="OpenVault" parent="GreatVaultListFrame" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
-				<Size x="0" y="27"/>
-				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-48" y="-30"/>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
-					</OnClick>
-				</Scripts>
-			</Button>
-
-			<Button parentKey="RefreshButton" inherits="BigRedRefreshButtonTemplate">
-				<Size x="28" y="28"/>
-				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-15" y="-30"/>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-					    GreatVaultList.Data:storeAll()
-					    GreatVaultList:updateData(true)
-					</OnClick>
-				</Scripts>
-			</Button>
+			
+			
 
 
 			<Frame parentKey="Drag"  parent="GreatVaultListFrame" >
@@ -185,7 +163,51 @@
 
 
 
-			<Frame parentKey="ListFrame" mixin="GreatVaultListListMixin">
+			<Frame name="GreatVaultListListFrame" parentKey="ListFrame" mixin="GreatVaultListListMixin">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
+				</Anchors>
+				<Frames>
+
+					<Button parentKey="OpenVault" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
+						<Size x="0" y="27"/>
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-33" y="30"/>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="RefreshButton" inherits="BigRedRefreshButtonTemplate">
+						<Size x="28" y="28"/>
+						<Anchors>
+							<Anchor point="TOPRIGHT" x="0" y="30"/>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GreatVaultList.Data:storeAll()
+								GreatVaultList:updateData(true)
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" y="-1"/>
+							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
+						</Anchors>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnLoad method="OnLoad"/>
+					<OnShow method="OnShow"/>
+				</Scripts>
+			</Frame>
+
+			<Frame parentKey="RaidLootList" mixin="GreatVaultListRaidLootListMixin" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
@@ -205,7 +227,8 @@
 			</Frame>
 
 
-			<Frame parentKey="MythicPlusLootList" mixin="GreatVaultListMythicPlusLootListMixin" hidden="true">
+
+			<Frame parentKey="DungeonLootList" mixin="GreatVaultListDungeonLootListMixin" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>

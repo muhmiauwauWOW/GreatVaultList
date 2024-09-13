@@ -231,7 +231,9 @@
         "ITEM_LEVEL_ALT",
         "CLUB_FINDER_PENDING",
         "InspectFrame",
-        "DUNGEON_SCORE"
+        "DUNGEON_SCORE",
+        "Rare",
+        "Add"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
