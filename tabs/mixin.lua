@@ -95,7 +95,7 @@ end
 
 function GreatVaultListLootListMixin:getColconfig(name, color)
 	local config = {}
-	config.index = i
+	config.index = self.i
 	config.width = 50
 	config.autoWidth = true
 	config.header = {text = name, canSort = false}
