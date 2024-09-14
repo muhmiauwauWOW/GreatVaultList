@@ -37,9 +37,9 @@ Column.config = {
         return comp(a[3].level, b[3].level)
     end,
     ['emptyStr'] = {
-        "0/1",
+        "0/2",
         "0/4",
-        "0/9"
+        "0/8"
     },
     ["demo"] = function(idx)
 
