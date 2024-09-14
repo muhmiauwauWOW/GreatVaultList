@@ -11,6 +11,16 @@ function GreatVaultListDelvesLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 end
 
+function GreatVaultListDelvesLootListMixin:OnShow()
+	GreatVaultListLootListMixin.OnShow(self)
+
+	-- Restored Coffer Key
+	local info = C_CurrencyInfo.GetCurrencyInfo(3028)
+	local color = info.quantity == 0 and RED_FONT_COLOR or GREEN_FONT_COLOR
+	self.keys.Text:SetText(string.format("%s: %s", NORMAL_FONT_COLOR:WrapTextInColorCode(info.name),  color:WrapTextInColorCode(tostring(info.quantity))))
+	self.keys:SetWidth(self.keys.Text:GetUnboundedStringWidth() + 20)
+end
+
 function GreatVaultListDelvesLootListMixin:BuildData()
 
     self:AddColumn(L["delvesLoot_col1"])

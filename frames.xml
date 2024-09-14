@@ -254,6 +254,25 @@
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
 				</Anchors>
 				<Frames>
+					<Frame parentKey="keys" >
+						<Size x="0" y="20"/>
+						<Anchors>
+							<Anchor point="TOPRIGHT" x="-10" y="25"/>
+						</Anchors>
+						<Layers>
+							<Layer level="OVERLAY">
+								<FontString parentKey="Text" inherits="Number13FontWhite" justifyH="CENTER"/>
+							</Layer>
+							<Layer level="ARTWORK">
+								<Texture atlas="auctionhouse-itemheaderframe" setAllPoints="true" useAtlasSize="false">
+									<Anchors>
+										<Anchor point="TOPLEFT" x="0" y="0"/>
+										<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+									</Anchors>
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
 					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" y="-1"/>
