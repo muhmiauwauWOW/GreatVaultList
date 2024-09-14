@@ -152,8 +152,6 @@ function GreatVaultListMixin:OnLoad()
         GreatVaultListFrame:StopMovingOrSizing()
     end)
 
-
-
 	tinsert(UISpecialFrames, self:GetName())
 end
 
@@ -387,13 +385,10 @@ end
 
 
 function GreatVaultListListMixin:OnShow()
-	self.reverseSort = not self.reverseSort 
-	self:SetSortOrder(GreatVaultList.db.global.sort)
+	if not self.columns then return end
 	
-
 	local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
 	self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
-
 
 	local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
@@ -415,34 +410,32 @@ end
 
 
 function GreatVaultListListMixin:SetSortOrder(sortOrder, main)
-	if self.sort == sortOrder then 
-		self.reverseSort = not self.reverseSort
-	else
-		self.sort = sortOrder
-		self.reverseSort =  false
-	end
+	local asserttext = "variable \"%s\" size is 0"
+	GreatVaultList:assert(_.size(self.columns) > 0, "GreatVaultListListMixin:SetSortOrder", asserttext, "self.columns")
+	GreatVaultList:assert(_.size(self.columnConfig) > 0, "GreatVaultListListMixin:SetSortOrder", asserttext, "self.columnConfig")
 
+	self.reverseSort =  (self.sort == sortOrder) and not self.reverseSort
+	self.sort = sortOrder
+		
 	for i, header in ipairs(self.headers) do
 		header:UpdateArrow(self.reverseSort);
 	end
 
 	local comp = (self.reverseSort) and _.gt or _.lt
-
-	local defaultSortFn = function(a, b, comp)
-		return comp(a, b)
-	end
-
+	local defaultSortFn = function(a, b, comp) return comp(a, b) end
 	local sortFn = _.get(self.columnConfig, {self.columns[self.sort], "sortFn"}, defaultSortFn)
-
+	
 	sort(self.ItemList.data, function(a, b)
+		if not a[self.sort] then return false end
+		if not b[self.sort] then return false end
 		return sortFn(a[self.sort], b[self.sort], comp)
 	end)
 
-	if main then
+	if main or self:GetParent().currentPlayer > 0  then
 		GreatVaultList.db.global.sort = self.sort
 		
 		local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-		self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
+		self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry) return entry[fidx] == UnitName("player") end)
 	end
 	self.ItemList:RefreshScrollFrame();
 end
