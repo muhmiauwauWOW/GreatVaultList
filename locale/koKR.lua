@@ -38,7 +38,7 @@ L["delvesLoot_col2"] = "풍부한"
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "단계"
-L["dungeonLoot_col2"] = "EoD"
+L["dungeonLoot_col2"] = "End of Dungeon"
 
 -- raid loot tab 
 L["raidLoot_col1"] = "난이도 및 유형"

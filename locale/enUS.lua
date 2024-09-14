@@ -36,6 +36,7 @@ L["tabLoot_name"] = "%s Loot"
 L["tabLoot_greatVault"] = "Great Vault"
 L["tabLoot_upgradelvl"] = "Gear Level"
 
+L["tabLoot_ilvl"] = "ilvl"
 
 -- delves loot tab
 L["delvesLoot_col1"] = "Tier"
@@ -43,7 +44,7 @@ L["delvesLoot_col2"] = "Bountiful" -- no auto translate
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Level"
-L["dungeonLoot_col2"] = "EoD"
+L["dungeonLoot_col2"] = "End of Dungeon"
 
 -- raid loot tab 
 L["raidLoot_col1"] = "Difficulty and Type"

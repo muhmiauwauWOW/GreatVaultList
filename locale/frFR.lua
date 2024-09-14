@@ -38,7 +38,7 @@ L["delvesLoot_col2"] = "Abondants"
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Niveau"
-L["dungeonLoot_col2"] = "EoD"
+L["dungeonLoot_col2"] = "End of Dungeon"
 
 -- raid loot tab 
 L["raidLoot_col1"] = "Difficulté et type"

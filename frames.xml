@@ -67,6 +67,10 @@
 				<Anchor point="BOTTOMRIGHT" x="4" y="-2"/>
 			</Anchors>
 		</HighlightTexture>
+		<Scripts>
+			<OnEnter method="OnEnter"/>
+			<OnLeave method="OnLeave"/>
+		</Scripts>
 	</Button>
 
 

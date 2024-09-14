@@ -77,22 +77,40 @@ GreatVaultListTableHeaderStringMixin = CreateFromMixins(TableBuilderElementMixin
 
 
 function GreatVaultListTableHeaderStringMixin:OnClick()
+	if not self.interactiveHeader then return end
 	self.owner:SetSortOrder(self.sortOrder);
 end
 
-function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder)
+function GreatVaultListTableHeaderStringMixin:OnEnter()
+	if not self.tooltip then return end
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+	GameTooltip:AddLine(self.tooltip);
+	GameTooltip:Show();
+end
+function GreatVaultListTableHeaderStringMixin:OnLeave()
+	if not self.tooltip then return end
+	GameTooltip:Hide();
+end
+
+
+function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder, tooltip)
 	self:SetText(headerText);
 
 	local find = _.find(owner.sortHeaders, function(entry) return entry == sortOrder; end)
-	local interactiveHeader = owner.RegisterHeader and find;
-	self:SetEnabled(interactiveHeader);
+	self.interactiveHeader = owner.RegisterHeader and find;
+	self.tooltip = tooltip
 	self.owner = owner;
 	self.sortOrder = sortOrder;
 
-	if interactiveHeader then
+	
+
+	if self.interactiveHeader then
 		owner:RegisterHeader(self);
 		self:UpdateArrow();
 	else
+		self:ClearHighlightTexture()
+		self:ClearPushedTexture()
+		self:SetPushedTextOffset(0, 0)
 		self.Arrow:Hide();
 	end
 end
@@ -197,27 +215,27 @@ end
 
 GreatVaultListTableBuilderMixin = {};
 
-function GreatVaultListTableBuilderMixin:AddColumnInternal(owner, sortOrder, cellTemplate, ...)
+function GreatVaultListTableBuilderMixin:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...)
 	local column = self:AddColumn();
 
 	if sortOrder then
-		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder);
+		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder, tooltip);
 	end
 
 	column:ConstructCells("FRAME", cellTemplate, owner, ...);
 	return column;
 end
 
-function GreatVaultListTableBuilderMixin:AddFillColumn(owner, padding, fillCoefficient, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, ...)
-	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, ...);
+function GreatVaultListTableBuilderMixin:AddFillColumn(owner, padding, fillCoefficient, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, tooltip, ...)
+	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...);
 	column:SetFillConstraints(fillCoefficient, padding);
 	column:SetCellPadding(leftCellPadding, rightCellPadding);
 	return column;
 end
 
 
-function GreatVaultListTableBuilderMixin:AddFixedWidthColumn(owner, padding, width, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, ...)
-	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, ...);
+function GreatVaultListTableBuilderMixin:AddFixedWidthColumn(owner, padding, width, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, tooltip, ...)
+	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...);
 	column:SetFixedConstraints(width, padding);
 	column:SetCellPadding(leftCellPadding, rightCellPadding);
 	return column;
@@ -351,7 +369,7 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList, useFill)
             local headerText = _.get(self.columnConfig, {colName, "header", "text"})
             local padding = _.get(self.columnConfig, {colName, "padding"}, GreatVaultList.config.defaultCellPadding)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
-
+			local tooltip =  _.get(self.columnConfig, {colName, "tooltip"}, nil)
 			local canSort = _.get(self.columnConfig, {colName, "header", "canSort"}, false)
 			if canSort then 
 				table.insert(self.sortHeaders, idx);
@@ -359,9 +377,9 @@ function GreatVaultListListMixin:GetBrowseListLayout(owner, itemList, useFill)
 
 			local col
 			if useFill then
-				col = tableBuilder:AddFillColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
+				col = tableBuilder:AddFillColumn(owner, 0, width, padding, padding, idx, template, tooltip, idx, self.columns, self.columnConfig, width);
 			else
-				col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, idx, self.columns, self.columnConfig, width);
+				col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, tooltip, idx, self.columns, self.columnConfig, width);
 			end
 			col:GetHeaderFrame():SetText(headerText);
 			

@@ -14,10 +14,10 @@ end
 function GreatVaultListDungeonLootListMixin:BuildData()
 	
 	self:AddColumn(L["dungeonLoot_col1"])
-	self:AddColumn(L["dungeonLoot_col2"], true)
-	self:AddColumn(L["tabLoot_upgradelvl"])
-	self:AddColumn(L["tabLoot_greatVault"], true)
-	self:AddColumn(L["tabLoot_upgradelvl"])
+	self:AddColumn(L["tabLoot_ilvl"], true, L["dungeonLoot_col2"])
+	self:AddColumn(L["tabLoot_upgradelvl"], true, L["dungeonLoot_col2"])
+	self:AddColumn(L["tabLoot_ilvl"], true, L["tabLoot_greatVault"])
+	self:AddColumn(L["tabLoot_upgradelvl"], false, L["tabLoot_greatVault"])
 
 
 	self.ItemList.data = {

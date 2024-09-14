@@ -42,7 +42,7 @@ L["delvesLoot_col2"] = "Großzügige"
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Stufe"
-L["dungeonLoot_col2"] = "EoD"
+L["dungeonLoot_col2"] = "End of Dungeon"
 
 -- raid loot tab 
 L["raidLoot_col1"] = "Schwierigkeit und Typ"

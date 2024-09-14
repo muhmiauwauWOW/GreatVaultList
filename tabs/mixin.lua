@@ -84,14 +84,14 @@ function GreatVaultListLootListMixin:colorItemLvl(itemlvl, ilvl)
 end
 
 
-function GreatVaultListLootListMixin:AddColumn(name, color)
+function GreatVaultListLootListMixin:AddColumn(name, color, tooltip)
 	self.i = self.i + 1
 	local key = "col" .. self.i
-	self.columnConfig[key] =  self:getColconfig(name, color)
+	self.columnConfig[key] =  self:getColconfig(name, color, tooltip)
 	table.insert(self.columns, key)
 end
 
-function GreatVaultListLootListMixin:getColconfig(name, color)
+function GreatVaultListLootListMixin:getColconfig(name, color, tooltip)
 	local config = {}
 	config.index = self.i
 	config.width = 50
@@ -99,6 +99,7 @@ function GreatVaultListLootListMixin:getColconfig(name, color)
 	config.header = {text = name, canSort = false}
 	config.colType = "fill"
     config.selected = false
+    config.tooltip = tooltip or nil
 
 	if color then 
 		config.populate = function(s, number)

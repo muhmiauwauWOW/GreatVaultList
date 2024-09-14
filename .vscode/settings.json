@@ -236,7 +236,9 @@
         "Add",
         "TabSystemButtonMixin",
         "AddonCompartmentFrame",
-        "DELVES_LABEL"
+        "DELVES_LABEL",
+        "AchievementFrameAchievements_CheckGuildMembersTooltip",
+        "ACHIEVEMENT_META_COMPLETED_DATE"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
