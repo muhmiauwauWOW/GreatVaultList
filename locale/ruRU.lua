@@ -5,14 +5,11 @@ if not L then
 end
 
 
-L["class"] = "Класс"
 L["character"] = "Персонаж"
 L["ilevel"] = "ilvl"
 L["keystone"] = "Ключ"
 
 L["OpenVault"] = "Открыть Хранилище"
-
-L["opt_option"] = "Параметры"
 
 L["opt_lines_name"] = "Линии"
 L["opt_lines_desc"] = "Количество строк для отображения"
@@ -22,3 +19,38 @@ L["opt_module_desc"] = "Активировать или деактивирова
 
 L["opt_position_name"] = "Позиция"
 L["opt_position_desc"] = "Изменить положение столбца этого модуля"
+
+L["opt_minimap_name"] = "Скрыть кнопку мини-карты"
+L["opt_minimap_desc"] = "Включить или выключить видимость кнопки мини-карты"
+
+-- tabs loot general
+L["tabLoot_name"] = "Добыча %s"
+
+L["tabLoot_greatVault"] = "Великий Хранилище"
+L["tabLoot_upgradelvl"] = "Уровень улучшения"
+
+-- delves loot tab
+L["delvesLoot_col1"] = "Уровень"
+L["delvesLoot_col2"] = "Обильный"
+
+-- dungeon loot tab 
+L["dungeonLoot_col1"] = "Уровень"
+L["dungeonLoot_col2"] = "EoD"
+
+-- raid loot tab 
+L["raidLoot_col1"] = "Сложность и тип"
+L["raidLoot_bosses"] = "Боссы %s"
+L["raidLoot_Regular"] = "Обычный"
+L["raidLoot_VeryRare"] = "Очень редкий"
+
+
+
+
+-- no auto translate
+-- gear tracks
+L["gearTrack_Adventurer"] = "Искатель приключений"
+L["gearTrack_Explorer"] = "Исследователь"
+L["gearTrack_Veteran"] = "Ветеран"
+L["gearTrack_Champion"] = "Защитник"
+L["gearTrack_Hero"] = "Герой"
+L["gearTrack_Myth"] = "Легенда"

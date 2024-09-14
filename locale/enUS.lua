@@ -5,12 +5,11 @@ if not L then
 end
 
 
-L["class"] = "Class"
 L["character"] = "Character"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
-L["OpenVault"] = "Open Vault"
+L["OpenVault"] = "View Vault"
 
 L["opt_lines_name"] = "Lines"
 L["opt_lines_desc"] = "Amount of lines to display"
@@ -26,3 +25,40 @@ L["opt_position_desc"] = "Change the position of the Column of this Module"
 
 L["opt_minimap_name"] = "Hide minimap button"
 L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
+
+
+
+
+
+-- tabs loot general
+L["tabLoot_name"] = "%s Loot"
+
+L["tabLoot_greatVault"] = "Great Vault"
+L["tabLoot_upgradelvl"] = "Upgrade Level"
+
+
+-- delves loot tab
+L["delvesLoot_col1"] = "Tier"
+L["delvesLoot_col2"] = "Bountiful" -- no auto translate
+
+-- dungeon loot tab 
+L["dungeonLoot_col1"] = "Level"
+L["dungeonLoot_col2"] = "EoD"
+
+-- raid loot tab 
+L["raidLoot_col1"] = "Difficulty and Type"
+L["raidLoot_bosses"] = "Bosses %s"
+L["raidLoot_Regular"] = "Regular"
+L["raidLoot_VeryRare"] = "Very Rare"
+
+
+
+
+-- no auto translate
+-- gear tracks
+L["gearTrack_Adventurer"] = "Adventurer"
+L["gearTrack_Explorer"] = "Explorer"
+L["gearTrack_Veteran"] = "Veteran"
+L["gearTrack_Champion"] = "Champion"
+L["gearTrack_Hero"] = "Hero"
+L["gearTrack_Myth"] = "Myth"

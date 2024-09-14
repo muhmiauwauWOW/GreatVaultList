@@ -1,5 +1,5 @@
 local addonName = ...
-local _ = LibStub("LibLodash-1"):Get()
+local L, _ = GreatVaultList:GetLibs()
 
 
 GreatVaultListLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
@@ -96,7 +96,7 @@ end
 function GreatVaultListLootListMixin:getColconfig(name, color)
 	local config = {}
 	config.index = i
-	config.width = 40
+	config.width = 50
 	config.autoWidth = true
 	config.header = {text = name, canSort = false}
 	config.colType = "fill"

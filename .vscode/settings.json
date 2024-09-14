@@ -235,7 +235,8 @@
         "Rare",
         "Add",
         "TabSystemButtonMixin",
-        "AddonCompartmentFrame"
+        "AddonCompartmentFrame",
+        "DELVES_LABEL"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
