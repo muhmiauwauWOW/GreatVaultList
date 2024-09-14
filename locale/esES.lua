@@ -33,7 +33,6 @@ L["tabLoot_greatVault"] = "Gran Bóveda"
 L["tabLoot_upgradelvl"] = "Nivel de mejora"
 
 -- delves loot tab
-L["delves"] = "Profundidades"
 L["delvesLoot_col1"] = "Nivel"
 L["delvesLoot_col2"] = "pródigas" 
 
