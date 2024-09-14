@@ -194,7 +194,6 @@ function GreatVaultList:updateData(refresh)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
 			return entry[_.get(cEntry, { "config", "sort", "store" })]
 		end)
-
 		d.selected = key == UnitName("player")
 		table.insert(data, d)
 	end)
