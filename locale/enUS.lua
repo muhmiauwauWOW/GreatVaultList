@@ -34,7 +34,7 @@ L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
 L["tabLoot_name"] = "%s Loot"
 
 L["tabLoot_greatVault"] = "Great Vault"
-L["tabLoot_upgradelvl"] = "Upgrade Level"
+L["tabLoot_upgradelvl"] = "Gear Level"
 
 
 -- delves loot tab

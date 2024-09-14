@@ -32,8 +32,8 @@ L["opt_minimap_desc"] = "Ein- oder Ausblenden des Minikarte-Buttons"
 -- tabs loot general
 L["tabLoot_name"] = "%s Beute"
 
-L["tabLoot_greatVault"] = "Großes Gewölbe"
-L["tabLoot_upgradelvl"] = "Aufrüstungsstufe"
+L["tabLoot_greatVault"] = "Große Schatzkammer"
+L["tabLoot_upgradelvl"] = "Rüstungsstufe"
 
 
 -- delves loot tab
