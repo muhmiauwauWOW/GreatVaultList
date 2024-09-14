@@ -16,6 +16,21 @@ function GreatVaultListOptions:init()
     GreatVaultList.OptionsID = category:GetID()
 
 
+
+
+    local setting = Settings.RegisterAddOnSetting(category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
+    setting:SetValueChangedCallback(function(self)
+        if self:GetValue() then 
+            GreatVaultList.minimapIcon:Hide(addonName)
+        else 
+            GreatVaultList.minimapIcon:Show(addonName)
+        end
+    end)
+
+    Settings.CreateCheckbox(category, setting, L["opt_minimap_desc"])
+
+
+
     -- scale
     if not BlizzMoveAPI then 
         local setting = Settings.RegisterAddOnSetting(category, "scale", "scale", GreatVaultList.db.global.Options, "number", L["opt_scale_name"], 1)

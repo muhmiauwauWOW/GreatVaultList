@@ -11,6 +11,24 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
+function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
+	if buttonName == "RightButton" then
+		Settings.OpenToCategory(GreatVaultList.OptionsID)
+	else
+		GreatVaultList:toggleWindow()
+	end
+end
+
+
+local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+-- add data broker support 
+local ldb =  LibStub("LibDataBroker-1.1"):NewDataObject(AddOnInfo[2], {
+	type = "data source",
+	icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
+	OnClick = GreatVaultList_OnAddonCompartmentClick,
+})
+GreatVaultList.minimapIcon = LibStub("LibDBIcon-1.0")
+
 
 GreatVaultList.config = {
 	defaultCellPadding = 6
@@ -25,8 +43,11 @@ local default_global_data = {
 			modules = {},
 			position = {},
 			scale = 1,
-			lines = 12
-		}
+			lines = 12,
+			minimap = {
+				hide = false,
+			},
+		},
 	}
 }
 
@@ -58,6 +79,7 @@ function GreatVaultList:OnInitialize()
 	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	GreatVaultList:slashcommand()
 
+	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
 
 	if BlizzMoveAPI then 
 
@@ -98,13 +120,6 @@ function GreatVaultList:toggleWindow()
 	end
 end
 
-function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
-	if buttonName == "RightButton" then
-		Settings.OpenToCategory(GreatVaultList.OptionsID)
-	else
-		GreatVaultList:toggleWindow()
-	end
-end
 
 function GreatVaultList:slashcommand()
 	SLASH_GV1 = "/gv"
@@ -223,13 +238,3 @@ end
 
 
 
--- add data broker support 
-local ldb =  LibStub("LibDataBroker-1.1")
-if ldb then
-	local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
-	ldb:NewDataObject(AddOnInfo[2], {
-		type = "data source",
-		icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
-		OnClick = GreatVaultList_OnAddonCompartmentClick,
-	})
-end

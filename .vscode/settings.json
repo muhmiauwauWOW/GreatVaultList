@@ -234,7 +234,8 @@
         "DUNGEON_SCORE",
         "Rare",
         "Add",
-        "TabSystemButtonMixin"
+        "TabSystemButtonMixin",
+        "AddonCompartmentFrame"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

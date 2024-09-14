@@ -24,4 +24,5 @@ L["opt_module_desc"] = "Activate or Deactivate this Module"
 L["opt_position_name"] = "Position"
 L["opt_position_desc"] = "Change the position of the Column of this Module"
 
-
+L["opt_minimap_name"] = "Hide minimap button"
+L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
