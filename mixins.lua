@@ -268,7 +268,8 @@ function GreatVaultListItemListMixin:Init()
 	local view = CreateScrollBoxListLinearView();
 	view:SetElementFactory(function(factory, elementData)
 		local function Initializer(button, elementData)
-			button.CurrentTexture:SetShown(GreatVaultListFrame.currentPlayer == elementData)
+			local entry = self.getEntry(elementData)
+			button.CurrentTexture:SetShown(entry.selected)
 			button:SetEnabled(true);
 		end
 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
@@ -387,9 +388,6 @@ end
 function GreatVaultListListMixin:OnShow()
 	if not self.columns then return end
 	
-	local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-	self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry)  return entry[fidx] == UnitName("player") end)
-
 	local width = 15 + (_.size(self.columnConfig) * 1)
     _.forEach(self.columnConfig, function(entry)
         width = width + (entry.width or 0)
@@ -431,11 +429,8 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder, main)
 		return sortFn(a[self.sort], b[self.sort], comp)
 	end)
 
-	if main or self:GetParent().currentPlayer > 0  then
+	if main then
 		GreatVaultList.db.global.sort = self.sort
-		
-		local fidx =  _.findIndex(self.columns, function(entry)  return entry == "character" end)
-		self:GetParent().currentPlayer =  _.findIndex(self.ItemList.data, function(entry) return entry[fidx] == UnitName("player") end)
 	end
 	self.ItemList:RefreshScrollFrame();
 end
@@ -474,7 +469,6 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
     self.columns = columns
 	self.ItemList.data = data
     self.columnConfig = columnConfig
-	self:GetParent().currentPlayer = 0
 
 	self.columnConfig = self:calcAutoWidthColumns(self.ItemList.data, self.columnConfig, self.columns)
 
