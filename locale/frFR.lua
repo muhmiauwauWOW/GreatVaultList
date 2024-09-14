@@ -51,9 +51,9 @@ L["raidLoot_VeryRare"] = "Très rare"
 
 -- no auto translate
 -- gear tracks
-L["gearTrack_Adventurer"] = "Avventuriero"
-L["gearTrack_Explorer"] = "Esploratore"
-L["gearTrack_Veteran"] = "Veterano"
-L["gearTrack_Champion"] = "Campione"
-L["gearTrack_Hero"] = "Eroe"
-L["gearTrack_Myth"] = "Mito"
+L["gearTrack_Adventurer"] = "Aventurier"
+L["gearTrack_Explorer"] = "Explorateur"
+L["gearTrack_Veteran"] = "Vétéran"
+L["gearTrack_Champion"] = "Champion"
+L["gearTrack_Hero"] = "Héros"
+L["gearTrack_Myth"] = "Mythe"
