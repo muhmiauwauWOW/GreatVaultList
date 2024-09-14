@@ -26,11 +26,9 @@ end
 
 function GreatVaultListLootListMixin:OnShow()
     self.itemlvl = select(2, GetAverageItemLevel())
-	self.reverseSort = true
-    self:GetParent().currentPlayer = 0
-	self:SetSortOrder(self.sortOrder)
 	self:GetParent():UpdateSize(self.width0);
 	self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList, true), self.columnConfig);
+    self.ItemList:RefreshScrollFrame();
 end
 
 
@@ -100,6 +98,7 @@ function GreatVaultListLootListMixin:getColconfig(name, color)
 	config.autoWidth = true
 	config.header = {text = name, canSort = false}
 	config.colType = "fill"
+    config.selected = false
 
 	if color then 
 		config.populate = function(s, number)
