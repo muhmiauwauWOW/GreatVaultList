@@ -59,6 +59,8 @@
 		</Layers>
 		<Scripts>
 			<OnClick method="OnClick"/>
+			<OnEnter method="OnEnter"/>
+			<OnLeave method="OnLeave"/>
 		</Scripts>
 		<HighlightTexture atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" setAllPoints="true" alpha="0.8">
 		    <Color r="0.4" g="1" b="0.4" a="1" />
@@ -67,10 +69,6 @@
 				<Anchor point="BOTTOMRIGHT" x="4" y="-2"/>
 			</Anchors>
 		</HighlightTexture>
-		<Scripts>
-			<OnEnter method="OnEnter"/>
-			<OnLeave method="OnLeave"/>
-		</Scripts>
 	</Button>
 
 

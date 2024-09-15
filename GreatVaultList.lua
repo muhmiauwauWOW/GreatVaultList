@@ -76,13 +76,10 @@ end
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	GreatVaultList.Data:init()
-	C_AddOns.LoadAddOn("Blizzard_WeeklyRewards");
 	GreatVaultList:slashcommand()
-
 	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
 
 	if BlizzMoveAPI then 
-
 		GreatVaultListFrame.Drag:Hide()
 		BlizzMoveAPI:RegisterAddOnFrames({
 			["GreatVaultList"] = { 
@@ -96,16 +93,17 @@ end
 
 function GreatVaultList:OnEnable()
 	GreatVaultListOptions:init()
-	-- GreatVaultListFrame:SetScale(self.db.global.Options.scale)
 end
-
-
 
 function GreatVaultList:hideWindow()
 	GreatVaultListFrame:Hide()
 end
 
 function GreatVaultList:showWindow()
+	if not WeeklyRewardsFrame then
+		WeeklyRewards_LoadUI();
+	end
+
 	GreatVaultList.Data:storeAll()
 	GreatVaultList:updateData(true)
 	--GreatVaultList:demoMode()
