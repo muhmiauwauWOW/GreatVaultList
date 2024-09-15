@@ -27,7 +27,7 @@ local ldb =  LibStub("LibDataBroker-1.1"):NewDataObject(AddOnInfo[2], {
 	icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
 	OnClick = GreatVaultList_OnAddonCompartmentClick,
 })
-GreatVaultList.minimapIcon = LibStub("LibDBIcon-1.0")
+-- GreatVaultList.minimapIcon = LibStub("LibDBIcon-1.0")
 
 
 GreatVaultList.config = {
@@ -77,7 +77,7 @@ function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	GreatVaultList.Data:init()
 	GreatVaultList:slashcommand()
-	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
+	-- GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
 
 	if BlizzMoveAPI then 
 		GreatVaultListFrame.Drag:Hide()
