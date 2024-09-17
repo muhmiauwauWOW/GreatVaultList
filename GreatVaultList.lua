@@ -192,6 +192,8 @@ function GreatVaultList:updateData(refresh)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
 			return entry[_.get(cEntry, { "config", "sort", "store" })]
 		end)
+		d.name = key
+		d.enabled = entry.enabled == nil and true or entry.enabled
 		d.selected = key == UnitName("player")
 		table.insert(data, d)
 	end)

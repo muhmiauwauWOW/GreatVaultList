@@ -476,7 +476,18 @@ function GreatVaultListListMixin:calcAutoWidthColumns(data, columnConfig, column
 end
 
 
-
+function GreatVaultListListMixin:UpdateFilteredData(str)
+	str = str and strtrim(string.lower(str)) or nil
+	if str then 
+		self.ItemList.data = _.filter(self.data, function(entry) 
+			return 	entry.enabled 
+					and 
+					string.find(string.lower(entry.name), str, 0, true)
+		end)
+	else
+		self.ItemList.data = _.filter(self.data, function(entry) return entry.enabled end)
+	end
+end
 
 function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 	local asserttext = "variable \"%s\" size is 0"
@@ -485,7 +496,8 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 	GreatVaultList:assert(_.size(columnConfig) > 0, "GreatVaultListListMixin:init", asserttext, "columnConfig")
 
     self.columns = columns
-	self.ItemList.data = data
+	self.data = data
+	self:UpdateFilteredData()
     self.columnConfig = columnConfig
 
 	self.columnConfig = self:calcAutoWidthColumns(self.ItemList.data, self.columnConfig, self.columns)
@@ -509,3 +521,56 @@ end
 
 
 
+
+
+GreatVaultListListSearchBoxMixin = {}
+
+
+function GreatVaultListListSearchBoxMixin:OnEnterPressed()
+	self:GetParent():UpdateFilteredData(self:GetText())
+	self:GetParent().ItemList:RefreshScrollFrame();
+end
+
+function GreatVaultListListSearchBoxMixin:Reset()
+	self:SetText("");
+end
+
+
+GreatVaultListListFilterMixin = {}
+
+function GreatVaultListListFilterMixin:OnLoad()
+	WowStyle1FilterDropdownMixin.OnLoad(self);
+	self.init = false
+end
+
+function GreatVaultListListFilterMixin:OnShow()
+	if self.init then return end
+	self.init = true
+
+	local function IsSelected(filter)
+		local find = _.find(GreatVaultList.db.global.characters, function(entry)
+			return entry.name == filter
+		end)
+		if find == nil then return  end
+		if find.enabled == nil then return true end
+		return find.enabled;
+	end
+	
+	local function SetSelected(filter)
+		local find = _.find(GreatVaultList.db.global.characters, function(entry) return entry.name == filter end)
+
+		find.enabled = not find.enabled
+		local findItemList = _.find(self:GetParent().data, function(entry) return entry.name == filter end)
+
+		findItemList.enabled = find.enabled
+		self:GetParent():UpdateFilteredData()
+		self:GetParent().ItemList:RefreshScrollFrame();
+	end
+
+	self:SetupMenu(function(dropdown, rootDescription)
+		rootDescription:SetTag("MENU_GREATVAULTLIST_FILTER");
+		_.forEach(GreatVaultList.db.global.characters, function(char, key)
+			rootDescription:CreateCheckbox(char.name, IsSelected, SetSelected, char.name);
+		end)
+	end);
+end

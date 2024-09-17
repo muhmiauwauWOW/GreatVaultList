@@ -167,28 +167,21 @@
 
 			<Frame name="GreatVaultListListFrame" parentKey="ListFrame" mixin="GreatVaultListListMixin">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-20"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
 				</Anchors>
 				<Frames>
 
-					<Button parentKey="OpenVault" inherits="UIPanelDynamicResizeButtonTemplate" text="GVL_OPEN_VAULT">
-						<Size x="0" y="27"/>
-						<Anchors>
-							<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="-33" y="30"/>
-						</Anchors>
-						<Scripts>
-							<OnClick>
-								WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
-							</OnClick>
-						</Scripts>
-					</Button>
+				
+				
 
-					<Button parentKey="RefreshButton" inherits="BigRedRefreshButtonTemplate">
-						<Size x="28" y="28"/>
+
+					<Button parentKey="RefreshButton">
+						<Size x="20" y="20"/>
 						<Anchors>
-							<Anchor point="TOPRIGHT" x="0" y="30"/>
+							<Anchor point="CENTER" relativeKey="$parent" relativePoint="TOPRIGHT" x="-10" y="-22"/>
 						</Anchors>
+						<NormalTexture parentKey="NormalTexture" atlas="UI-RefreshButton" setAllPoints="true"/>
 						<Scripts>
 							<OnClick>
 								GreatVaultList.Data:storeAll()
@@ -196,9 +189,45 @@
 							</OnClick>
 						</Scripts>
 					</Button>
+					<Button parentKey="OpenVault" >
+						<Size x="20" y="20"/>
+						<Anchors>
+							<Anchor point="RIGHT" relativeKey="$parent.RefreshButton" relativePoint="LEFT" x="-5" y="0"/>
+						</Anchors>
+						<NormalTexture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true"/>
+						<Scripts>
+							<OnClick>
+								WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<DropdownButton parentKey="Filter" mixin="GreatVaultListListFilterMixin" inherits="WowStyle1FilterDropdownTemplate" >
+						<Anchors>
+							<Anchor point="RIGHT" relativeKey="$parent.OpenVault" relativePoint="LEFT" x="-10" y="0"/>
+						</Anchors>
+						<Scripts>
+							<OnLoad method="OnLoad"/>
+							<OnShow method="OnShow"/>
+						</Scripts>
+					</DropdownButton>
+
+					<EditBox parentKey="Search" autoFocus="false" historyLines="1" bytes="64" mixin="GreatVaultListListSearchBoxMixin" inherits="SearchBoxTemplate">
+						<Size x="241" y="22"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="70" y="-11"/>
+							<Anchor point="RIGHT" relativeKey="$parent.Filter" relativePoint="LEFT" x="-10" y="0"/>
+						</Anchors>
+						<Scripts>
+							<OnEnterPressed method="OnEnterPressed"/>
+						</Scripts>
+					</EditBox>
+
+
+					
 					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" y="-1"/>
+							<Anchor point="TOPLEFT" y="-40"/>
 							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
 						</Anchors>
 					</Frame>

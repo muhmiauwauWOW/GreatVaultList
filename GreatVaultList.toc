@@ -25,7 +25,6 @@ Libs\AceTimer-3.0\AceTimer-3.0.xml
 Libs\AceBucket-3.0\AceBucket-3.0.xml
 Libs\LibLodash\LibLodash.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
-Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 
 
 locale/locale.xml

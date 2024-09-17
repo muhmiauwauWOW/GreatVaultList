@@ -238,7 +238,15 @@
         "AddonCompartmentFrame",
         "DELVES_LABEL",
         "AchievementFrameAchievements_CheckGuildMembersTooltip",
-        "ACHIEVEMENT_META_COMPLETED_DATE"
+        "ACHIEVEMENT_META_COMPLETED_DATE",
+        "WeeklyRewards_LoadUI",
+        "AuctionHouseSearchBoxMixin",
+        "WowStyle1FilterDropdownMixin",
+        "AuctionHouseFilterButtonMixin",
+        "AUCTION_HOUSE_DEFAULT_FILTERS",
+        "AUCTION_HOUSE_FILTER_DROP_DOWN_LEVEL_RANGE",
+        "GetAHFilterCategoryName",
+        "GetAHFilterName"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
