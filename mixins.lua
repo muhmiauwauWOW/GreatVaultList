@@ -1,7 +1,7 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
 
-local _ = LibStub("LibLodash-1"):Get()
+local L, _ = GreatVaultList:GetLibs()
 
 
 
@@ -252,6 +252,8 @@ function GreatVaultListItemListMixin:OnLoad()
 	self.data = {}
 	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
 
+	self.ResultsText:SetText(L["ResultsText"])
+
 	local xOffset = 0;
 	local yOffset = -20;
 	self.Background:SetAtlas("auctionhouse-background-index", true);
@@ -338,6 +340,7 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
 	local numResults = self.getNumEntries();
 	local dataProvider = CreateIndexRangeDataProvider(numResults);
 	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
+	self.ResultsText:SetShown(numResults == 0);
 end
 
 function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
@@ -526,6 +529,14 @@ end
 GreatVaultListListSearchBoxMixin = {}
 
 
+function GreatVaultListListSearchBoxMixin:OnLoad()
+	SearchBoxTemplate_OnLoad(self);
+	self.clearButton:SetScript("OnClick", function(btn)
+		self:Reset()
+		SearchBoxTemplateClearButton_OnClick(btn);
+	end)
+end
+
 function GreatVaultListListSearchBoxMixin:OnEnterPressed()
 	self:GetParent():UpdateFilteredData(self:GetText())
 	self:GetParent().ItemList:RefreshScrollFrame();
@@ -533,6 +544,8 @@ end
 
 function GreatVaultListListSearchBoxMixin:Reset()
 	self:SetText("");
+	self:GetParent():UpdateFilteredData()
+	self:GetParent().ItemList:RefreshScrollFrame();
 end
 
 
@@ -565,6 +578,7 @@ function GreatVaultListListFilterMixin:OnShow()
 		findItemList.enabled = find.enabled
 		self:GetParent():UpdateFilteredData()
 		self:GetParent().ItemList:RefreshScrollFrame();
+		self:GetParent().Search:Reset();
 	end
 
 	self:SetupMenu(function(dropdown, rootDescription)

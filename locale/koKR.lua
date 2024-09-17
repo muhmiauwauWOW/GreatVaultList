@@ -26,6 +26,8 @@ L["opt_position_desc"] = "이 모듈의 열 위치 변경"
 L["opt_minimap_name"] = "미니맵 버튼 숨기기"
 L["opt_minimap_desc"] = "미니맵 버튼 표시 여부 토글"
 
+L["ResultsText"] = "표시할 캐릭터가 없습니다"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s 전리품"
 

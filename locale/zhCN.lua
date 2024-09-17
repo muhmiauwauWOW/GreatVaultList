@@ -26,6 +26,8 @@ L["opt_position_desc"] = "更改此模块列的位置"
 L["opt_minimap_name"] = "隐藏小地图按钮"
 L["opt_minimap_desc"] = "启用或禁用小地图按钮的可见性"
 
+L["ResultsText"] = "没有角色显示"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s 战利品"
 

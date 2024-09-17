@@ -26,6 +26,8 @@ L["opt_position_desc"] = "Alterar a posição da coluna deste módulo"
 L["opt_minimap_name"] = "Ocultar botão do minimapa"
 L["opt_minimap_desc"] = "Alternar a visibilidade do botão do minimapa"
 
+L["ResultsText"] = "Nenhum personagem para exibir"
+
 -- tabs loot general
 L["tabLoot_name"] = "Loot de %s"
 

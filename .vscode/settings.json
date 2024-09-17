@@ -246,7 +246,10 @@
         "AUCTION_HOUSE_DEFAULT_FILTERS",
         "AUCTION_HOUSE_FILTER_DROP_DOWN_LEVEL_RANGE",
         "GetAHFilterCategoryName",
-        "GetAHFilterName"
+        "GetAHFilterName",
+        "SearchBoxTemplateClearButton_OnClick",
+        "SearchBoxTemplate_OnLoad",
+        "LFG_LIST_NO_RESULTS_FOUND"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

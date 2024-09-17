@@ -26,6 +26,8 @@ L["opt_position_desc"] = "Changer la position de la colonne de ce module"
 L["opt_minimap_name"] = "Cacher le bouton de la mini-carte"
 L["opt_minimap_desc"] = "Activer ou désactiver la visibilité du bouton de la mini-carte"
 
+L["ResultsText"] = "Aucun personnage à afficher"
+
 -- tabs loot general
 L["tabLoot_name"] = "Butin de %s"
 

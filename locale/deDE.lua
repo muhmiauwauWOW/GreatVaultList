@@ -26,7 +26,7 @@ L["opt_position_desc"] = "Ändern der Position der Spalte dieses Moduls"
 L["opt_minimap_name"] = "Minimap Button ausblenden"
 L["opt_minimap_desc"] = "Ein- oder Ausblenden des Minikarte-Buttons"
 
-
+L["ResultsText"] = "Keine Charaktere zum anzeigen"
 
 
 -- tabs loot general

@@ -27,6 +27,7 @@ L["opt_minimap_name"] = "Hide minimap button"
 L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
 
 
+L["ResultsText"] = "No characters to display"
 
 
 

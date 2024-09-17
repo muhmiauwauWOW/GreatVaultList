@@ -26,6 +26,8 @@ L["opt_position_desc"] = "變更此模組欄的位置"
 L["opt_minimap_name"] = "隱藏小地圖按鈕"
 L["opt_minimap_desc"] = "啟用或停用小地圖按鈕的顯示"
 
+L["ResultsText"] = "沒有角色顯示"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s 戰利品"
 
