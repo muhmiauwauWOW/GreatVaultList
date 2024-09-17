@@ -12,22 +12,23 @@ GreatVaultListOptions = {}
 function GreatVaultListOptions:init()
     local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
     local category, layout = Settings.RegisterVerticalLayoutCategory(AddOnInfo[2])
+    self.category = category
     Settings.RegisterAddOnCategory(category)
     GreatVaultList.OptionsID = category:GetID()
 
 
 
 
-    -- local setting = Settings.RegisterAddOnSetting(category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
-    -- setting:SetValueChangedCallback(function(self)
-    --     if self:GetValue() then 
-    --         GreatVaultList.minimapIcon:Hide(addonName)
-    --     else 
-    --         GreatVaultList.minimapIcon:Show(addonName)
-    --     end
-    -- end)
+    local setting = Settings.RegisterAddOnSetting(category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
+    setting:SetValueChangedCallback(function(self)
+        if self:GetValue() then 
+            GreatVaultList.minimapIcon:Hide(addonName)
+        else 
+            GreatVaultList.minimapIcon:Show(addonName)
+        end
+    end)
 
-    -- Settings.CreateCheckbox(category, setting, L["opt_minimap_desc"])
+    Settings.CreateCheckbox(category, setting, L["opt_minimap_desc"])
 
 
 

@@ -1,5 +1,5 @@
 local TabSideExtraSpacing = 40
-function TabSystemButtonMixin:UpdateTabWidth()
+hooksecurefunc(TabSystemButtonMixin, "UpdateTabWidth", function(self)
 	local minTabWidth, maxTabWidth = self:GetTabSystem():GetTabWidthConstraints();
 	local strwidth = self.Text:GetUnboundedStringWidth() or minTabWidth
 	strwidth = math.ceil(strwidth)
@@ -18,4 +18,4 @@ function TabSystemButtonMixin:UpdateTabWidth()
 
 	self.Text:SetWidth(textWidth);
 	self:SetTabWidth(width);
-end
+end)
