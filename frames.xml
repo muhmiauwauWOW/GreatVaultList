@@ -198,24 +198,51 @@
 						<Anchors>
 							<Anchor point="CENTER" relativeKey="$parent" relativePoint="TOPRIGHT" x="-10" y="-22"/>
 						</Anchors>
+						<HighlightTexture parentKey="HighlightTexture" atlas="UI-RefreshButton" setAllPoints="true"  alphaMode="ADD" alpha=".2"/>
 						<NormalTexture parentKey="NormalTexture" atlas="UI-RefreshButton" setAllPoints="true"/>
 						<Scripts>
 							<OnClick>
+								
 								GreatVaultList.Data:storeAll()
 								GreatVaultList:updateData(true)
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button parentKey="OpenVault" >
+					<Button parentKey="OpenVault" mixin="GreatVaultListListOpenVaultMixin">
 						<Size x="20" y="20"/>
 						<Anchors>
 							<Anchor point="RIGHT" relativeKey="$parent.RefreshButton" relativePoint="LEFT" x="-5" y="0"/>
 						</Anchors>
-						<NormalTexture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true"/>
+						<Layers>
+							<Layer level="OVERLAY">
+								<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+								</Texture>
+								<Texture parentKey="handlesTexture" atlas="greatVault-handles-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+								</Texture>
+								<Texture parentKey="centerPlateTexture" atlas="greatVault-centerPlate-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+								</Texture>
+								
+							</Layer>
+							<Layer level="HIGHLIGHT">
+								<Texture parentKey="HighlightTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true"  alphaMode="ADD" alpha=".2" scale="0.1851852">
+									<Anchors>
+										<Anchor point="CENTER"/>
+									</Anchors>
+								</Texture>								
+							</Layer>
+						</Layers>
 						<Scripts>
-							<OnClick>
-								WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
-							</OnClick>
+							<OnClick method="OnClick"/>
+							<OnShow method="OnShow"/>
 						</Scripts>
 					</Button>
 

@@ -207,8 +207,41 @@ end
 
 
 
+function GreatVaultListMixin:GetState()
+	if C_WeeklyRewards.HasAvailableRewards() then
+		return "collect";
+	end
+
+	local rewardCheck = false
+	_.forEach(Enum.WeeklyRewardChestThresholdType, function(type)
+		if rewardCheck then return end
+		rewardCheck = WeeklyRewardsUtil.HasUnlockedRewards(type)
+	end)
+
+	if rewardCheck then
+		return "complete";
+	end
+
+	return "incomplete";
+end
 
 
+
+
+GreatVaultListListOpenVaultMixin = {}
+
+function GreatVaultListListOpenVaultMixin:OnShow()
+	local state = self:GetParent():GetParent():GetState()
+
+	self.NormalTexture:SetShown(state ~= "incomplete");
+	self.handlesTexture:SetShown(state == "incomplete");
+	self.centerPlateTexture:SetShown(state == "incomplete");
+	self.NormalTexture:SetDesaturated(state ~= "collect");
+end
+
+function GreatVaultListListOpenVaultMixin:OnClick()
+	WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+end
 
 
 
@@ -518,6 +551,7 @@ function GreatVaultListListMixin:init(columns, data, columnConfig, refresh)
 	else
 		self.ItemList:RefreshScrollFrame();
 	end
+
 
 end
 
