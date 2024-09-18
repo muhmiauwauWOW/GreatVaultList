@@ -64,8 +64,7 @@ function ListMixin:OnShow()
     end)
 
     self:GetParent():UpdateSize(width);
-
-	self.ItemList:RefreshScrollFrame();
+	self:SetSortOrder(GreatVaultList.db.global.sort, GreatVaultList.db.global.sortReverse)
 end
 
 
@@ -77,31 +76,45 @@ function ListMixin:RegisterHeader(header)
 end
 
 
-function ListMixin:SetSortOrder(sortOrder, main)
+function ListMixin:SetSortOrder(sortOrder, reverseSort)
 	local asserttext = "variable \"%s\" size is 0"
 	GreatVaultList:assert(_.size(self.columns) > 0, "ListMixin:SetSortOrder", asserttext, "self.columns")
 	GreatVaultList:assert(_.size(self.columnConfig) > 0, "ListMixin:SetSortOrder", asserttext, "self.columnConfig")
 
-	self.reverseSort =  (self.sort == sortOrder) and not self.reverseSort
-	self.sort = sortOrder
+	if reverseSort ~= nil then 
+		self.reverseSort = reverseSort
+	else
+		self.reverseSort =  (self.sort == sortOrder) and not self.reverseSort
+	end
+
+	self.sort = sortOrder > 0 and sortOrder or "name"
 		
 	for i, header in ipairs(self.headers) do
 		header:UpdateArrow(self.reverseSort);
 	end
 
-	local comp = (self.reverseSort) and _.gt or _.lt
-	local defaultSortFn = function(a, b, comp) return comp(a, b) end
-	local sortFn = _.get(self.columnConfig, {self.columns[self.sort], "sortFn"}, defaultSortFn)
-	
-	sort(self.ItemList.data, function(a, b)
-		if not a[self.sort] then return false end
-		if not b[self.sort] then return false end
-		return sortFn(a[self.sort], b[self.sort], comp)
-	end)
 
-	if main then
-		GreatVaultList.db.global.sort = self.sort
+
+	local comp = (self.reverseSort) and _.gt or _.lt
+	if type(self.sort) == "number" then
+		local defaultSortFn = function(a, b, comp) return comp(a, b) end
+		local sortFn = _.get(self.columnConfig, {self.columns[self.sort], "sortFn"}, defaultSortFn)
+		sort(self.ItemList.data, function(a, b)
+			if not a[self.sort] then return false end
+			if not b[self.sort] then return false end
+			return sortFn(a[self.sort], b[self.sort], comp)
+		end)
+	else
+		sort(self.ItemList.data, function(a, b)
+			return comp(strcmputf8i(a[self.sort], a[self.sort]), 0)
+		end)
 	end
+
+    if sortOrder then
+        GreatVaultList.db.global.sort = self.sort
+        GreatVaultList.db.global.sortReverse= self.reverseSort
+    end
+
 	self.ItemList:RefreshScrollFrame();
 end
 
@@ -163,8 +176,6 @@ function ListMixin:init(columns, data, columnConfig, refresh)
 
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList, false), self.columnConfig);
 	if refresh then 
-		self:SetSortOrder(GreatVaultList.db.global.sort, true)
-	else
 		self.ItemList:RefreshScrollFrame();
 	end
 end

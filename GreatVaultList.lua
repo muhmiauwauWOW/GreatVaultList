@@ -37,7 +37,8 @@ GreatVaultList.config = {
 
 local default_global_data = {
 	global = {
-		sort = 2,
+		sort = -1,
+		sortReverse = false,
 		characters = {},
 		Options = {
 			modules = {},
@@ -105,7 +106,7 @@ function GreatVaultList:showWindow()
 	end
 
 	GreatVaultList.Data:storeAll()
-	GreatVaultList:updateData(true)
+	GreatVaultList:updateData()
 	--GreatVaultList:demoMode()
 	GreatVaultListFrame:Show()
 end
