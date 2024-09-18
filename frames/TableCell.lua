@@ -3,15 +3,16 @@ local L, _ = GreatVaultList:GetLibs()
 
 
 
-GreatVaultListTableCellBaseMixin = CreateFromMixins(TableBuilderCellMixin);
+local TableCellBaseMixin = CreateFromMixins(TableBuilderCellMixin);
+GreatVaultListTableCellBaseMixin = TableCellBaseMixin
 
-function GreatVaultListTableCellBaseMixin:Init(owner, dataIndex, columns, columnConfig, width)
+function TableCellBaseMixin:Init(owner, dataIndex, columns, columnConfig, width)
     self.columns = columns or {}
     self.columnConfig = columnConfig or {}
     self.width = width
 end
 
-function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
+function TableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     idx = idx or 1
     local text
     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
@@ -29,18 +30,20 @@ function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     return tostring(text)
 end
 
-GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+local TableCellTextMixin = CreateFromMixins(TableCellBaseMixin);
+GreatVaultListTableCellTextMixin = TableCellTextMixin
 
 
-function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
+function TableCellTextMixin:Populate(rowData, dataIndex)
 	if not dataIndex then return end
     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
 end
 
 
-GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+local TableCellTripleTextMixin = CreateFromMixins(TableCellBaseMixin);
+GreatVaultListTableCellTripleTextMixin = TableCellTripleTextMixin
 
-function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
+function TableCellTripleTextMixin:Populate(rowData, dataIndex)
     _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
         self[entry]:SetWidth(math.floor(self.width/3))
         self[entry].Text:SetJustifyH("CENTER")
@@ -48,11 +51,10 @@ function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
     end)
 end
 
+local TableCellIconMixin = CreateFromMixins(TableCellBaseMixin);
+GreatVaultListTableCellIconMixin = TableCellIconMixin
 
-
-GreatVaultListTableCellIconMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
-
-function GreatVaultListTableCellIconMixin:Populate(rowData, dataIndex)
+function TableCellIconMixin:Populate(rowData, dataIndex)
 	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
 	local icon = fn(rowData, rowData[dataIndex])
     self.Icon:SetAtlas(icon)

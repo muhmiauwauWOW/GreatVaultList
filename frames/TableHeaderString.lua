@@ -3,28 +3,29 @@ local L, _ = GreatVaultList:GetLibs()
 
 
 
-GreatVaultListTableHeaderStringMixin = CreateFromMixins(TableBuilderElementMixin);
+local TableHeaderStringMixin = CreateFromMixins(TableBuilderElementMixin);
+GreatVaultListTableHeaderStringMixin = TableHeaderStringMixin
 
 
 
-function GreatVaultListTableHeaderStringMixin:OnClick()
+function TableHeaderStringMixin:OnClick()
 	if not self.interactiveHeader then return end
 	self.owner:SetSortOrder(self.sortOrder);
 end
 
-function GreatVaultListTableHeaderStringMixin:OnEnter()
+function TableHeaderStringMixin:OnEnter()
 	if not self.tooltip then return end
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 	GameTooltip:AddLine(self.tooltip);
 	GameTooltip:Show();
 end
-function GreatVaultListTableHeaderStringMixin:OnLeave()
+function TableHeaderStringMixin:OnLeave()
 	if not self.tooltip then return end
 	GameTooltip:Hide();
 end
 
 
-function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder, tooltip)
+function TableHeaderStringMixin:Init(owner, headerText, sortOrder, tooltip)
 	self:SetText(headerText);
 
 	local find = _.find(owner.sortHeaders, function(entry) return entry == sortOrder; end)
@@ -46,7 +47,7 @@ function GreatVaultListTableHeaderStringMixin:Init(owner, headerText, sortOrder,
 	end
 end
 
-function GreatVaultListTableHeaderStringMixin:UpdateArrow(reverse)
+function TableHeaderStringMixin:UpdateArrow(reverse)
 	if self.owner.sort == self.sortOrder then 
 		self:SetArrowState(reverse)
 		self.Arrow:Show();
@@ -55,7 +56,7 @@ function GreatVaultListTableHeaderStringMixin:UpdateArrow(reverse)
 	end
 end
 
-function GreatVaultListTableHeaderStringMixin:SetArrowState(reverse)
+function TableHeaderStringMixin:SetArrowState(reverse)
 	if reverse then
 		self.Arrow:SetTexCoord(0, 1, 1, 0);
 	else 

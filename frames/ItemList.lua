@@ -1,9 +1,10 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
 
-GreatVaultListItemListMixin = {};
+local ItemListMixin = {}
+GreatVaultListItemListMixin = ItemListMixin
 
-function GreatVaultListItemListMixin:OnLoad()
+function ItemListMixin:OnLoad()
 	self.data = {}
 	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
 
@@ -15,7 +16,7 @@ function GreatVaultListItemListMixin:OnLoad()
 	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
 end
 
-function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction, columnConfig)
+function ItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction, columnConfig)
 	self.tableBuilderLayoutFunction = tableBuilderLayoutFunction;
 	self.tableBuilderLayoutDirty = true;
 	self.columnConfig = columnConfig
@@ -25,7 +26,7 @@ function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFun
 	end
 end
 
-function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
+function ItemListMixin:UpdateTableBuilderLayout()
 	if self.tableBuilderLayoutDirty then
 		self.tableBuilder:Reset();
 		self.tableBuilderLayoutFunction(self.tableBuilder);
@@ -35,7 +36,7 @@ function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
 	end
 end
 
-function GreatVaultListItemListMixin:Init()
+function ItemListMixin:Init()
 	if self.isInitialized then
 		return;
 	end
@@ -47,7 +48,7 @@ function GreatVaultListItemListMixin:Init()
 			button.CurrentTexture:SetShown(entry.selected)
 			button:SetEnabled(true);
 		end
-		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
+		factory(self.lineTemplate or "GreatVaultListTableLineTemplate", Initializer);
 	end);
 
 	ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, view);
@@ -76,16 +77,16 @@ function GreatVaultListItemListMixin:Init()
 	self.isInitialized = true;
 end
 
-function GreatVaultListItemListMixin:OnShow()
+function ItemListMixin:OnShow()
 	self:Init();
 	self:UpdateTableBuilderLayout();
 end
 
-function GreatVaultListItemListMixin:DirtyScrollFrame()
+function ItemListMixin:DirtyScrollFrame()
 	self.scrollFrameDirty = true;
 end
 
-function GreatVaultListItemListMixin:RefreshScrollFrame()
+function ItemListMixin:RefreshScrollFrame()
 	self.scrollFrameDirty = false;
 
 	if not self.isInitialized or not self:IsShown() then
@@ -98,10 +99,10 @@ function GreatVaultListItemListMixin:RefreshScrollFrame()
 	self.ResultsText:SetShown(numResults == 0);
 end
 
-function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
+function ItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
 
 end
 
-function GreatVaultListItemListMixin:GetHeaderContainer()
+function ItemListMixin:GetHeaderContainer()
 	return self.HeaderContainer;
 end
