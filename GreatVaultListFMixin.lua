@@ -65,27 +65,6 @@ end
 function GreatVaultListMixin:OnHide()
 end
 
-
 function GreatVaultListMixin:RefreshScrollFrame()
 	self.ListFrame.ItemList:RefreshScrollFrame();
-end
-
-
-
-function GreatVaultListMixin:GetState()
-	if C_WeeklyRewards.HasAvailableRewards() then
-		return "collect";
-	end
-
-	local rewardCheck = false
-	_.forEach(Enum.WeeklyRewardChestThresholdType, function(type)
-		if rewardCheck then return end
-		rewardCheck = WeeklyRewardsUtil.HasUnlockedRewards(type)
-	end)
-
-	if rewardCheck then
-		return "complete";
-	end
-
-	return "incomplete";
 end

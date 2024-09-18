@@ -203,7 +203,7 @@ end
 GreatVaultListListOpenVaultMixin = {}
 
 function GreatVaultListListOpenVaultMixin:OnShow()
-	local state = self:GetParent():GetParent():GetState()
+	local state = GreatVaultList:GetVaultState()
 
 	self.NormalTexture:SetShown(state ~= "incomplete");
 	self.handlesTexture:SetShown(state == "incomplete");
