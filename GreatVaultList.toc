@@ -33,13 +33,10 @@ locale/locale.xml
 GreatVaultList.lua
 GreatVaultListData.lua
 GreatVaultListOptions.lua
-mixins.lua
 
-# tabs\raidLoot.lua
-# tabs\dungeonLoot.lua
-# tabs\delvesLoot.lua
+GreatVaultListFrame.xml
 
-frames.xml
+
 
 columns/activities.lua
 columns/character.lua
