@@ -1,6 +1,41 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
 
+
+
+
+
+local TableBuilderMixin = {};
+
+function TableBuilderMixin:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...)
+	local column = self:AddColumn();
+
+	if sortOrder then
+		column:ConstructHeader("BUTTON", "GreatVaultListTableHeaderStringTemplate", owner, nil, sortOrder, tooltip);
+	end
+
+	column:ConstructCells("FRAME", cellTemplate, owner, ...);
+	return column;
+end
+
+function TableBuilderMixin:AddFillColumn(owner, padding, fillCoefficient, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, tooltip, ...)
+	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...);
+	column:SetFillConstraints(fillCoefficient, padding);
+	column:SetCellPadding(leftCellPadding, rightCellPadding);
+	return column;
+end
+
+
+function TableBuilderMixin:AddFixedWidthColumn(owner, padding, width, leftCellPadding, rightCellPadding, sortOrder, cellTemplate, tooltip, ...)
+	local column = self:AddColumnInternal(owner, sortOrder, cellTemplate, tooltip, ...);
+	column:SetFixedConstraints(width, padding);
+	column:SetCellPadding(leftCellPadding, rightCellPadding);
+	return column;
+end
+
+
+
+
 local ItemListMixin = {}
 GreatVaultListItemListMixin = ItemListMixin
 
@@ -53,7 +88,7 @@ function ItemListMixin:Init()
 
 	ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, view);
     
-	local tableBuilder = CreateTableBuilder(nil, GreatVaultListTableBuilderMixin);
+	local tableBuilder = CreateTableBuilder(nil, TableBuilderMixin);
 	self.tableBuilder = tableBuilder;
 
 	local function ElementDataTranslator(elementData)

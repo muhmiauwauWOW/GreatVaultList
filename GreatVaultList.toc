@@ -35,7 +35,6 @@ GreatVaultListData.lua
 GreatVaultListOptions.lua
 mixins.lua
 
-tabs\mixin.lua
 # tabs\raidLoot.lua
 # tabs\dungeonLoot.lua
 # tabs\delvesLoot.lua
