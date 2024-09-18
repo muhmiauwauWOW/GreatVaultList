@@ -250,7 +250,8 @@
         "SearchBoxTemplateClearButton_OnClick",
         "SearchBoxTemplate_OnLoad",
         "LFG_LIST_NO_RESULTS_FOUND",
-        "GreatVaultButtonMixin"
+        "GreatVaultButtonMixin",
+        "PaperDollFrame_UpdateStats"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

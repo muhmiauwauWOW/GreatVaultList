@@ -219,6 +219,8 @@ function GreatVaultList:demoMode()
 		return entry.key
 	end)
 
+
+	local playerFn = _.get(GreatVaultList.ModuleColumns, {"character", "config", "demo" }, function(e) return e end)
 	local demoData = {}
 	for i = 1, 10, 1 do
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
@@ -226,6 +228,9 @@ function GreatVaultList:demoMode()
 			return demoFn(i)
 		end)
 
+		d.name = playerFn(i)
+		d.enabled = true 
+		d.selected = false
 		table.insert(demoData, d)
 	end
 
