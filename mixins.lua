@@ -1,66 +1,65 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
-
 local L, _ = GreatVaultList:GetLibs()
 
 
 
 
 
-GreatVaultListTableCellBaseMixin = CreateFromMixins(TableBuilderCellMixin);
+-- GreatVaultListTableCellBaseMixin = CreateFromMixins(TableBuilderCellMixin);
 
-function GreatVaultListTableCellBaseMixin:Init(owner, dataIndex, columns, columnConfig, width)
-    self.columns = columns or {}
-    self.columnConfig = columnConfig or {}
-    self.width = width
-end
+-- function GreatVaultListTableCellBaseMixin:Init(owner, dataIndex, columns, columnConfig, width)
+--     self.columns = columns or {}
+--     self.columnConfig = columnConfig or {}
+--     self.width = width
+-- end
 
-function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
-    idx = idx or 1
-    local text
-    local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
-    if fn and type(fn) == "function" then 
-        text = fn(self, rowData[dataIndex], idx)
-    else 
-        text = rowData[dataIndex]
-    end
-
-
-    if not text then 
-        local emptyStr = _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr", idx}, _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr"}, "-"))
-        text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
-    end
-    return tostring(text)
-end
-
-GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+-- function GreatVaultListTableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
+--     idx = idx or 1
+--     local text
+--     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
+--     if fn and type(fn) == "function" then 
+--         text = fn(self, rowData[dataIndex], idx)
+--     else 
+--         text = rowData[dataIndex]
+--     end
 
 
-function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
-	if not dataIndex then return end
-    self.Text:SetText(self:PopulateFn(rowData, dataIndex))
-end
+--     if not text then 
+--         local emptyStr = _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr", idx}, _.get(self.columnConfig, {self.columns[dataIndex], "emptyStr"}, "-"))
+--         text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+--     end
+--     return tostring(text)
+-- end
+
+-- GreatVaultListTableCellTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
 
 
-GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
-
-function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
-    _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
-        self[entry]:SetWidth(math.floor(self.width/3))
-        self[entry].Text:SetJustifyH("CENTER")
-        self[entry].Text:SetText(self:PopulateFn(rowData, dataIndex, idx))
-    end)
-end
+-- function GreatVaultListTableCellTextMixin:Populate(rowData, dataIndex)
+-- 	if not dataIndex then return end
+--     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
+-- end
 
 
+-- GreatVaultListTableCellTripleTextMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
 
-GreatVaultListTableCellIconMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+-- function GreatVaultListTableCellTripleTextMixin:Populate(rowData, dataIndex)
+--     _.forEach({"Text1", "Text2", "Text3"}, function(entry, idx)
+--         self[entry]:SetWidth(math.floor(self.width/3))
+--         self[entry].Text:SetJustifyH("CENTER")
+--         self[entry].Text:SetText(self:PopulateFn(rowData, dataIndex, idx))
+--     end)
+-- end
 
-function GreatVaultListTableCellIconMixin:Populate(rowData, dataIndex)
-	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
-	local icon = fn(rowData, rowData[dataIndex])
-    self.Icon:SetAtlas(icon)
-end
+
+
+-- GreatVaultListTableCellIconMixin = CreateFromMixins(GreatVaultListTableCellBaseMixin);
+
+-- function GreatVaultListTableCellIconMixin:Populate(rowData, dataIndex)
+-- 	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
+-- 	local icon = fn(rowData, rowData[dataIndex])
+--     self.Icon:SetAtlas(icon)
+-- end
 
 
 
@@ -279,110 +278,110 @@ end
 
 
 
-GreatVaultListItemListMixin = {};
+-- GreatVaultListItemListMixin = {};
 
-function GreatVaultListItemListMixin:OnLoad()
-	self.data = {}
-	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
+-- function GreatVaultListItemListMixin:OnLoad()
+-- 	self.data = {}
+-- 	self.ScrollBox:RegisterCallback(ScrollBoxListMixin.Event.OnScroll, self.OnScrollBoxScroll, self);
 
-	self.ResultsText:SetText(L["ResultsText"])
+-- 	self.ResultsText:SetText(L["ResultsText"])
 
-	local xOffset = 0;
-	local yOffset = -20;
-	self.Background:SetAtlas("auctionhouse-background-index", true);
-	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
-end
+-- 	local xOffset = 0;
+-- 	local yOffset = -20;
+-- 	self.Background:SetAtlas("auctionhouse-background-index", true);
+-- 	self.Background:SetPoint("TOPLEFT", xOffset + 3, yOffset - 3);
+-- end
 
-function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction, columnConfig)
-	self.tableBuilderLayoutFunction = tableBuilderLayoutFunction;
-	self.tableBuilderLayoutDirty = true;
-	self.columnConfig = columnConfig
+-- function GreatVaultListItemListMixin:SetTableBuilderLayout(tableBuilderLayoutFunction, columnConfig)
+-- 	self.tableBuilderLayoutFunction = tableBuilderLayoutFunction;
+-- 	self.tableBuilderLayoutDirty = true;
+-- 	self.columnConfig = columnConfig
 
-	if self.isInitialized and self:IsShown() then
-		self:UpdateTableBuilderLayout();
-	end
-end
+-- 	if self.isInitialized and self:IsShown() then
+-- 		self:UpdateTableBuilderLayout();
+-- 	end
+-- end
 
-function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
-	if self.tableBuilderLayoutDirty then
-		self.tableBuilder:Reset();
-		self.tableBuilderLayoutFunction(self.tableBuilder);
-		self.tableBuilder:SetTableWidth(self.ScrollBox:GetWidth());
-		self.tableBuilder:Arrange();
-		self.tableBuilderLayoutDirty = false;
-	end
-end
+-- function GreatVaultListItemListMixin:UpdateTableBuilderLayout()
+-- 	if self.tableBuilderLayoutDirty then
+-- 		self.tableBuilder:Reset();
+-- 		self.tableBuilderLayoutFunction(self.tableBuilder);
+-- 		self.tableBuilder:SetTableWidth(self.ScrollBox:GetWidth());
+-- 		self.tableBuilder:Arrange();
+-- 		self.tableBuilderLayoutDirty = false;
+-- 	end
+-- end
 
-function GreatVaultListItemListMixin:Init()
-	if self.isInitialized then
-		return;
-	end
+-- function GreatVaultListItemListMixin:Init()
+-- 	if self.isInitialized then
+-- 		return;
+-- 	end
 
-	local view = CreateScrollBoxListLinearView();
-	view:SetElementFactory(function(factory, elementData)
-		local function Initializer(button, elementData)
-			local entry = self.getEntry(elementData)
-			button.CurrentTexture:SetShown(entry.selected)
-			button:SetEnabled(true);
-		end
-		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
-	end);
+-- 	local view = CreateScrollBoxListLinearView();
+-- 	view:SetElementFactory(function(factory, elementData)
+-- 		local function Initializer(button, elementData)
+-- 			local entry = self.getEntry(elementData)
+-- 			button.CurrentTexture:SetShown(entry.selected)
+-- 			button:SetEnabled(true);
+-- 		end
+-- 		factory(self.lineTemplate or "GreatVaultListItemListLineTemplate", Initializer);
+-- 	end);
 
-	ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, view);
+-- 	ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, view);
     
-	local tableBuilder = CreateTableBuilder(nil, GreatVaultListTableBuilderMixin);
-	self.tableBuilder = tableBuilder;
+-- 	local tableBuilder = CreateTableBuilder(nil, GreatVaultListTableBuilderMixin);
+-- 	self.tableBuilder = tableBuilder;
 
-	local function ElementDataTranslator(elementData)
-		return elementData;
-	end;
-	ScrollUtil.RegisterTableBuilder(self.ScrollBox, tableBuilder, ElementDataTranslator);
+-- 	local function ElementDataTranslator(elementData)
+-- 		return elementData;
+-- 	end;
+-- 	ScrollUtil.RegisterTableBuilder(self.ScrollBox, tableBuilder, ElementDataTranslator);
 
 
-	self.getNumEntries = function()
-		return #self.data;
-	end
+-- 	self.getNumEntries = function()
+-- 		return #self.data;
+-- 	end
 
-	self.getEntry = function(index)
-		return self.data[index];
-	end
+-- 	self.getEntry = function(index)
+-- 		return self.data[index];
+-- 	end
 
-	if self.tableBuilder then
-		self.tableBuilder:SetDataProvider(self.getEntry);
-	end
+-- 	if self.tableBuilder then
+-- 		self.tableBuilder:SetDataProvider(self.getEntry);
+-- 	end
 
-	self.isInitialized = true;
-end
+-- 	self.isInitialized = true;
+-- end
 
-function GreatVaultListItemListMixin:OnShow()
-	self:Init();
-	self:UpdateTableBuilderLayout();
-end
+-- function GreatVaultListItemListMixin:OnShow()
+-- 	self:Init();
+-- 	self:UpdateTableBuilderLayout();
+-- end
 
-function GreatVaultListItemListMixin:DirtyScrollFrame()
-	self.scrollFrameDirty = true;
-end
+-- function GreatVaultListItemListMixin:DirtyScrollFrame()
+-- 	self.scrollFrameDirty = true;
+-- end
 
-function GreatVaultListItemListMixin:RefreshScrollFrame()
-	self.scrollFrameDirty = false;
+-- function GreatVaultListItemListMixin:RefreshScrollFrame()
+-- 	self.scrollFrameDirty = false;
 
-	if not self.isInitialized or not self:IsShown() then
-		return;
-	end
+-- 	if not self.isInitialized or not self:IsShown() then
+-- 		return;
+-- 	end
 
-	local numResults = self.getNumEntries();
-	local dataProvider = CreateIndexRangeDataProvider(numResults);
-	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
-	self.ResultsText:SetShown(numResults == 0);
-end
+-- 	local numResults = self.getNumEntries();
+-- 	local dataProvider = CreateIndexRangeDataProvider(numResults);
+-- 	self.ScrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition);
+-- 	self.ResultsText:SetShown(numResults == 0);
+-- end
 
-function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
+-- function GreatVaultListItemListMixin:OnScrollBoxScroll(scrollPercentage, visibleExtentPercentage, panExtentPercentage)
 
-end
+-- end
 
-function GreatVaultListItemListMixin:GetHeaderContainer()
-	return self.HeaderContainer;
-end
+-- function GreatVaultListItemListMixin:GetHeaderContainer()
+-- 	return self.HeaderContainer;
+-- end
 
 
 
