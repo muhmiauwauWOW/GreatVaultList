@@ -1,217 +1,34 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
 
-
 	<Include file="frames/TableCell.xml"/>
 	<Include file="frames/TableHeaderString.xml"/>
 	<Include file="frames/TableLine.xml"/>
 	<Include file="frames/ItemList.xml"/>
-	
+	<Include file="frames/Content.xml"/>
+
+	<Include file="tabs/list.xml"/>
+	<Include file="tabs/raidLoot.xml"/>
+	<Include file="tabs/dungeonLoot.xml"/>
+	<Include file="tabs/delvesLoot.xml"/>
 
 
-
-
-
-   <Frame name="GreatVaultListFrame" toplevel="true" hidden="true"  enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
+   <Frame name="GreatVaultListFrame" toplevel="true" hidden="true" enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
 		<Frames>
-			
-			
-
-
-			<Frame parentKey="Drag"  parent="GreatVaultListFrame" >
+			<Frame parentKey="Drag">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="0"/>
 					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-60"/>
 				</Anchors>
 			</Frame>
 
-
-
-
-			<Frame name="GreatVaultListListFrame" parentKey="ListFrame" mixin="GreatVaultListListMixin">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-20"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
-				</Anchors>
-				<Frames>
-
-				
-				
-
-
-					<Button parentKey="RefreshButton">
-						<Size x="20" y="20"/>
-						<Anchors>
-							<Anchor point="CENTER" relativeKey="$parent" relativePoint="TOPRIGHT" x="-10" y="-22"/>
-						</Anchors>
-						<HighlightTexture parentKey="HighlightTexture" atlas="UI-RefreshButton" setAllPoints="true"  alphaMode="ADD" alpha=".2"/>
-						<NormalTexture parentKey="NormalTexture" atlas="UI-RefreshButton" setAllPoints="true"/>
-						<Scripts>
-							<OnClick>
-								
-								GreatVaultList.Data:storeAll()
-								GreatVaultList:updateData(true)
-							</OnClick>
-						</Scripts>
-					</Button>
-					<Button parentKey="OpenVault" mixin="GreatVaultListListOpenVaultMixin">
-						<Size x="20" y="20"/>
-						<Anchors>
-							<Anchor point="RIGHT" relativeKey="$parent.RefreshButton" relativePoint="LEFT" x="-5" y="0"/>
-						</Anchors>
-						<Layers>
-							<Layer level="OVERLAY">
-								<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
-									<Anchors>
-										<Anchor point="CENTER"/>
-									</Anchors>
-								</Texture>
-								<Texture parentKey="handlesTexture" atlas="greatVault-handles-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
-									<Anchors>
-										<Anchor point="CENTER"/>
-									</Anchors>
-								</Texture>
-								<Texture parentKey="centerPlateTexture" atlas="greatVault-centerPlate-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
-									<Anchors>
-										<Anchor point="CENTER"/>
-									</Anchors>
-								</Texture>
-								
-							</Layer>
-							<Layer level="HIGHLIGHT">
-								<Texture parentKey="HighlightTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true"  alphaMode="ADD" alpha=".2" scale="0.1851852">
-									<Anchors>
-										<Anchor point="CENTER"/>
-									</Anchors>
-								</Texture>								
-							</Layer>
-						</Layers>
-						<Scripts>
-							<OnClick method="OnClick"/>
-							<OnShow method="OnShow"/>
-						</Scripts>
-					</Button>
-
-					<DropdownButton parentKey="Filter" mixin="GreatVaultListListFilterMixin" inherits="WowStyle1FilterDropdownTemplate" >
-						<Anchors>
-							<Anchor point="RIGHT" relativeKey="$parent.OpenVault" relativePoint="LEFT" x="-10" y="0"/>
-						</Anchors>
-						<Scripts>
-							<OnLoad method="OnLoad"/>
-							<OnShow method="OnShow"/>
-						</Scripts>
-					</DropdownButton>
-
-					<EditBox parentKey="Search" autoFocus="false" historyLines="1" bytes="64" mixin="GreatVaultListListSearchBoxMixin" inherits="SearchBoxTemplate">
-						<Size x="241" y="22"/>
-						<Anchors>
-							<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="70" y="-11"/>
-							<Anchor point="RIGHT" relativeKey="$parent.Filter" relativePoint="LEFT" x="-10" y="0"/>
-						</Anchors>
-						<Scripts>
-							<OnLoad method="OnLoad"/>
-							<OnEnterPressed method="OnEnterPressed"/>
-						</Scripts>
-					</EditBox>
-
-
-					
-					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" y="-40"/>
-							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-						</Anchors>
-					</Frame>
-				</Frames>
-				<Scripts>
-					<OnLoad method="OnLoad"/>
-					<OnShow method="OnShow"/>
-				</Scripts>
-			</Frame>
-
-			<Frame parentKey="RaidLootList" mixin="GreatVaultListRaidLootListMixin" hidden="true">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
-				</Anchors>
-				<Frames>
-					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" y="-1"/>
-							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-						</Anchors>
-					</Frame>
-				</Frames>
-				<Scripts>
-					<OnLoad method="OnLoad"/>
-					<OnShow method="OnShow"/>
-				</Scripts>
-			</Frame>
-
-
-
-			<Frame parentKey="DungeonLootList" mixin="GreatVaultListDungeonLootListMixin" hidden="true">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
-				</Anchors>
-				<Frames>
-					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" y="-1"/>
-							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-						</Anchors>
-					</Frame>
-				</Frames>
-				<Scripts>
-					<OnLoad method="OnLoad"/>
-					<OnShow method="OnShow"/>
-				</Scripts>
-			</Frame>
-
-
-			<Frame parentKey="DelvesLootList" mixin="GreatVaultListDelvesLootListMixin" hidden="true">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-60"/>
-					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
-				</Anchors>
-				<Frames>
-					<Frame parentKey="keys" >
-						<Size x="0" y="20"/>
-						<Anchors>
-							<Anchor point="TOPRIGHT" x="-10" y="25"/>
-						</Anchors>
-						<Layers>
-							<Layer level="OVERLAY">
-								<FontString parentKey="Text" inherits="Number13FontWhite" justifyH="CENTER"/>
-							</Layer>
-							<Layer level="ARTWORK">
-								<Texture atlas="auctionhouse-itemheaderframe" setAllPoints="true" useAtlasSize="false">
-									<Anchors>
-										<Anchor point="TOPLEFT" x="0" y="0"/>
-										<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
-									</Anchors>
-								</Texture>
-							</Layer>
-						</Layers>
-					</Frame>
-					<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
-						<Anchors>
-							<Anchor point="TOPLEFT" y="-1"/>
-							<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
-						</Anchors>
-					</Frame>
-				</Frames>
-				<Scripts>
-					<OnLoad method="OnLoad"/>
-					<OnShow method="OnShow"/>
-				</Scripts>
-			</Frame>
-
-
+			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate"/>
+			<Frame parentKey="RaidLootList" inherits="GreatVaultListRaidLootTemplate" hidden="true"/>
+			<Frame parentKey="DungeonLootList" inherits="GreatVaultListDungeonLootTemplate" hidden="true"/>
+			<Frame parentKey="DelvesLootList" inherits="GreatVaultListDelvesLootTemplate" hidden="true"/>
 
 			<Frame parentKey="TabSystem" inherits="TabSystemTemplate">
 				<KeyValues>
@@ -222,7 +39,6 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="22" y="2"/>
 				</Anchors>
 			</Frame>
-
 		</Frames>
 		<Scripts>
 			<OnLoad method="OnLoad"/>
