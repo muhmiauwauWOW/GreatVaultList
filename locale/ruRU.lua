@@ -14,22 +14,27 @@ L["OpenVault"] = "Открыть Хранилище"
 L["opt_lines_name"] = "Линии"
 L["opt_lines_desc"] = "Количество строк для отображения"
 
+L["opt_scale_name"] = "Масштаб"
+L["opt_scale_desc"] = "Масштаб окна"
+
 L["opt_module_name"] = "Модуль %s"
 L["opt_module_desc"] = "Активировать или деактивировать этот модуль"
 
 L["opt_position_name"] = "Позиция"
 L["opt_position_desc"] = "Изменить положение столбца этого модуля"
 
-L["opt_minimap_name"] = "Скрыть кнопку мини-карты"
-L["opt_minimap_desc"] = "Включить или выключить видимость кнопки мини-карты"
+L["opt_minimap_name"] = "Скрыть кнопку миникарты"
+L["opt_minimap_desc"] = "Включить или выключить видимость кнопки миникарты"
 
 L["ResultsText"] = "Нет персонажей для отображения"
 
 -- tabs loot general
 L["tabLoot_name"] = "Добыча %s"
 
-L["tabLoot_greatVault"] = "Великий Хранилище"
+L["tabLoot_greatVault"] = "Великое Хранилище"
 L["tabLoot_upgradelvl"] = "Уровень улучшения"
+
+L["tabLoot_ilvl"] = "ilvl"
 
 -- delves loot tab
 L["delvesLoot_col1"] = "Уровень"
@@ -37,15 +42,13 @@ L["delvesLoot_col2"] = "Обильный"
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Уровень"
-L["dungeonLoot_col2"] = "End of Dungeon"
+L["dungeonLoot_col2"] = "Конец подземелья"
 
 -- raid loot tab 
 L["raidLoot_col1"] = "Сложность и тип"
 L["raidLoot_bosses"] = "Боссы %s"
 L["raidLoot_Regular"] = "Обычный"
 L["raidLoot_VeryRare"] = "Очень редкий"
-
-
 
 
 -- no auto translate
