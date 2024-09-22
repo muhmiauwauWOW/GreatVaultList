@@ -87,14 +87,14 @@ function GreatVaultListDungeonLootListMixin:BuildData()
 		{ 
 			9,
 			613,
-			L["gearTrack_Hero"] .. "  1/6",
+			L["gearTrack_Hero"] .. "  2/6",
 			619,
 			L["gearTrack_Hero"] .. "  4/6"
 		},
 		{ 
 			10,
 			613,
-			L["gearTrack_Hero"] .. "  1/6",
+			L["gearTrack_Hero"] .. "  2/6",
 			623,
 			L["gearTrack_Myth"] .. "  1/6"
 		}
