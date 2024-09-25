@@ -139,6 +139,9 @@ GreatVaultList.ModuleColumns = {}
 
 GREATVAULTLIST_COLUMNS = {
 	OnEnable = function(self)
+		if not WeeklyRewardsFrame then
+			WeeklyRewards_LoadUI();
+		end
 		-- init is not found
 		if not GreatVaultList.db.global.Options.modules[self.key] then
 			GreatVaultList.db.global.Options.modules[self.key] = { active = true, index = self.config.index }
@@ -156,7 +159,9 @@ GREATVAULTLIST_COLUMNS = {
 
 		-- store data 
 		if self.config.store then
-			GreatVaultList.Data:store(self.config, true)
+			C_Timer.After(3, function()
+				GreatVaultList.Data:store(self.config, true)
+			end)
 		end
 
 		-- register events
