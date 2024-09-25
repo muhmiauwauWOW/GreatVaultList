@@ -39,6 +39,7 @@ Column.config = {
     },
     ["store"] = function(characterInfo)
         local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel()
+
         if activityID then 
             characterInfo.keystone = {}
             characterInfo.keystone.activityID = activityID
@@ -49,16 +50,15 @@ Column.config = {
         end
 
         return characterInfo
-
     end,
     ["populate"] = function(self, keystone)
         if not keystone then return keystone end
         if type(keystone) ~= "table" then return nil end
         if not keystone.keystoneLevel then return nil end
-        if not keystone.activityID then return nil end
+        if not keystone.groupID then return nil end
 
-        local name = C_ChallengeMode.GetMapUIInfo(keystone.activityID) or ""
-        local level = keystone.keystoneLevel
+        local name = C_LFGList.GetActivityGroupInfo(keystone.groupID) or ""
+        local level = keystone.keystoneLevel or 0
         return string.format("%s %s", name, level)
     end
 }

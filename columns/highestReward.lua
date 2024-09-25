@@ -13,15 +13,13 @@ Column.config = {
         ["store"] = ColumKey,
     },
     ["demo"] = function(idx)
-
-        
-
-
         return math.random(500, 600)
     end,
     ["store"] = function(characterInfo)
+
+        DevTool:AddData(C_WeeklyRewards.GetActivities(1))
         local _, ilvl = GetAverageItemLevel();
-        characterInfo.averageItemLevel = ilvl
+        characterInfo[ColumKey] = math.random(500, 600)
         return characterInfo
     end,
     ["populate"] = function(self, number)
