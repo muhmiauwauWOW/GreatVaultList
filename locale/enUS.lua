@@ -5,13 +5,17 @@ if not L then
 end
 
 
+
+L["Bindings_toggle_window"] = "Toggle window" -- need translation
+
+
 L["character"] = "Character"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
-L["highestReward"] = "R"
-L["highestReward_tooltip_title"] = "Highest Reward"
-L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward"
+L["highestReward"] = "R" -- need translation
+L["highestReward_tooltip_title"] = "Highest Reward" -- need translation
+L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" -- need translation
 
 L["OpenVault"] = "View Vault"
 

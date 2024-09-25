@@ -11,6 +11,13 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
+local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+_G["BINDING_HEADER_GreatVaultList"] = AddOnInfo[2]
+_G["BINDING_NAME_GreatVaultList_toggle_window"] = L["Bindings_toggle_window"]
+
+
+
+
 function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
 	if buttonName == "RightButton" then
 		Settings.OpenToCategory(GreatVaultList.OptionsID)
