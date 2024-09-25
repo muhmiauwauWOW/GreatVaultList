@@ -6,11 +6,16 @@ Column.key = ColumKey
 Column.config = {
     ["index"] = 13,
     ["width"] = 180,
-    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 200, canSort = true},
+    ["header"] =  { key = ColumKey, text = L[ColumKey], width = 200, canSort = false},
     ["sort"] = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     }, 
+    ["sortFn"] = function(a, b, comp)
+        if type(a) ~= "table" then a = {keystoneLevel = 1} end
+        if type(b) ~= "table" then b = {keystoneLevel = 1} end
+        return comp(a.keystoneLevel, b.keystoneLevel)
+    end,
     ['emptyStr'] = "-",
     ["demo"] = function(idx)
         local mapChallengeModeIDs = {}
@@ -22,7 +27,8 @@ Column.config = {
         end)
 
         return {
-            activityID = mapChallengeModeIDs[math.random(#mapChallengeModeIDs)],
+            activityID =  1278, --mapChallengeModeIDs[math.random(#mapChallengeModeIDs)],
+            groupID = 328,
             keystoneLevel = math.random(5,15)
         }
     end,
@@ -40,26 +46,21 @@ Column.config = {
         if activityID then 
             characterInfo.keystone = {}
             characterInfo.keystone.activityID = activityID
+            characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
         else
-            characterInfo.keystone = ""
+            characterInfo.keystone = nil
         end
 
         return characterInfo
-
     end,
     ["populate"] = function(self, keystone)
         if not keystone then return keystone end
         if type(keystone) ~= "table" then return nil end
         if not keystone.keystoneLevel then return nil end
 
-        local fullName = C_LFGList.GetActivityFullName(keystone.activityID)
-        local estart, _ = string.find(fullName, " %(")
-        local estart2, _ = string.find(fullName, " %- ")
-        if estart2 and estart2 < estart then
-            estart = estart2
-        end
-        fullName = string.sub(fullName, 1, estart-1)  
-        return fullName .. " " .. keystone.keystoneLevel
+        local name = C_LFGList.GetActivityGroupInfo(keystone.groupID)
+        local level = keystone.keystoneLevel
+        return string.format("%s %s", name, level)
     end
 }

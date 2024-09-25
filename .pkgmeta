@@ -18,6 +18,3 @@ externals:
   Libs/LibDataBroker-1.1: https://repos.curseforge.com/wow/libdatabroker-1-1
 
 enable-nolib-creation: no
-
-tools-used:
-    - liblodash
