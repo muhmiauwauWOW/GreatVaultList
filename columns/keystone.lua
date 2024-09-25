@@ -58,9 +58,10 @@ Column.config = {
         if not keystone then return keystone end
         if type(keystone) ~= "table" then return nil end
         if not keystone.keystoneLevel then return nil end
+        if not keystone.groupID then return nil end
 
-        local name = C_LFGList.GetActivityGroupInfo(keystone.groupID)
-        local level = keystone.keystoneLevel
+        local name = C_LFGList.GetActivityGroupInfo(keystone.groupID) or ""
+        local level = keystone.keystoneLevel or 0
         return string.format("%s %s", name, level)
     end
 }
