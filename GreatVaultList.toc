@@ -45,3 +45,4 @@ columns/ilevel.lua
 columns/keystone.lua
 columns/raid.lua
 columns/world.lua
+columns/highestReward.lua

@@ -107,7 +107,7 @@ function GreatVaultList:showWindow()
 
 	GreatVaultList.Data:storeAll()
 	GreatVaultList:updateData()
-	--GreatVaultList:demoMode()
+	-- GreatVaultList:demoMode()
 	GreatVaultListFrame:Show()
 end
 

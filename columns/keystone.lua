@@ -11,6 +11,11 @@ Column.config = {
         ["key"] = ColumKey,
         ["store"] = ColumKey,
     }, 
+    ["sortFn"] = function(a, b, comp)
+        if type(a) ~= "table" then a = {keystoneLevel = 1} end
+        if type(b) ~= "table" then b = {keystoneLevel = 1} end
+        return comp(a.keystoneLevel, b.keystoneLevel)
+    end,
     ['emptyStr'] = "-",
     ["demo"] = function(idx)
         local mapChallengeModeIDs = {}
@@ -37,6 +42,7 @@ Column.config = {
         if activityID then 
             characterInfo.keystone = {}
             characterInfo.keystone.activityID = activityID
+            characterInfo.keystone.groupID = groupID
             characterInfo.keystone.keystoneLevel = keystoneLevel
         else
             characterInfo.keystone = ""
@@ -49,8 +55,9 @@ Column.config = {
         if not keystone then return keystone end
         if type(keystone) ~= "table" then return nil end
         if not keystone.keystoneLevel then return nil end
+        if not keystone.activityID then return nil end
 
-        local name = C_ChallengeMode.GetMapUIInfo(keystone.activityID)
+        local name = C_ChallengeMode.GetMapUIInfo(keystone.activityID) or ""
         local level = keystone.keystoneLevel
         return string.format("%s %s", name, level)
     end

@@ -9,6 +9,8 @@ L["character"] = "Character"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
+L["highestReward"] = "Reward"
+
 L["OpenVault"] = "View Vault"
 
 L["opt_lines_name"] = "Lines"
