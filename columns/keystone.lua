@@ -14,16 +14,13 @@ Column.config = {
     ['emptyStr'] = "-",
     ["demo"] = function(idx)
         local mapChallengeModeIDs = {}
-        table.foreach(C_LFGList.GetAvailableActivities(2), function(k, id)
-            local info = C_LFGList.GetActivityInfoTable(id)
-            if info.isMythicPlusActivity then
-                tinsert(mapChallengeModeIDs,id)
-            end
+        table.foreach(C_ChallengeMode.GetMapTable(), function(k, id)
+            tinsert(mapChallengeModeIDs, id)
         end)
-
+        
         return {
             activityID = mapChallengeModeIDs[math.random(#mapChallengeModeIDs)],
-            keystoneLevel = math.random(5,15)
+            keystoneLevel = math.random(5, 15)
         }
     end,
     event = {
@@ -53,13 +50,8 @@ Column.config = {
         if type(keystone) ~= "table" then return nil end
         if not keystone.keystoneLevel then return nil end
 
-        local fullName = C_LFGList.GetActivityFullName(keystone.activityID)
-        local estart, _ = string.find(fullName, " %(")
-        local estart2, _ = string.find(fullName, " %- ")
-        if estart2 and estart2 < estart then
-            estart = estart2
-        end
-        fullName = string.sub(fullName, 1, estart-1)  
-        return fullName .. " " .. keystone.keystoneLevel
+        local name = C_ChallengeMode.GetMapUIInfo(keystone.activityID)
+        local level = keystone.keystoneLevel
+        return string.format("%s %s", name, level)
     end
 }
