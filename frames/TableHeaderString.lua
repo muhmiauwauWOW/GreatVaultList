@@ -16,7 +16,12 @@ end
 function TableHeaderStringMixin:OnEnter()
 	if not self.tooltip then return end
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:AddLine(self.tooltip);
+	if type(self.tooltip) == "table" then 
+		GameTooltip_SetTitle(GameTooltip, self.tooltip.title);
+		GameTooltip:AddLine(self.tooltip.desc);
+	else
+		GameTooltip:AddLine(self.tooltip);
+	end
 	GameTooltip:Show();
 end
 function TableHeaderStringMixin:OnLeave()

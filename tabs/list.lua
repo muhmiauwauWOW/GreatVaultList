@@ -97,15 +97,17 @@ function ListMixin:SetSortOrder(sortOrder, reverseSort)
 
 	local comp = (self.reverseSort) and _.gt or _.lt
 	if type(self.sort) == "number" then
-		local defaultSortFn = function(a, b, comp) return comp(a, b) end
+		local defaultSortFn = function(a, b, comp)
+			a = type(a) == "number" and a or 0
+			b = type(b) == "number" and b or 0
+			return comp(a, b)
+		end
 		local sortFn = _.get(self.columnConfig, {self.columns[self.sort], "sortFn"}, defaultSortFn)
+		sort(self.ItemList.data, function(a, b) return sortFn(a[self.sort], b[self.sort], comp) end)
+	else
 		sort(self.ItemList.data, function(a, b)
 			if not a[self.sort] then return false end
 			if not b[self.sort] then return false end
-			return sortFn(a[self.sort], b[self.sort], comp)
-		end)
-	else
-		sort(self.ItemList.data, function(a, b)
 			return comp(strcmputf8i(a[self.sort], a[self.sort]), 0)
 		end)
 	end

@@ -9,7 +9,9 @@ L["character"] = "Character"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
-L["highestReward"] = "Reward"
+L["highestReward"] = "R"
+L["highestReward_tooltip_title"] = "Highest Reward"
+L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward"
 
 L["OpenVault"] = "View Vault"
 

@@ -36,6 +36,7 @@ GreatVaultListTableCellTextMixin = TableCellTextMixin
 
 function TableCellTextMixin:Populate(rowData, dataIndex)
 	if not dataIndex then return end
+    if not rowData then return end
     self.Text:SetText(self:PopulateFn(rowData, dataIndex))
 end
 
