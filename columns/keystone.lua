@@ -14,7 +14,7 @@ Column.config = {
     ["sortFn"] = function(a, b, comp)
         if type(a) ~= "table" then a = {keystoneLevel = 1} end
         if type(b) ~= "table" then b = {keystoneLevel = 1} end
-        return comp(a.keystoneLevel, b.keystoneLevel)
+        return comp(a.keystoneLevel, b.keystoneLevel) 
     end,
     ['emptyStr'] = "-",
     ["demo"] = function(idx)
