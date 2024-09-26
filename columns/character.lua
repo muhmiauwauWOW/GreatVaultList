@@ -9,6 +9,11 @@ Column.config = {
     ["width"] = 100,
     ["autoWidth"] = true,
     ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true},
+    ["sortFn"] = function(a, b, comp)
+        if type(a) ~= "string" then a = "" end
+        if type(b) ~= "string" then b = "" end
+        return comp(a, b)
+    end,
     ["demo"] = function(idx)
         local names = {"Jesternar", "Mishenani", "Martiners", "Mydraciea", "Monzorust", "Ysedbelly", "Connerrig", "Trauddled", "Groldrold", "Shillenton", "Ravenf", "Reginotta", "Groldrold"};
         return names[idx]

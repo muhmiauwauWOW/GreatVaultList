@@ -9,6 +9,11 @@ Column.config = {
     ["width"] = 20,
     ["padding"] = 0,
     ["header"] = {key = ColumKey, text = "", canSort = true},
+    ["sortFn"] = function(a, b, comp)
+        if type(a) ~= "string" then a = "" end
+        if type(b) ~= "string" then b = "" end
+        return comp(a, b)
+    end,
     ["demo"] = function(idx)
         local classes = _.keys(CLASS_ICON_TCOORDS);
         return string.lower(classes[math.random(#classes)])
