@@ -16,12 +16,8 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = WORLD, width = 40, canSort = true},
+    ["header"] =  { key = ColumKey, text = WORLD, canSort = true},
     ["subCols"] = 3,
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = ColumKey,
-    },
     ["sortFn"] = function(a, b, comp)
         if a[1].level == b[1].level and a[2].level == b[2].level and a[3].level == b[3].level  then
             return comp(a[3].progress, b[3].progress)

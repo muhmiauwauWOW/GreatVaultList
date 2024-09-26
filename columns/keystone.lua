@@ -8,10 +8,6 @@ Column.config = {
     ["width"] = 180,
     ["autoWidth"] = true,
     ["header"] =  { key = ColumKey, text = L[ColumKey], canSort = true},
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = ColumKey,
-    }, 
     ["sortFn"] = function(a, b, comp)
         if type(a) ~= "table" then a = {keystoneLevel = 1} end
         if type(b) ~= "table" then b = {keystoneLevel = 1} end

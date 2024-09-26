@@ -3,15 +3,12 @@ local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
+Column.DBkey = "averageItemLevel"
 Column.config = {
     ["index"] = 3,
     ["width"] = 40,
     ["autoWidth"] = true,
     ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true},
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = "averageItemLevel",
-    },
     ["demo"] = function(idx)
         return math.random(50000, 60000)/100
     end,

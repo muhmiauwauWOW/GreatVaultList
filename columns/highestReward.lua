@@ -16,10 +16,6 @@ Column.config = {
     ["width"] = 40,
     ["autoWidth"] = true,
     ["header"] = { key = ColumKey, text = L[ColumKey], canSort = true },
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = ColumKey,
-    },
     ["tooltip"] = {
         title =   L["highestReward_tooltip_title"],
         desc = L["highestReward_tooltip_desc"]

@@ -11,12 +11,13 @@ local DIFFICULTY_NAMES = {
 
 
 Column.key = ColumKey
+Column.DBkey = ColumKey
 Column.config = {
     ["index"] = 7,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = DUNGEONS, width = 40, canSort = true},
+    ["header"] =  { key = ColumKey, text = DUNGEONS, canSort = true},
     ["subCols"] = 3,
     ["sort"] = {
         ["key"] = ColumKey,

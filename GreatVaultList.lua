@@ -153,6 +153,7 @@ GREATVAULTLIST_COLUMNS = {
 		-- register col
 		table.insert(GreatVaultList.ModuleColumns, {
 			key = self.key,
+			DBkey = self.DBkey or self.key,
 			index = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
 			config = self.config
 		})
@@ -203,7 +204,7 @@ function GreatVaultList:updateData(refresh)
 	local data = {}
 	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
-			return entry[_.get(cEntry, { "config", "sort", "store" })]
+			return entry[_.get(cEntry, { "DBkey" })]
 		end)
 		d.name = key
 		d.enabled = entry.enabled == nil and true or entry.enabled

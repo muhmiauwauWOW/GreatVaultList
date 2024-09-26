@@ -14,21 +14,6 @@ local DIFFICULTY_NAMES = {
 	[DifficultyUtil.ID.PrimaryRaidLFR] = "LFR",
 }
 
-
--- local DifficultySorting = {
--- 	[DifficultyUtil.ID.Raid10Normal] = "NHC",
--- 	[DifficultyUtil.ID.Raid25Normal] = "NHC",
--- 	[DifficultyUtil.ID.Raid10Heroic] = "HC",
--- 	[DifficultyUtil.ID.Raid25Heroic] = "HC",
--- 	[DifficultyUtil.ID.RaidLFR] = "LFR",
--- 	[DifficultyUtil.ID.PrimaryRaidNormal] = "NHC",
--- 	[DifficultyUtil.ID.PrimaryRaidHeroic] = "HC",
--- 	[DifficultyUtil.ID.PrimaryRaidMythic] = "MTH",
--- 	[DifficultyUtil.ID.PrimaryRaidLFR] = "LFR",
--- }
-
-
-
 local PRIMARY_RAIDS = { DifficultyUtil.ID.PrimaryRaidLFR, DifficultyUtil.ID.PrimaryRaidNormal, DifficultyUtil.ID.PrimaryRaidHeroic, DifficultyUtil.ID.PrimaryRaidMythic };
 
 
@@ -38,12 +23,7 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = RAIDS, width = 40, canSort = true},
-    ["subCols"] = 3,
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = ColumKey,
-    },
+    ["header"] =  { key = ColumKey, text = RAIDS, canSort = true},
     ["sortFn"] = function(a, b, comp)
         local a1Level = _.indexOf(PRIMARY_RAIDS, a[1].level)
         local b1Level = _.indexOf(PRIMARY_RAIDS, b[1].level)
