@@ -35,7 +35,7 @@ GreatVaultListUtil.lua
 GreatVaultListData.lua
 GreatVaultListOptions.lua
 
-GreatVaultListFrame.xml
+frames/GreatVaultListFrame.xml
 
 
 
