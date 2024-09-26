@@ -126,13 +126,14 @@ function ListMixin:calcAutoWidthColumns(data, columnConfig, columns)
 	return _.forEach(columnConfig, function(column, key)
 		if not column.autoWidth then return column end
 
+		local index = _.findIndex(columns, function(v) return v == key end)
 		local addSpace = column.header.canSort and 12 or 0
 		self.tframe.Text:SetText(column.header.text)
 		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + addSpace -- addSpace for arrow 
 
 		_.forEach(data, function(entry)
-			self.tframe:Init(self, column.index, columns, columnConfig)
-			self.tframe:Populate(entry, column.index)
+			self.tframe:Init(self, index, columns, columnConfig)
+			self.tframe:Populate(entry, index)
 			local w = math.ceil(self.tframe.Text:GetStringWidth())
 			maxWidth = w > maxWidth and w or maxWidth
 		end)
