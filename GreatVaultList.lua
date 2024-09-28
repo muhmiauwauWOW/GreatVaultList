@@ -72,7 +72,6 @@ end
 
 
 
-
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	GreatVaultList.Data:init()
@@ -89,10 +88,6 @@ function GreatVaultList:OnInitialize()
 	else
 		GreatVaultListFrame:SetScale(self.db.global.Options.scale)
 	end
-end
-
-function GreatVaultList:OnEnable()
-	GreatVaultListOptions:init()
 end
 
 function GreatVaultList:hideWindow()
@@ -128,14 +123,21 @@ function GreatVaultList:slashcommand()
 end
 
 GreatVaultList.ModuleColumns = {}
+local optionsInit = true
+
 
 GREATVAULTLIST_COLUMNS = {
-	OnEnable = function(self)
-		-- init is not found
-		if not GreatVaultList.db.global.Options.modules[self.key] then
-			GreatVaultList.db.global.Options.modules[self.key] = { active = true, index = self.config.index }
+	OnInitialize = function(self)
+		if optionsInit then 
+			GreatVaultListOptions:init()
+			optionsInit = false
 		end
 
+		GreatVaultList.db.global.Options.modules[self.key] =  GreatVaultList.db.global.Options.modules[self.key] or { active = true, index = self.config.index }
+		GreatVaultListOptions:addModule(self)
+	end,
+
+	OnEnable = function(self)
 		-- return if already active
 		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
 
