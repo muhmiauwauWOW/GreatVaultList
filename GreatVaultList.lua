@@ -99,10 +99,6 @@ function GreatVaultList:OnInitialize()
 	end
 end
 
-function GreatVaultList:OnEnable()
-	GreatVaultListOptions:init()
-end
-
 function GreatVaultList:hideWindow()
 	GreatVaultListFrame:Hide()
 end
@@ -136,8 +132,18 @@ function GreatVaultList:slashcommand()
 end
 
 GreatVaultList.ModuleColumns = {}
+local optionsInit = true
 
 GREATVAULTLIST_COLUMNS = {
+	OnInitialize = function(self)
+		if optionsInit then 
+			GreatVaultListOptions:init()
+			optionsInit = false
+		end
+
+		GreatVaultList.db.global.Options.modules[self.key] =  GreatVaultList.db.global.Options.modules[self.key] or { active = true, index = self.config.index }
+		GreatVaultListOptions:addModule(self)
+	end,
 	OnEnable = function(self)
 		if not WeeklyRewardsFrame then
 			WeeklyRewards_LoadUI();

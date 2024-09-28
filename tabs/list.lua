@@ -87,13 +87,11 @@ function ListMixin:SetSortOrder(sortOrder, reverseSort)
 		self.reverseSort =  (self.sort == sortOrder) and not self.reverseSort
 	end
 
-	self.sort = sortOrder > 0 and sortOrder or "name"
+	self.sort = type(sortOrder) == "number" and  sortOrder > 0 and sortOrder or "name"
 		
 	for i, header in ipairs(self.headers) do
 		header:UpdateArrow(self.reverseSort);
 	end
-
-
 
 	local comp = (self.reverseSort) and _.gt or _.lt
 	if type(self.sort) == "number" then
