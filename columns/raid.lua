@@ -19,7 +19,7 @@ local PRIMARY_RAIDS = { DifficultyUtil.ID.PrimaryRaidLFR, DifficultyUtil.ID.Prim
 
 Column.key = ColumKey
 Column.config = {
-    ["index"] = 4,
+    ["defaultIndex"] = 5,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 100,
     ["padding"] = 0, 

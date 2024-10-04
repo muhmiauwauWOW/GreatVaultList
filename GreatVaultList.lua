@@ -83,8 +83,7 @@ end
 
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
-	GreatVaultList.db.global.Options.columnOrder = {}
-
+ 
 	GreatVaultList.Data:init()
 	GreatVaultList:slashcommand()
 	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
@@ -151,16 +150,15 @@ GREATVAULTLIST_COLUMNS = {
 			
 		end
 
-		GreatVaultList.db.global.Options.modules[self.key] =  GreatVaultList.db.global.Options.modules[self.key] or { active = true, index = self.config.index }
-		GreatVaultListOptions:addModule(self)
+		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
+			active = true,
+			index = self.config.defaultIndex,
+			id = self.key
+		}
 	end,
 	OnEnable = function(self)
 		if not WeeklyRewardsFrame then
 			WeeklyRewards_LoadUI();
-		end
-		-- init is not found
-		if not GreatVaultList.db.global.Options.modules[self.key] then
-			GreatVaultList.db.global.Options.modules[self.key] = { active = true, index = self.config.index }
 		end
 
 		-- return if already active
@@ -171,6 +169,7 @@ GREATVAULTLIST_COLUMNS = {
 			key = self.key,
 			DBkey = self.DBkey or self.key,
 			index = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
+			defaultIndex = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
 			config = self.config
 		})
 

@@ -6,6 +6,7 @@ Column.key = ColumKey
 Column.DBkey = "name"
 Column.config = {
     ["index"] = 2,
+    ["defaultIndex"] = 2,
     ["width"] = 100,
     ["autoWidth"] = true,
     ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true},

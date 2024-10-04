@@ -5,6 +5,7 @@ local L, _ = GreatVaultList:GetLibs()
 Column.key = ColumKey
 Column.config = {
     ["index"] = 1,
+    ["defaultIndex"] = 1,
     ["template"] = "GreatVaultListTableCellIconTemplate", 
     ["width"] = 20,
     ["padding"] = 0,
