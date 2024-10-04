@@ -9,6 +9,8 @@ function ColumnOrderSettingsMixin:OnLoad()
 	self.dataTable = {}
 	self.Text:SetPoint("TOP", 0, -5)
 
+	self.entryHeight = 40
+
 	self.pool = CreateFramePool("BUTTON", self.Content, "ColumnOrderSettingsEntryTemplate");
 
 	self.Interval = nil
@@ -41,12 +43,12 @@ function ColumnOrderSettingsMixin:Init(initializer)
 	_.forEach(self.dataTable, function(item, key)
 		print(key, item.index)
 		local frame = self.pool:Acquire();
-		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, i * 19 *-1)
-		frame:SetText(key .. " ".. item.name.. " ".. item.index)
+		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, i * self.entryHeight *-1)
+		frame.Text:SetText(key .. " ".. item.name.. " ".. item.index)
 		frame.Checkbox:SetChecked(item.active)
 		frame.id = item.id
 
-		frame.Arrow:Hide()
+	--	frame.Arrow:Hide()
 		frame:Show()
 		i =  i + 1
 		item.index = i
@@ -110,11 +112,18 @@ function ColumnOrderSettingsMixin:StartDrag(id)
 	end)
 end
 
+
 function ColumnOrderSettingsMixin:StopDrag(id)
+
+	local function round(num, numDecimalPlaces)
+		local mult = 10^(numDecimalPlaces or 0)
+		return math.floor(num * mult + 0.5) / mult
+	  end
+	
 	self.Interval:Cancel()
 
 	local x, y = GetCursorPosition()
-	local position =  math.floor((self.startCursor - y)*2/ 19)
+	local position = round((self.startCursor - y)*2/ self.entryHeight)
 
 
 	-- position
@@ -137,7 +146,7 @@ function ColumnOrderSettingsMixin:StopDrag(id)
 	local i = 0
 	_.forEach(widgets, function(widget, key)
 		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, i * 19 *-1)
+		widget:SetPoint("TOPLEFT", 0, i * self.entryHeight *-1)
 		widget.index = i + 1
 		widget:SetText(i .. " ".. widget.name.. " ".. widget.index)
 		i = i + 1
@@ -162,7 +171,7 @@ function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id)
 	local i = 0
 	_.forEach(widgets, function(widget)
 		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, i * 19 *-1)
+		widget:SetPoint("TOPLEFT", 0, i * self.entryHeight *-1)
 		i = i + 1
 	end)
 end
@@ -192,6 +201,8 @@ end
 
 
 function ColumnOrderSettingsEntryMixin:OnDragStart()
+	self.fs = self:GetFrameStrata()
+	self:SetFrameStrata("DIALOG")
 	print("OnDragStart")
 
 	self:StartMoving()
@@ -202,6 +213,7 @@ end
 
 function ColumnOrderSettingsEntryMixin:OnDragStop()
 	print("OnDragStop")
+	self:SetFrameStrata(self.fs)
 	self:StopMovingOrSizing()
 	self.parent:StopDrag(self.id)
 end
