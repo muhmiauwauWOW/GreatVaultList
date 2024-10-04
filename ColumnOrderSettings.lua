@@ -46,11 +46,12 @@ function ColumnOrderSettingsMixin:Init(initializer)
 		frame.Checkbox:SetChecked(item.active)
 		frame.id = item.id
 
-		frame.index = item.index
 		frame.Arrow:Hide()
 		frame:Show()
 		i =  i + 1
 		item.index = i
+		frame.index = item.index
+		frame.name = item.name
 	end)
 
 
@@ -99,38 +100,69 @@ end
 
 
 function ColumnOrderSettingsMixin:StartDrag(id)
+	local x, y = GetCursorPosition()
+	self.startCursor = y
 	self.Interval = C_Timer.NewTicker(1, function()
 
-		self:UpdatePositionsOnDrag(id)
+	--	self:UpdatePositionsOnDrag(id)
 		print("initval")
 	
 	end)
 end
 
-function ColumnOrderSettingsMixin:StopDrag()
+function ColumnOrderSettingsMixin:StopDrag(id)
 	self.Interval:Cancel()
+
+	local x, y = GetCursorPosition()
+	local position =  math.floor((self.startCursor - y)*2/ 19)
+
+
+	-- position
+	-- print("position",position, find.index )
+
+	
+	local widgets = {}
+	local active =  nil
+	
+	for widget in self.pool:EnumerateActive() do
+		if widget.id ~= id then
+			widgets[widget.index] = widget
+		else
+			active = widget
+		end
+	end
+	local newposition = active.index + position
+	table.insert(widgets, newposition, active)
+
+	local i = 0
+	_.forEach(widgets, function(widget, key)
+		widget:ClearAllPoints()
+		widget:SetPoint("TOPLEFT", 0, i * 19 *-1)
+		widget.index = i + 1
+		widget:SetText(i .. " ".. widget.name.. " ".. widget.index)
+		i = i + 1
+	end)
 end
 
 
 function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id)
-	print("lolo", id)
+	-- print("lolo", id)
 
 	local widgets = {}
 	
 	for widget in self.pool:EnumerateActive() do
 		if widget.id ~= id then
-			print(widget.index, widget.id)
+			-- print(widget.index, widget.id)
 			widgets[widget.index] = widget
 		end
 	end
 
-	-- sort(widgets, function(a, b) return a.index < b.index end)
-
+	DevTool:AddData(self.startCursor - y, "y")
 	DevTool:AddData(widgets)
 	local i = 0
 	_.forEach(widgets, function(widget)
-
-		widget:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, i * 19 *-1)
+		widget:ClearAllPoints()
+		widget:SetPoint("TOPLEFT", 0, i * 19 *-1)
 		i = i + 1
 	end)
 end
@@ -167,15 +199,11 @@ function ColumnOrderSettingsEntryMixin:OnDragStart()
 
 end
 
-function ColumnOrderSettingsEntryMixin:OnReceiveDrag()
-	print("OnReceiveDrag---", self.id )
-	DevTools_Dump(GetCursorInfo())
-end
 
 function ColumnOrderSettingsEntryMixin:OnDragStop()
 	print("OnDragStop")
 	self:StopMovingOrSizing()
-	self.parent:StopDrag()
+	self.parent:StopDrag(self.id)
 end
 
 
