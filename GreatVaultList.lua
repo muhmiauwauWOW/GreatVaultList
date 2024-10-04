@@ -83,6 +83,8 @@ end
 
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
+	GreatVaultList.db.global.Options.columnOrder = {}
+
 	GreatVaultList.Data:init()
 	GreatVaultList:slashcommand()
 	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
@@ -139,6 +141,14 @@ GREATVAULTLIST_COLUMNS = {
 		if optionsInit then 
 			GreatVaultListOptions:init()
 			optionsInit = false
+
+
+			C_Timer.After(3,function ()
+				GreatVaultListOptions:InitColumnOrder()
+				Settings.OpenToCategory(GreatVaultList.OptionsID)
+				
+			end)
+			
 		end
 
 		GreatVaultList.db.global.Options.modules[self.key] =  GreatVaultList.db.global.Options.modules[self.key] or { active = true, index = self.config.index }

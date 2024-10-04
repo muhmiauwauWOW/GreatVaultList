@@ -251,7 +251,9 @@
         "SearchBoxTemplate_OnLoad",
         "LFG_LIST_NO_RESULTS_FOUND",
         "GreatVaultButtonMixin",
-        "PaperDollFrame_UpdateStats"
+        "PaperDollFrame_UpdateStats",
+        "SettingsControlMixin",
+        "CreateFramePool"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

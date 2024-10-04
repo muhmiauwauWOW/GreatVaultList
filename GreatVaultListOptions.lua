@@ -56,32 +56,82 @@ end
 
 
 
-function GreatVaultListOptions:addModule(module)    
-    local cbSetting = Settings.RegisterAddOnSetting(self.category, "moduleactive"..module.key, "active", GreatVaultList.db.global.Options.modules[module.key], "boolean", module.key, true)
-    local sliderSetting = Settings.RegisterAddOnSetting(self.category, "moduleindex"..module.key, "index", GreatVaultList.db.global.Options.modules[module.key], "number", module.key, module.config.index)
 
-    cbSetting:SetValueChangedCallback(function(self)
-        local value = self:GetValue()
+
+
+function GreatVaultListOptions:InitColumnOrder()  
+
+
+
+
+
+
+
+    local default = GreatVaultList.db.global.Options.modules
+
+
+
+
+    GreatVaultList.db.global.Options.columnOrder = _.sortBy(GreatVaultList.db.global.Options.columnOrder, function(a) return a.index end)
+    GreatVaultList.db.global.Options.columnOrder = _.sortBy(GreatVaultList.db.global.Options.columnOrder, function(a) return a.index end)
+
+    DevTool:AddData(default, "default")
+    DevTool:AddData(GreatVaultList.db.global.Options.columnOrder, "opt")
+
+    print("opt", #GreatVaultList.db.global.Options.columnOrder)
+
+    local setting = Settings.RegisterAddOnSetting(self.category, "columnOrder", "columnOrder", GreatVaultList.db.global.Options, "table", "Column Order")
+    setting:SetValueChangedCallback(function(self)  end)
+
+    Settings.CreateColumnOrder(self.category, setting, "Tooltipi")
+
+
+
+    
+    
+
+    
+
+
+
+end
+
+
+
+function GreatVaultListOptions:addModule(module)  
+    GreatVaultList.db.global.Options.columnOrder[module.key] = GreatVaultList.db.global.Options.modules[module.key]
+    GreatVaultList.db.global.Options.columnOrder[module.key]["name"] = module.config.header.text ~="" and module.config.header.text or module.key
+    GreatVaultList.db.global.Options.columnOrder[module.key]["id"] = module.key
+    
+
+    -- local cbSetting = Settings.RegisterAddOnSetting(self.category, "moduleactive"..module.key, "active", GreatVaultList.db.global.Options.modules[module.key], "boolean", module.key, true)
+    -- local sliderSetting = Settings.RegisterAddOnSetting(self.category, "moduleindex"..module.key, "index", GreatVaultList.db.global.Options.modules[module.key], "number", module.key, module.config.index)
+
+    -- cbSetting:SetValueChangedCallback(function(self)
+    --     local value = self:GetValue()
         
-        if value == true then 
-            module:Enable()
-        else 
-            module:Disable()
-        end
+    --     if value == true then 
+    --         module:Enable()
+    --     else 
+    --         module:Disable()
+    --     end
         
-        GreatVaultList:updateData()
-    end)
+    --     GreatVaultList:updateData()
+    -- end)
 
-    sliderSetting:SetValueChangedCallback(function(self)
-        GreatVaultList:updateData()
-    end)
+    -- sliderSetting:SetValueChangedCallback(function(self)
+    --     GreatVaultList:updateData()
+    -- end)
 
-    local options = Settings.CreateSliderOptions(0, 10, 1)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    -- local options = Settings.CreateSliderOptions(0, 10, 1)
+    -- options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
 
-    local initializer = CreateSettingsCheckboxSliderInitializer(
-            cbSetting, string.format(L["opt_module_name"], module.key), L["opt_module_desc"],
-            sliderSetting, options, L["opt_position_name"], L["opt_position_desc"]
-    );
-    self.layout:AddInitializer(initializer);
+    -- local initializer = CreateSettingsCheckboxSliderInitializer(
+    --         cbSetting, string.format(L["opt_module_name"], module.key), L["opt_module_desc"],
+    --         sliderSetting, options, L["opt_position_name"], L["opt_position_desc"]
+    -- );
+    -- self.layout:AddInitializer(initializer);
+
+    
+   
 end

@@ -1,0 +1,86 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+
+    <Script file="ColumnOrderSettings.lua"/>
+
+
+    <Button name="ColumnOrderSettingsEntryTemplate" inherits="GreatVaultListTableHeaderStringTemplate" mixin="ColumnOrderSettingsEntryMixin" virtual="true">
+        <size x="280" y="19"/>
+        <Frames>
+            <CheckButton parentKey="Checkbox" mixin="ColumnOrderSettingsEntryCheckboxMixin" >
+                <Size x="15" y="15"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent" relativePoint="RIGHT" x="-5" y="0"/>
+                </Anchors>
+                <!-- <Scripts>
+                    <OnEnter method="OnEnter"/>
+                    <OnLeave method="OnLeave"/>
+                </Scripts> -->
+                <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+                <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+                <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+                <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+                <Scripts>
+                    <OnClick method="OnClick"/>
+                </Scripts>
+            </CheckButton>
+        </Frames>
+		<Scripts>
+            <OnLoad method="OnLoad"/>
+            <OnDragStart method="OnDragStart"/>
+            <OnDragStop method="OnDragStop"/>   
+        
+		</Scripts>
+	</Button>
+
+
+
+
+
+	<Frame name="ColumnOrderSettingsTemplate" inherits="SettingsListElementTemplate" mixin="ColumnOrderSettingsMixin" virtual="true">
+        <size x="280" y="152"/>
+		<Frames>
+    
+            <Frame parentKey="Content">
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="0"/>
+                    <Anchor point="LEFT" relativeKey="$parent" relativePoint="CENTER" x="-80" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent" relativePoint="CENTER" x="200" y="0"/>
+                    <Anchor point="BOTTOM" relativeKey="$parent" relativePoint="BOTTOM" x="0" y="0"/>
+                </Anchors>
+
+                <Layers>
+                    <!-- <Layer level="BACKGROUND">
+                        <Texture parentKey="Color" setAllPoints="true" >
+                            <Anchors>
+                                <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="0"/>
+                                <Anchor point="LEFT" relativeKey="$parent" relativePoint="CENTER" x="-80" y="0"/>
+                                <Anchor point="RIGHT" relativeKey="$parent" relativePoint="CENTER" x="200" y="0"/>
+                                <Anchor point="BOTTOM" relativeKey="$parent" relativePoint="BOTTOM" x="0" y="0"/>
+                            </Anchors>
+                            <Color r="0" g="0" b="0" a="0.2" />
+                        </Texture>
+                         </Layer> -->
+                    <Layer level="BACKGROUND" textureSubLevel="-6">
+                        <Texture  file="Interface\FrameGeneral\UI-Background-Rock" horizTile="true" vertTile="true" parentKey="Bg">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="0" y="0"/>
+                                <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+
+		</Frames>
+		<Scripts>
+            <OnLoad method="OnLoad"/>
+		</Scripts>
+	</Frame>
+
+
+
+</Ui>
