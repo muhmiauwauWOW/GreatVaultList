@@ -57,7 +57,7 @@ function GreatVaultListMixin:UpdateSize(width)
 
     if not GreatVaultList.db then return  end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7
-    self:SetWidth(self.width)
+    self:SetWidth(self.width + 5)
     self:SetHeight(height)
 end
 

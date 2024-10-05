@@ -5,25 +5,23 @@
 
     <Frame name="GreatVaultListListFrameTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListListMixin" virtual="true">
         <Frames>
-            <Button parentKey="RefreshButton">
+            <Button parentKey="SettingsButton">
                 <Size x="20" y="20"/>
                 <Anchors>
                     <Anchor point="CENTER" relativeKey="$parent" relativePoint="TOPRIGHT" x="-10" y="-22"/>
                 </Anchors>
-                <HighlightTexture parentKey="HighlightTexture" atlas="UI-RefreshButton" setAllPoints="true"  alphaMode="ADD" alpha=".2"/>
-                <NormalTexture parentKey="NormalTexture" atlas="UI-RefreshButton" setAllPoints="true"/>
+                <HighlightTexture parentKey="HighlightTexture" atlas="QuestLog-icon-setting" setAllPoints="true" alphaMode="ADD" alpha=".2"/>
+                <NormalTexture parentKey="NormalTexture" atlas="QuestLog-icon-setting" setAllPoints="true" />
                 <Scripts>
                     <OnClick>
-                        
-                        GreatVaultList.Data:storeAll()
-                        GreatVaultList:updateData(true)
+                        Settings.OpenToCategory(GreatVaultList.OptionsID)
                     </OnClick>
                 </Scripts>
             </Button>
             <Button parentKey="OpenVault" mixin="GreatVaultListListOpenVaultMixin">
                 <Size x="20" y="20"/>
                 <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.RefreshButton" relativePoint="LEFT" x="-5" y="0"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.SettingsButton" relativePoint="LEFT" x="-5" y="0"/>
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">

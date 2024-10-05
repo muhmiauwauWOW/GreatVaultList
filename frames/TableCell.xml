@@ -15,11 +15,19 @@
 
 	<Frame name="GreatVaultListTableCellIconTemplate" mixin="GreatVaultListTableCellIconMixin" virtual="true">
 		<Size x="0" y="16"/>
-		<Layers>
-			<Layer level="BACKGROUND">
-				<Texture parentKey="Icon" atlas="classicon-paladin" />
-			</Layer>
-		</Layers>
+		<Frames>
+			<Frame parentKey="IconFrame">
+				<Size x="15" y="15"/>
+				<Anchors>
+					<Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" x="0" y="0"/>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Icon" atlas="classicon-paladin" useAtlasSize="true" setAllPoints="true" />
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
 	</Frame>
 
 

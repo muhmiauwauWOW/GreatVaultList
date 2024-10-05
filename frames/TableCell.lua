@@ -58,5 +58,5 @@ GreatVaultListTableCellIconMixin = TableCellIconMixin
 function TableCellIconMixin:Populate(rowData, dataIndex)
 	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
 	local icon = fn(rowData, rowData[dataIndex])
-    self.Icon:SetAtlas(icon)
+    self.IconFrame.Icon:SetAtlas(icon)
 end
