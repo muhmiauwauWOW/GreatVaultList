@@ -254,7 +254,9 @@
         "PaperDollFrame_UpdateStats",
         "SettingsControlMixin",
         "CreateFramePool",
-        "SettingsInbound"
+        "SettingsInbound",
+        "PlayerSpellsFrame",
+        "GreatVaultListFrameCloseButton"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
