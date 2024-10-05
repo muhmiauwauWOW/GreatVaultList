@@ -81,6 +81,8 @@ function ListMixin:SetSortOrder(sortOrder, reverseSort)
 	GreatVaultList:assert(_.size(self.columns) > 0, "ListMixin:SetSortOrder", asserttext, "self.columns")
 	GreatVaultList:assert(_.size(self.columnConfig) > 0, "ListMixin:SetSortOrder", asserttext, "self.columnConfig")
 
+	self.sortOrder = sortOrder
+
 	if reverseSort ~= nil then 
 		self.reverseSort = reverseSort
 	else
@@ -272,8 +274,11 @@ function GreatVaultListListFilterMixin:OnShow()
 
 		findItemList.enabled = find.enabled
 		self:GetParent():UpdateFilteredData()
-		self:GetParent().ItemList:RefreshScrollFrame();
 		self:GetParent().Search:Reset();
+
+		local sortOrder = self:GetParent().sortOrder
+		local reverseSort = self:GetParent().reverseSort
+		self:GetParent():SetSortOrder(sortOrder,reverseSort)
 	end
 
 	self:SetupMenu(function(dropdown, rootDescription)
