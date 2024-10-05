@@ -9,13 +9,9 @@ function ColumnOrderSettingsMixin:OnLoad()
 	self.dataTable = {}
 	self.dataObj = {}
 	self.Text:SetPoint("TOP", 0, -5)
-
 	self.entryHeight = 40
-
 	self.pool = CreateFramePool("BUTTON", self.Content, "ColumnOrderSettingsEntryTemplate");
-
 	self.Interval = nil
-
 	self.init = false
 end
 
@@ -24,6 +20,9 @@ function ColumnOrderSettingsMixin:Init(initializer)
 	SettingsControlMixin.Init(self, initializer);
 	if self.init  then return end
 	self.init = true
+
+	local num = #GreatVaultList.ModuleColumns
+	self:SetHeight(num * 40)
 
 	local setting = self:GetSetting();
 	local currentValue = setting:GetValue()
@@ -49,35 +48,61 @@ function ColumnOrderSettingsMixin:Init(initializer)
 
 	local i = 0
 	_.forEach(sorted, function(item, key)
+		i =  i + 1
+		if not self.dataObj[item.id] then return end
 		local frame = self.pool:Acquire();
-		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, i * self.entryHeight *-1)
+		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, (i - 1) * self.entryHeight *-1)
 		frame:SetText(self:getName(self.dataObj[item.id].name, item.id))
 		frame.Checkbox:SetChecked(item.active)
 		frame.data = self.dataObj[item.id]
 		frame.key = item.id
 		frame:Show()
-		i =  i + 1
 		item.index = i
 	end)
 end
 
 function ColumnOrderSettingsMixin:OnSettingValueChanged(setting, value)
 	SettingsControlMixin.OnSettingValueChanged(self, setting, value)
-	
-	for widget in self.pool:EnumerateActive() do
-		local defaultValue = value[widget.key]
-		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, (defaultValue.index - 1) * self.entryHeight *-1)
-		self.dataTable[widget.key].index = defaultValue.index
-	end
+
+
+
+
+
+	_.forEach(value, function(entry, key)
+		self.dataTable[entry.id].index = entry.index
+	end)
+
+	DevTool:AddData(self.dataTable, "self.dataTable")
+
+	self:UpdatePositionsOnDrag(nil, true)
+
+
+
+
+
+
+
+	-- self.dataTable
+	-- local tempWidgets = {}
+	-- for widget in self.pool:EnumerateActive() do
+	-- 	local defaultValue = value[widget.key]
+	-- 	widget.data.index = defaultValue.index
+	-- 	tempWidgets[widget.data.index] = widget
+	-- end
+
+	-- local widgets = {}
+	-- _.forEach(tempWidgets, function(widget, key)
+	-- 	table.insert(widgets, widget)
+	-- end)
+
+	-- local i = 0
+	-- _.forEach(widgets, function(widget, key)
+	-- 	i = i + 1
+	-- 	widget:ClearAllPoints()
+	-- 	widget:SetPoint("TOPLEFT", 0, (i - 1) * self.entryHeight *-1)
+	-- 	self.dataTable[widget.data.id].index = widget.data.index
+	-- end)
 end
-
-
-
-
-
-
-
 
 function ColumnOrderSettingsMixin:getName(name, id)
 	return string.format("%s (%s)", name, id)
@@ -87,39 +112,42 @@ function ColumnOrderSettingsMixin:Release()
 	SettingsControlMixin.Release(self);
 end
 
-
-
 function ColumnOrderSettingsMixin:StartDrag(id)
 	local x, y = GetCursorPosition()
 	self.startCursor = y
-	-- self.Interval = C_Timer.NewTicker(1, function()
+	self.Interval = C_Timer.NewTicker(.1, function()
+		self:UpdatePositionsOnDrag(id)
+	end)
+end
 
-	-- --	self:UpdatePositionsOnDrag(id)
-	-- 	--print("initval")
-	
-	-- end)
+function ColumnOrderSettingsMixin:StopDrag(id)
+	self.Interval:Cancel()
+	self:UpdatePositionsOnDrag(id, true)
 end
 
 
-function ColumnOrderSettingsMixin:StopDrag(id)
+function ColumnOrderSettingsMixin:getPositionOffset()
+	if not self.startCursor then return 0 end
 
 	local function round(num, numDecimalPlaces)
 		local mult = 10^(numDecimalPlaces or 0)
 		return math.floor(num * mult + 0.5) / mult
-	  end
-	
-	-- self.Interval:Cancel()
+	end
 
+	local scale = SettingsPanel:GetScale()
 	local x, y = GetCursorPosition()
-	local position = round((self.startCursor - y)*2/ self.entryHeight)
+	local position = round((((self.startCursor - y) * 1.6) / scale) / self.entryHeight)
 
+	return position
+end
 
+function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id, finish)
 	local tempWidgets = {}
 	local activeWidget =  nil
 	
 	for widget in self.pool:EnumerateActive() do
 		if widget.data.id ~= id then
-			tempWidgets[widget.data.index] = widget
+			tempWidgets[self.dataTable[widget.data.id].index] = widget
 		else
 			activeWidget = widget
 		end
@@ -130,37 +158,33 @@ function ColumnOrderSettingsMixin:StopDrag(id)
 		table.insert(widgets, widget)
 	end)
 
-	if not activeWidget then return end
-	local newposition = activeWidget.data.index + position
-	table.insert(widgets, newposition, activeWidget)
+	if activeWidget then
+		local newposition = activeWidget.data.index + self:getPositionOffset()
+		table.insert(widgets, newposition, activeWidget)
+	end
+
 
 	local i = 0
 	_.forEach(widgets, function(widget, key)
+		i = i + 1
+		if id and widget.data.id == id and not finish then return end
 		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, i * self.entryHeight *-1)
-		widget.data.index = i + 1
+		widget:SetPoint("TOPLEFT", 0, (i-1) * self.entryHeight *-1)
+
+		if not id then return end
+		widget.data.index = i
 		widget:SetText(self:getName(widget.data.name, widget.data.id))
 		self.dataTable[widget.key].index = widget.data.index
-		i = i + 1
 	end)
-end
 
 
-function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id)
-		local widgets = {}
-	
-	for widget in self.pool:EnumerateActive() do
-		if widget.id ~= id then
-			widgets[widget.index] = widget
-		end
-	end
+	if not finish or not id then return end 
 
-	local i = 0
-	_.forEach(widgets, function(widget)
-		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, i * self.entryHeight *-1)
-		i = i + 1
-	end)
+
+
+	local initializer = self:GetElementData();
+	local setting = initializer:GetSetting();
+	setting:SetValue(self.dataTable);
 end
 
 

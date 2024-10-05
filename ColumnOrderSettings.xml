@@ -68,9 +68,8 @@
 
 
 	<Frame name="ColumnOrderSettingsTemplate" inherits="SettingsListElementTemplate" mixin="ColumnOrderSettingsMixin" virtual="true">
-        <size x="280" y="320"/>
+        <size x="280" y=""/>
 		<Frames>
-    
             <Frame parentKey="Content">
                 <Anchors>
                     <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="0"/>
@@ -87,8 +86,6 @@
                     </Layer>
                 </Layers>
             </Frame>
-
-
 		</Frames>
 		<Scripts>
             <OnLoad method="OnLoad"/>

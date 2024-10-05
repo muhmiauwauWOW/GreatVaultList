@@ -51,8 +51,7 @@ function GreatVaultListOptions:init()
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
     Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
 
-    self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
-end
+ end
 
 
 
@@ -60,6 +59,8 @@ end
 
 
 function GreatVaultListOptions:InitColumnOrder()
+    self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
+
     local default = {}
      _.forEach(GreatVaultList.ModuleColumns, function(entry, key)
         default[entry.key] = { 
