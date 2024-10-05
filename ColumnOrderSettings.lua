@@ -7,7 +7,6 @@ ColumnOrderSettingsMixin = CreateFromMixins(SettingsControlMixin);
 function ColumnOrderSettingsMixin:OnLoad()
 	SettingsControlMixin.OnLoad(self);
 	self.dataTable = {}
-	self.dataObj = {}
 	self.Text:SetPoint("TOP", 0, -5)
 
 	self.entryHeight = 40
@@ -15,72 +14,68 @@ function ColumnOrderSettingsMixin:OnLoad()
 	self.pool = CreateFramePool("BUTTON", self.Content, "ColumnOrderSettingsEntryTemplate");
 
 	self.Interval = nil
-
-	self.init = false
 end
 
+function ColumnOrderSettingsMixin:SetValueFn(key, value)
+	if not self.dataTable then return end
+	self.dataTable[key] = value
+	self:GetSetting():SetValue(self.dataTable)
+end
 
 function ColumnOrderSettingsMixin:Init(initializer)
 	SettingsControlMixin.Init(self, initializer);
-	if self.init  then return end
-	self.init = true
-
 	local setting = self:GetSetting();
 	local currentValue = setting:GetValue()
 
-	self.dataObj = {}
-	_.forEach(GreatVaultList.ModuleColumns, function(entry, key)
-		self.dataObj[entry.key] = { 
-			active = true,
-			index = entry.config.defaultIndex, 
-			defaultIndex = entry.config.defaultIndex, 
-			id = entry.key,
-			name =  entry.config.header.text
-		}
-    end)
-
 	self.dataTable = currentValue
 
-	if not self.dataTable then return end
 	self.pool:ReleaseAll();
-	
-	local sorted  = _.sortBy(CopyTable(self.dataTable), function(a) return a.index end)
-	sort(sorted, function(a,b) return a.index< b.index end)
+
+	if not self.dataTable then return end
+
+
+    -- DevTool:AddData(self.dataTable, "(self.dataTable,")
+	-- self.dataTable = _.sortBy(self.dataTable, function(a) return a.index end)
+	-- DevTool:AddData(self.dataTable, "(self.dataTable,")
 
 	local i = 0
-	_.forEach(sorted, function(item, key)
+
+	_.forEach(self.dataTable, function(item, key)
+		print(key, item.index)
 		local frame = self.pool:Acquire();
 		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, i * self.entryHeight *-1)
-		frame:SetText(self:getName(self.dataObj[item.id].name, item.id))
+		frame.Text:SetText(key .. " ".. item.name.. " ".. item.index)
 		frame.Checkbox:SetChecked(item.active)
-		frame.data = self.dataObj[item.id]
-		frame.key = item.id
+		frame.id = item.id
+
+	--	frame.Arrow:Hide()
 		frame:Show()
 		i =  i + 1
 		item.index = i
+		frame.index = item.index
+		frame.name = item.name
 	end)
+
+
+
+	
+
+	-- self.AtlasName:SetText(self.dataTable.atlas)
+    -- self.Atlas.NormalTexture:SetAtlas(self.dataTable.atlas)
+	-- self.Atlas.HighlightTexture:SetAtlas(self.dataTable.atlas)
+
+	-- self.X:SetText(self.dataTable.x)
+	-- self.Y:SetText(self.dataTable.y)
+
 end
 
 function ColumnOrderSettingsMixin:OnSettingValueChanged(setting, value)
 	SettingsControlMixin.OnSettingValueChanged(self, setting, value)
-	
-	for widget in self.pool:EnumerateActive() do
-		local defaultValue = value[widget.key]
-		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, (defaultValue.index - 1) * self.entryHeight *-1)
-		self.dataTable[widget.key].index = defaultValue.index
-	end
-end
-
-
-
-
-
-
-
-
-function ColumnOrderSettingsMixin:getName(name, id)
-	return string.format("%s (%s)", name, id)
+	-- self.AtlasName:SetText(value.atlas)
+	-- self.Atlas.NormalTexture:SetAtlas(value.atlas)
+	-- self.Atlas.HighlightTexture:SetAtlas(value.atlas)
+	-- self.X:SetText(value.x)
+	-- self.Y:SetText(value.y)
 end
 
 function ColumnOrderSettingsMixin:Release()
@@ -89,15 +84,32 @@ end
 
 
 
+function ColumnOrderSettingsMixin:ChangeEntry(id, key, value )
+	local find = _.find(self.dataTable, function(entry)
+		return entry.id == id
+	end)
+	if not find then return end
+	find[key] = value
+
+	print(id, key, value)
+	DevTool:AddData(self.dataTable, "ChangeEntry")
+
+end
+
+function ColumnOrderSettingsMixin:OnReceiveDrag()
+	print("OnReceiveDrag parent")
+end
+
+
 function ColumnOrderSettingsMixin:StartDrag(id)
 	local x, y = GetCursorPosition()
 	self.startCursor = y
-	-- self.Interval = C_Timer.NewTicker(1, function()
+	self.Interval = C_Timer.NewTicker(1, function()
 
-	-- --	self:UpdatePositionsOnDrag(id)
-	-- 	--print("initval")
+	--	self:UpdatePositionsOnDrag(id)
+		print("initval")
 	
-	-- end)
+	end)
 end
 
 
@@ -108,53 +120,54 @@ function ColumnOrderSettingsMixin:StopDrag(id)
 		return math.floor(num * mult + 0.5) / mult
 	  end
 	
-	-- self.Interval:Cancel()
+	self.Interval:Cancel()
 
 	local x, y = GetCursorPosition()
 	local position = round((self.startCursor - y)*2/ self.entryHeight)
 
 
-	local tempWidgets = {}
-	local activeWidget =  nil
+	-- position
+	-- print("position",position, find.index )
+
+	
+	local widgets = {}
+	local active =  nil
 	
 	for widget in self.pool:EnumerateActive() do
-		if widget.data.id ~= id then
-			tempWidgets[widget.data.index] = widget
+		if widget.id ~= id then
+			widgets[widget.index] = widget
 		else
-			activeWidget = widget
+			active = widget
 		end
 	end
-
-	local widgets = {}
-	_.forEach(tempWidgets, function(widget, key)
-		table.insert(widgets, widget)
-	end)
-
-	if not activeWidget then return end
-	local newposition = activeWidget.data.index + position
-	table.insert(widgets, newposition, activeWidget)
+	local newposition = active.index + position
+	table.insert(widgets, newposition, active)
 
 	local i = 0
 	_.forEach(widgets, function(widget, key)
 		widget:ClearAllPoints()
 		widget:SetPoint("TOPLEFT", 0, i * self.entryHeight *-1)
-		widget.data.index = i + 1
-		widget:SetText(self:getName(widget.data.name, widget.data.id))
-		self.dataTable[widget.key].index = widget.data.index
+		widget.index = i + 1
+		widget:SetText(i .. " ".. widget.name.. " ".. widget.index)
 		i = i + 1
 	end)
 end
 
 
 function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id)
-		local widgets = {}
+	-- print("lolo", id)
+
+	local widgets = {}
 	
 	for widget in self.pool:EnumerateActive() do
 		if widget.id ~= id then
+			-- print(widget.index, widget.id)
 			widgets[widget.index] = widget
 		end
 	end
 
+	DevTool:AddData(self.startCursor - y, "y")
+	DevTool:AddData(widgets)
 	local i = 0
 	_.forEach(widgets, function(widget)
 		widget:ClearAllPoints()
@@ -181,7 +194,8 @@ function ColumnOrderSettingsEntryMixin:OnLoad()
 end
 
 function ColumnOrderSettingsEntryMixin:SetState(state)
-	self.data.active = state
+	print("i am active?", state)
+	self.parent:ChangeEntry(self.id, "active", state )
 end
 
 
@@ -189,17 +203,19 @@ end
 function ColumnOrderSettingsEntryMixin:OnDragStart()
 	self.fs = self:GetFrameStrata()
 	self:SetFrameStrata("DIALOG")
+	print("OnDragStart")
 
 	self:StartMoving()
-	self.parent:StartDrag(self.data.id)
+	self.parent:StartDrag(self.id)
 
 end
 
 
 function ColumnOrderSettingsEntryMixin:OnDragStop()
+	print("OnDragStop")
 	self:SetFrameStrata(self.fs)
 	self:StopMovingOrSizing()
-	self.parent:StopDrag(self.data.id)
+	self.parent:StopDrag(self.id)
 end
 
 

@@ -14,8 +14,11 @@
 		</ButtonText>
         <NormalFont style="GameFontHighlightMedium"/>
         <Layers>
-            <Layer level="ARTWORK">
-                <Texture >
+            <Layer level="DIALOG">
+              <Texture parentKey="Color">
+                    <Color r=".2" g=".2" b=".2" a="1" />
+                </Texture>	
+                 <Texture>
                     <size x="1" y="40"/>
                      <Anchors>
                         <Anchor point="RIGHT"  x="-35" y="0"/>
@@ -29,7 +32,7 @@
                     </Anchors>
                 </Texture>	
              </Layer>
-            <Layer level="BACKGROUND">
+            <Layer level="ARTWORK">
                 <Texture parentKey="Color">
                     <Color r=".2" g=".2" b=".2" a="1" />
                 </Texture>							
