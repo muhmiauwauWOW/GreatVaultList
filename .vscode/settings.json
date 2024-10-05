@@ -253,7 +253,8 @@
         "GreatVaultButtonMixin",
         "PaperDollFrame_UpdateStats",
         "SettingsControlMixin",
-        "CreateFramePool"
+        "CreateFramePool",
+        "SettingsInbound"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

@@ -21,22 +21,13 @@ function ColumnOrderSettingsMixin:Init(initializer)
 	if self.init  then return end
 	self.init = true
 
-	local num = #GreatVaultList.ModuleColumns
+	self.options = initializer:GetOptions();
+
+	local num = _.size(self.options)
 	self:SetHeight(num * 40)
 
 	local setting = self:GetSetting();
 	local currentValue = setting:GetValue()
-
-	self.dataObj = {}
-	_.forEach(GreatVaultList.ModuleColumns, function(entry, key)
-		self.dataObj[entry.key] = { 
-			active = true,
-			index = entry.config.defaultIndex, 
-			defaultIndex = entry.config.defaultIndex, 
-			id = entry.key,
-			name =  entry.config.header.text
-		}
-    end)
 
 	self.dataTable = currentValue
 
@@ -44,68 +35,33 @@ function ColumnOrderSettingsMixin:Init(initializer)
 	self.pool:ReleaseAll();
 	
 	local sorted  = _.sortBy(CopyTable(self.dataTable), function(a) return a.index end)
-	sort(sorted, function(a,b) return a.index< b.index end)
+	sort(sorted, function(a,b) return a.index < b.index end)
 
 	local i = 0
 	_.forEach(sorted, function(item, key)
 		i =  i + 1
-		if not self.dataObj[item.id] then return end
 		local frame = self.pool:Acquire();
-		frame:SetPoint("TOPLEFT", self.Content, "TOPLEFT", 0, (i - 1) * self.entryHeight *-1)
-		frame:SetText(self:getName(self.dataObj[item.id].name, item.id))
+		self:frameSetPoint(frame, i)
+		frame:SetText(self:getName(self.options[item.id]))
 		frame.Checkbox:SetChecked(item.active)
-		frame.data = self.dataObj[item.id]
 		frame.key = item.id
 		frame:Show()
-		item.index = i
 	end)
 end
 
 function ColumnOrderSettingsMixin:OnSettingValueChanged(setting, value)
 	SettingsControlMixin.OnSettingValueChanged(self, setting, value)
 
-
-
-
-
 	_.forEach(value, function(entry, key)
-		self.dataTable[entry.id].index = entry.index
+		self.dataTable[entry.id] = CopyTable(entry)
 	end)
 
-	DevTool:AddData(self.dataTable, "self.dataTable")
-
 	self:UpdatePositionsOnDrag(nil, true)
-
-
-
-
-
-
-
-	-- self.dataTable
-	-- local tempWidgets = {}
-	-- for widget in self.pool:EnumerateActive() do
-	-- 	local defaultValue = value[widget.key]
-	-- 	widget.data.index = defaultValue.index
-	-- 	tempWidgets[widget.data.index] = widget
-	-- end
-
-	-- local widgets = {}
-	-- _.forEach(tempWidgets, function(widget, key)
-	-- 	table.insert(widgets, widget)
-	-- end)
-
-	-- local i = 0
-	-- _.forEach(widgets, function(widget, key)
-	-- 	i = i + 1
-	-- 	widget:ClearAllPoints()
-	-- 	widget:SetPoint("TOPLEFT", 0, (i - 1) * self.entryHeight *-1)
-	-- 	self.dataTable[widget.data.id].index = widget.data.index
-	-- end)
 end
 
-function ColumnOrderSettingsMixin:getName(name, id)
-	return string.format("%s (%s)", name, id)
+function ColumnOrderSettingsMixin:getName(entry)
+	if not entry then return "" end
+	return string.format("%s (%s)", entry.name, entry.id)
 end
 
 function ColumnOrderSettingsMixin:Release()
@@ -146,8 +102,9 @@ function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id, finish)
 	local activeWidget =  nil
 	
 	for widget in self.pool:EnumerateActive() do
-		if widget.data.id ~= id then
-			tempWidgets[self.dataTable[widget.data.id].index] = widget
+		widget.Checkbox:EvaluateState(self.dataTable[widget.key].active)
+		if widget.key ~= id then
+			tempWidgets[self.dataTable[widget.key].index] = widget
 		else
 			activeWidget = widget
 		end
@@ -159,33 +116,44 @@ function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id, finish)
 	end)
 
 	if activeWidget then
-		local newposition = activeWidget.data.index + self:getPositionOffset()
+		local newposition = self.dataTable[activeWidget.key].index + self:getPositionOffset()
 		table.insert(widgets, newposition, activeWidget)
 	end
-
 
 	local i = 0
 	_.forEach(widgets, function(widget, key)
 		i = i + 1
-		if id and widget.data.id == id and not finish then return end
-		widget:ClearAllPoints()
-		widget:SetPoint("TOPLEFT", 0, (i-1) * self.entryHeight *-1)
-
+		if id and widget.key == id and not finish then return end
+		self:frameSetPoint(widget, i)
 		if not id then return end
-		widget.data.index = i
-		widget:SetText(self:getName(widget.data.name, widget.data.id))
-		self.dataTable[widget.key].index = widget.data.index
+		self.dataTable[widget.key].index = i
 	end)
 
 
 	if not finish or not id then return end 
 
+	self:Save()
+end
+
+function ColumnOrderSettingsMixin:frameSetPoint(frame, position)
+	frame:ClearAllPoints()
+	frame:SetPoint("TOPLEFT", 0, (position - 1) * self.entryHeight * -1)
+end
 
 
+
+function ColumnOrderSettingsMixin:SetActiveState(key, state)
+	self.dataTable[key].active = state
+	self:Save()
+end
+
+
+function ColumnOrderSettingsMixin:Save()
 	local initializer = self:GetElementData();
 	local setting = initializer:GetSetting();
 	setting:SetValue(self.dataTable);
 end
+
 
 
 
@@ -200,12 +168,10 @@ function ColumnOrderSettingsEntryMixin:OnLoad()
 	self:SetMovable(true)
     self:EnableMouse(true)
 	self:RegisterForDrag("LeftButton")
-
-	
 end
 
 function ColumnOrderSettingsEntryMixin:SetState(state)
-	self.data.active = state
+	self.parent:SetActiveState(self.key, state)
 end
 
 
@@ -215,7 +181,7 @@ function ColumnOrderSettingsEntryMixin:OnDragStart()
 	self:SetFrameStrata("DIALOG")
 
 	self:StartMoving()
-	self.parent:StartDrag(self.data.id)
+	self.parent:StartDrag(self.key)
 
 end
 
@@ -223,30 +189,27 @@ end
 function ColumnOrderSettingsEntryMixin:OnDragStop()
 	self:SetFrameStrata(self.fs)
 	self:StopMovingOrSizing()
-	self.parent:StopDrag(self.data.id)
+	self.parent:StopDrag(self.key)
 end
-
-
-
-
-
-
 
 
 
 ColumnOrderSettingsEntryCheckboxMixin = {}
 
 function ColumnOrderSettingsEntryCheckboxMixin:OnClick()
-	print("click", self:GetChecked())
-
 	self:GetParent():SetState(self:GetChecked())
+end
+
+
+function ColumnOrderSettingsEntryCheckboxMixin:EvaluateState(state)
+	self:SetChecked(state)
 end
 
 
 
 
-function Settings.CreateColumnOrder(category, setting, tooltip)
-    local initializer = Settings.CreateControlInitializer("ColumnOrderSettingsTemplate", setting, nil, tooltip);
+function Settings.CreateColumnOrder(category, setting, options, tooltip)
+    local initializer = Settings.CreateControlInitializer("ColumnOrderSettingsTemplate", setting, options, tooltip);
     local layout = SettingsPanel:GetLayout(category);
 	layout:AddInitializer(initializer);
     return initializer;

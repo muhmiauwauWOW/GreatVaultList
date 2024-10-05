@@ -62,23 +62,22 @@ function GreatVaultListOptions:InitColumnOrder()
     self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
 
     local default = {}
-     _.forEach(GreatVaultList.ModuleColumns, function(entry, key)
-        default[entry.key] = { 
-			active = true,
-			index = entry.config.defaultIndex,
-            id = entry.key
+    local options = {}
+     _.forEach(GreatVaultList.RegisterdModules, function(entry, key)
+        default[key] = { 
+			active = entry.active,
+			index = entry.index,
+            id = entry.id
+		}
+
+        options[key] = { 
+            id = entry.id,
+            name = entry.name
 		}
     end)
-
+    
     local setting = Settings.RegisterAddOnSetting(self.category, "modules", "modules", GreatVaultList.db.global.Options, "table", "Column Order", default)
     setting:SetValueChangedCallback(function(self)  end)
 
-    Settings.CreateColumnOrder(self.category, setting, "")
-end
-
-
-
-function GreatVaultListOptions:addModule(module)  
-    -- GreatVaultList.db.global.Options.modules[module.key]["name"] = module.config.header.text
-    -- GreatVaultList.db.global.Options.modules[module.key]["id"] = module.key
+    Settings.CreateColumnOrder(self.category, setting,  options,  "")
 end

@@ -132,7 +132,9 @@ function GreatVaultList:slashcommand()
 	end
 end
 
+GreatVaultList.RegisterdModules = {}
 GreatVaultList.ModuleColumns = {}
+
 local optionsInit = true
 
 GREATVAULTLIST_COLUMNS = {
@@ -141,14 +143,19 @@ GREATVAULTLIST_COLUMNS = {
 			GreatVaultListOptions:init()
 			optionsInit = false
 
-
 			C_Timer.After(3,function ()
 				GreatVaultListOptions:InitColumnOrder()
-				Settings.OpenToCategory(GreatVaultList.OptionsID)
+				-- Settings.OpenToCategory(GreatVaultList.OptionsID)
 				
 			end)
-			
 		end
+
+		GreatVaultList.RegisterdModules[self.key] = {
+			active = true,
+			index = self.config.defaultIndex,
+            id = self.key,
+            name = self.config.header.text or ""
+		}
 
 		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
 			active = true,

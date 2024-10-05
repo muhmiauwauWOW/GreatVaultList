@@ -68,7 +68,7 @@
 
 
 	<Frame name="ColumnOrderSettingsTemplate" inherits="SettingsListElementTemplate" mixin="ColumnOrderSettingsMixin" virtual="true">
-        <size x="280" y=""/>
+        <size x="280" y="500"/>
 		<Frames>
             <Frame parentKey="Content">
                 <Anchors>
