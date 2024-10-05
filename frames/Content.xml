@@ -4,13 +4,13 @@
     <Frame name="GreatVaultListContentTemplate" virtual="true">
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-20"/>
-			<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-15" y="0"/>
+			<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOMRIGHT" x="-20" y="0"/>
 		</Anchors>
 		<Frames>
 			<Frame parentKey="ItemList" inherits="GreatVaultListItemListTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" y="-40"/>
-					<Anchor point="BOTTOMRIGHT" x="18" y="0"/>
+					<Anchor point="BOTTOMRIGHT" x="20" y="0"/>
 				</Anchors>
 			</Frame>
 		</Frames>
