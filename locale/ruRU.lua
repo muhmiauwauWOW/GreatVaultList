@@ -14,8 +14,8 @@ L["OpenVault"] = "Открыть Хранилище"
 L["opt_lines_name"] = "Линии"
 L["opt_lines_desc"] = "Количество строк для отображения"
 
-L["opt_module_name"] = "Модуль %s"
-L["opt_module_desc"] = "Активировать или деактивировать этот модуль"
+L["opt_column_order_name"] = "Порядок столбцов"
+L["opt_column_order_desc"] = "Перетащите элементы, чтобы изменить порядок столбцов"
 
 L["opt_position_name"] = "Позиция"
 L["opt_position_desc"] = "Изменить положение столбца этого модуля"

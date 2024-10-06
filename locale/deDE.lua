@@ -17,8 +17,9 @@ L["opt_lines_desc"] = "Anzahl der anzuzeigenden Zeilen"
 L["opt_scale_name"] = "Skalierung"
 L["opt_scale_desc"] = "Skalierung des Fensters"
 
-L["opt_module_name"] = "%s Modul"
-L["opt_module_desc"] = "Aktivieren oder Deaktivieren dieses Moduls"
+L["opt_column_order_name"] = "Spaltenreihenfolge"
+L["opt_column_order_desc"] = "Ziehen Sie Elemente per Drag & Drop, um die Reihenfolge der Spalten zu ändern"
+
 
 L["opt_position_name"] = "Position"
 L["opt_position_desc"] = "Ändern der Position der Spalte dieses Moduls"

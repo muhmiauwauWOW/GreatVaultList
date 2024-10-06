@@ -102,6 +102,7 @@ function ColumnOrderSettingsMixin:UpdatePositionsOnDrag(id, finish)
 	local activeWidget =  nil
 	
 	for widget in self.pool:EnumerateActive() do
+		if not self.dataTable[widget.key] then return end
 		widget.Checkbox:EvaluateState(self.dataTable[widget.key].active)
 		if widget.key ~= id then
 			tempWidgets[self.dataTable[widget.key].index] = widget

@@ -51,14 +51,9 @@ function GreatVaultListOptions:init()
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
     Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
 
- end
 
 
 
-
-
-
-function GreatVaultListOptions:InitColumnOrder()
     self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
 
     local default = {}
@@ -76,8 +71,6 @@ function GreatVaultListOptions:InitColumnOrder()
 		}
     end)
     
-    local setting = Settings.RegisterAddOnSetting(self.category, "modules", "modules", GreatVaultList.db.global.Options, "table", "Column Order", default)
-    setting:SetValueChangedCallback(function(self)  end)
-
-    Settings.CreateColumnOrder(self.category, setting,  options,  "")
+    local setting = Settings.RegisterAddOnSetting(self.category, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
+    Settings.CreateColumnOrder(self.category, setting,  options,  L["opt_column_order_desc"])
 end

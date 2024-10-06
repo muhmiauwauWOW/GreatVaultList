@@ -17,8 +17,8 @@ L["opt_lines_desc"] = "Quantidade de linhas a exibir"
 L["opt_scale_name"] = "Escala"
 L["opt_scale_desc"] = "Escala da janela"
 
-L["opt_module_name"] = "Módulo %s"
-L["opt_module_desc"] = "Ativar ou desativar este módulo"
+L["opt_column_order_name"] = "Ordem das colunas"
+L["opt_column_order_desc"] = "Arraste e solte itens para alterar a ordem das colunas"
 
 L["opt_position_name"] = "Posição"
 L["opt_position_desc"] = "Alterar a posição da coluna deste módulo"

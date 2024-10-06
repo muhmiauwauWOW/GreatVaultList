@@ -18,8 +18,8 @@ L["opt_lines_desc"] = "Numero di righe da mostrare"
 L["opt_scale_name"] = "Scala"
 L["opt_scale_desc"] = "Scala della finestra"
 
-L["opt_module_name"] = "Modulo %s"
-L["opt_module_desc"] = "Attiva o disattiva questo modulo"
+L["opt_column_order_name"] = "Ordine delle colonne"
+L["opt_column_order_desc"] = "Trascina gli elementi per cambiare l'ordine delle colonne"
 
 L["opt_position_name"] = "Posizione"
 L["opt_position_desc"] = "Cambia la posizione della colonna di questo modulo"

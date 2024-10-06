@@ -17,8 +17,8 @@ L["opt_lines_desc"] = "표시할 줄 수"
 L["opt_scale_name"] = "크기"
 L["opt_scale_desc"] = "창 크기"
 
-L["opt_module_name"] = "%s 모듈"
-L["opt_module_desc"] = "이 모듈 활성화 또는 비활성화"
+L["opt_column_order_name"] = "열 순서"
+L["opt_column_order_desc"] = "열 순서를 변경하려면 항목을 끌어다 놓으세요."
 
 L["opt_position_name"] = "위치"
 L["opt_position_desc"] = "이 모듈의 열 위치 변경"

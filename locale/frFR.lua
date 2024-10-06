@@ -17,8 +17,8 @@ L["opt_lines_desc"] = "Nombre de lignes à afficher"
 L["opt_scale_name"] = "Échelle"
 L["opt_scale_desc"] = "Échelle de la fenêtre"
 
-L["opt_module_name"] = "Module %s"
-L["opt_module_desc"] = "Activer ou désactiver ce module"
+L["opt_column_order_name"] = "Ordre des colonnes"
+L["opt_column_order_desc"] = "Glisser-déposer des éléments pour modifier l'ordre des colonnes"
 
 L["opt_position_name"] = "Position"
 L["opt_position_desc"] = "Changer la position de la colonne de ce module"

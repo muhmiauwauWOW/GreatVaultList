@@ -17,8 +17,8 @@ L["opt_lines_desc"] = "显示的行数"
 L["opt_scale_name"] = "缩放"
 L["opt_scale_desc"] = "窗口缩放"
 
-L["opt_module_name"] = "%s 模块"
-L["opt_module_desc"] = "启用或禁用此模块"
+L["opt_column_order_name"] = "列顺序"
+L["opt_column_order_desc"] = "拖放项目以更改列的顺序"
 
 L["opt_position_name"] = "位置"
 L["opt_position_desc"] = "更改此模块列的位置"

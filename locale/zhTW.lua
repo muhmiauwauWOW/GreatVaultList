@@ -17,8 +17,8 @@ L["opt_lines_desc"] = "顯示的行數"
 L["opt_scale_name"] = "縮放"
 L["opt_scale_desc"] = "視窗縮放"
 
-L["opt_module_name"] = "%s 模組"
-L["opt_module_desc"] = "啟用或停用此模組"
+L["opt_column_order_name"] = "欄位順序"
+L["opt_column_order_desc"] = "拖放項目以變更欄位的順序"
 
 L["opt_position_name"] = "位置"
 L["opt_position_desc"] = "變更此模組欄的位置"

@@ -137,20 +137,10 @@ end
 GreatVaultList.RegisterdModules = {}
 GreatVaultList.ModuleColumns = {}
 
-local optionsInit = true
+GreatVaultList.DataCheck = nil
 
 GREATVAULTLIST_COLUMNS = {
 	OnInitialize = function(self)
-		if optionsInit then 
-			GreatVaultListOptions:init()
-			optionsInit = false
-
-			C_Timer.After(3,function ()
-				GreatVaultListOptions:InitColumnOrder()
-				-- Settings.OpenToCategory(GreatVaultList.OptionsID)
-				
-			end)
-		end
 
 		GreatVaultList.RegisterdModules[self.key] = {
 			active = true,
@@ -164,6 +154,13 @@ GREATVAULTLIST_COLUMNS = {
 			index = self.config.defaultIndex,
 			id = self.key
 		}
+
+		if GreatVaultList.DataCheck then GreatVaultList.DataCheck:Cancel() end
+
+		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
+			GreatVaultList.DataCheck:Cancel()
+			GreatVaultListOptions:init()
+		end)
 	end,
 	OnEnable = function(self)
 		if not WeeklyRewardsFrame then
