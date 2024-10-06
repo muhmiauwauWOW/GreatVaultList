@@ -141,6 +141,9 @@ GreatVaultList.DataCheck = nil
 
 GREATVAULTLIST_COLUMNS = {
 	OnInitialize = function(self)
+		if not WeeklyRewardsFrame then
+			WeeklyRewards_LoadUI();
+		end
 
 		GreatVaultList.RegisterdModules[self.key] = {
 			active = true,
@@ -160,14 +163,11 @@ GREATVAULTLIST_COLUMNS = {
 		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
 			GreatVaultList.DataCheck:Cancel()
 			GreatVaultListOptions:init()
+			
+	
 		end)
 	end,
 	OnEnable = function(self)
-		if not WeeklyRewardsFrame then
-			WeeklyRewards_LoadUI();
-		end
-
-		-- return if already active
 		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
 
 		-- register col
@@ -188,15 +188,21 @@ GREATVAULTLIST_COLUMNS = {
 
 		-- register events
 		if self.config.event then
-			GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event)
+			self.config.eventHandle = GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event)
 				self.config.event[2](self, event)
 			end)
 		end
 	end,
 	OnDisable = function(self)
+		if GreatVaultList.db.global.Options.modules[self.key].active then return end
+
 		local fidx = _.findIndex(GreatVaultList.ModuleColumns, function(entry) return entry.key == self.key end)
 		if fidx > 0 then
 			table.remove(GreatVaultList.ModuleColumns, fidx)
+		end
+
+		if self.config.eventHandle then
+			GreatVaultList:UnregisterBucket(self.config.eventHandle)
 		end
 	end
 }

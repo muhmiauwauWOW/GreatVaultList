@@ -71,6 +71,23 @@ function GreatVaultListOptions:init()
 		}
     end)
     
+
     local setting = Settings.RegisterAddOnSetting(self.category, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
+
+    setting:SetValueChangedCallback(function(self)
+        local value = self:GetValue()
+        for name, module in GreatVaultList:IterateModules() do
+            local mode = value[name].active
+            if value[name].active ~=  module.enabledState  then
+                if mode then
+                    module:Enable()
+                else
+                    module:Disable()
+                end
+            end
+         end
+    end)
+
+
     Settings.CreateColumnOrder(self.category, setting,  options,  L["opt_column_order_desc"])
 end
