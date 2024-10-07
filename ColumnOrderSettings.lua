@@ -29,13 +29,16 @@ function ColumnOrderSettingsMixin:Init(initializer)
 	local setting = self:GetSetting();
 	local currentValue = setting:GetValue()
 
-	self.dataTable = currentValue
+	self.dataTable = _.forEach(currentValue, function(entry, key)
+		entry.id = key
+		return entry
+	end)
 
 	if not self.dataTable then return end
 	self.pool:ReleaseAll();
 	
 	local sorted  = _.sortBy(CopyTable(self.dataTable), function(a) return a.index end)
-	sort(sorted, function(a,b) return a.index < b.index end)
+	sort(sorted, function(a, b) return a.index < b.index end)
 
 	local i = 0
 	_.forEach(sorted, function(item, key)
