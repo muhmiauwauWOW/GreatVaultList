@@ -476,10 +476,12 @@ function GreatVaultListListMixin:SetSortOrder(sortOrder, main)
 	local comp = (self.reverseSort) and _.gt or _.lt
 	local defaultSortFn = function(a, b, comp) return comp(a, b) end
 	local sortFn = _.get(self.columnConfig, {self.columns[self.sort], "sortFn"}, defaultSortFn)
+	sortFn = type(sortFn) == "function" and sortFn or defaultSortFn
 	
 	sort(self.ItemList.data, function(a, b)
 		if not a[self.sort] then return false end
 		if not b[self.sort] then return false end
+		
 		return sortFn(a[self.sort], b[self.sort], comp)
 	end)
 
