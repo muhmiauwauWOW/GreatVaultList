@@ -1,4 +1,5 @@
 local addonName = ...
+local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
@@ -11,35 +12,17 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
-local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
 _G["BINDING_HEADER_GreatVaultList"] = AddOnInfo[2]
 _G["BINDING_NAME_GreatVaultList_toggle_window"] = L["Bindings_toggle_window"]
 
 
 
 
-function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
-	if buttonName == "RightButton" then
-		Settings.OpenToCategory(GreatVaultList.OptionsID)
-	else
-		GreatVaultList:toggleWindow()
-	end
-end
-
-
-local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
--- add data broker support 
-local ldb =  LibStub("LibDataBroker-1.1"):NewDataObject(AddOnInfo[2], {
-	type = "data source",
-	icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
-	OnClick = GreatVaultList_OnAddonCompartmentClick,
-})
-GreatVaultList.minimapIcon = LibStub("LibDBIcon-1.0")
-
 
 GreatVaultList.config = {
 	defaultCellPadding = 6
 }
+
 
 
 local default_global_data = {
@@ -83,23 +66,13 @@ end
 
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
- 
-	GreatVaultList.Data:init()
-	GreatVaultList:slashcommand()
-	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
+	self.Data:init()
 
-	if BlizzMoveAPI then 
-		GreatVaultListFrame.Drag:Hide()
-		BlizzMoveAPI:RegisterAddOnFrames({
-			["GreatVaultList"] = { 
-				["GreatVaultListFrame"] = {}
-			},
-		});
-	else
-		GreatVaultListFrame:SetScale(self.db.global.Options.scale)
-	end
-
-	self:ElvSkin()
+	self:slashcommand()
+	
+	self:DataBrokerInit()
+	self:BlizzMove()
+	self:ElvUISkin()
 end
 
 function GreatVaultList:hideWindow()
@@ -130,7 +103,12 @@ function GreatVaultList:slashcommand()
 	SLASH_GV1 = "/gv"
 	SLASH_GV2 = "/greatvault"
 	SlashCmdList["GV"] = function(msg)
-		GreatVaultList:toggleWindow()
+		if msg == "reset" then 
+			self.db:ResetDB("global")
+			C_UI.Reload()
+		else
+			GreatVaultList:toggleWindow()
+		end
 	end
 end
 
@@ -304,82 +282,4 @@ function GreatVaultList:GetVaultState()
 	end
 
 	return "incomplete";
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- support for all the ELVUI fanbois out there
-function GreatVaultList:ElvSkin()
-	if not C_AddOns.IsAddOnLoaded("ElvUI") then return end
-	
-	local E, L, V, P, G = unpack(ElvUI)
-	local S = E:GetModule("Skins")
-
-	GreatVaultListFrame:StripTextures()
-	GreatVaultListFrame:SetTemplate("Transparent")
-
-	S:HandleCloseButton(GreatVaultListFrameCloseButton)
-	
-
-	for _, tab in next, {GreatVaultListFrame.TabSystem:GetChildren() } do
-		S:HandleTab(tab)
-	end
-
-	GreatVaultListFrame.TabSystem:ClearAllPoints()
-	GreatVaultListFrame.TabSystem:Point('TOPLEFT', PlayerSpellsFrame, 'BOTTOMLEFT', -3, 0)
-
-
-	S:HandleEditBox(GreatVaultListFrame.ListFrame.Search)
-	S:HandleButton(GreatVaultListFrame.ListFrame.Filter)
-
-
-	local function HandleHeaders(frame)
-		local maxHeaders = frame.HeaderContainer:GetNumChildren()
-		for i, header in next, { frame.HeaderContainer:GetChildren() } do
-			if not header.IsSkinned then
-				header:DisableDrawLayer('BACKGROUND')
-
-				if not header.backdrop then
-					header:CreateBackdrop('Transparent')
-				end
-
-				header.IsSkinned = true
-			end
-
-			if header.backdrop then
-				header.backdrop:Point('BOTTOMRIGHT', i < maxHeaders and -5 or 0, -2)
-			end
-		end
-	end
-
-	
-	local function HandleSellList(frame)
-		frame:StripTextures()
-		frame:SetTemplate('Transparent')
-
-		S:HandleTrimScrollBar(frame.ScrollBar)
-		frame.ScrollBar:ClearAllPoints()
-		frame.ScrollBar:Point('TOPRIGHT', frame, -10, -16)
-		frame.ScrollBar:Point('BOTTOMRIGHT', frame, -10, 16)
-
-		hooksecurefunc(frame, 'RefreshScrollFrame', HandleHeaders)
-	end
-	HandleSellList(GreatVaultListFrame.ListFrame.ItemList)
-	HandleSellList(GreatVaultListFrame.RaidLootList.ItemList)
-	HandleSellList(GreatVaultListFrame.DungeonLootList.ItemList)
-	HandleSellList(GreatVaultListFrame.DelvesLootList.ItemList)
 end
