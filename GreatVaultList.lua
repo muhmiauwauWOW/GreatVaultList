@@ -230,6 +230,52 @@ function GreatVaultList:updateData(refresh)
 	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
 end
 
+
+
+function GreatVaultList:updateInspectData(name, payload)
+	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
+		'no "ModuleColumns" found, try to enable modules in the options')
+	if _.size(payload) == 0 then return end -- fail silent
+
+	_.map(GreatVaultList.ModuleColumns, function(entry, key)
+		-- fallback for no modules options, should never happen...
+		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
+		{ active = true, index = entry.config.index }
+		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
+	end)
+
+	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
+
+	local colConfig = {}
+	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
+		colConfig[entry.key] = entry.config
+		return entry.key
+	end)
+
+	local data = {}
+	_.forEach(payload, function(entry, key)
+		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
+			return entry[_.get(cEntry, { "DBkey" })]
+		end)
+		d.name = key
+		d.enabled = entry.enabled == nil and true or entry.enabled
+		d.data = entry
+		d.selected = key == UnitName("player")
+		table.insert(data, d)
+	end)
+
+
+	 DevTool:AddData(data, "updateInspectData data")
+	-- DevTool:AddData(cols, "cols")
+	-- DevTool:AddData(colConfig, "colConfig")
+
+	GreatVaultListFrame.Inspect:init(cols, data, colConfig)
+
+	GreatVaultListFrame.Inspect:SetSender(name)
+end
+
+
+
 function GreatVaultList:demoMode()
 	_.map(GreatVaultList.ModuleColumns, function(entry, key)
 		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
@@ -268,8 +314,6 @@ end
 
 
 
-
-
 function GreatVaultList:GetVaultState()
 	if C_WeeklyRewards.HasAvailableRewards() then
 		return "collect";
@@ -298,24 +342,11 @@ GreatVaultList.CommAction = {
 }
 
 function GreatVaultList:InitComm()
-	print("initcom")
-
-	-- Menu.ModifyMenu("MENU_UNIT_PLAYER", function(owner, rootDescription, contextData)
-	-- 	rootDescription:CreateDivider();
-	-- 	rootDescription:CreateTitle("My Addon");
-	-- 	rootDescription:CreateButton("Button", function() print("Text here!") end);
-	-- end);
 
 	local menuFN = function(owner, rootDescription, contextData)
 		rootDescription:CreateDivider();
 		rootDescription:CreateTitle(AddOnInfo[2]);
-		rootDescription:CreateButton("View Progress", function() 
-			-- print("Text here!", contextData.name) 
-			local obj = {
-				action = GreatVaultList.CommAction.request
-			}
-
-			-- self:SendCommMessage(AddOnInfo[1], self:Serialize(obj), "WHISPER", UnitName("player"))
+		rootDescription:CreateButton("View Progress", function()
 			self:SendComm(contextData.name,  GreatVaultList.CommAction.request)
 		end);
 	end
@@ -323,20 +354,7 @@ function GreatVaultList:InitComm()
 	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
 
-
-
-
 	self:RegisterComm(AddOnInfo[1])
-
-
-
-
-
-
-	-- self:SendCommMessage(AddOnInfo[1], self:Serialize("test"), "WHISPER", UnitName("player"))
-	-- self:SendComm(UnitName("player"), "test")
-
-
 end
 
 function GreatVaultList:SendComm(recipient, action, payload)
@@ -352,107 +370,23 @@ function GreatVaultList:OnCommReceived(commName, data, channel, sender)
 	if not data then return end
 	local status, action, payload = self:Deserialize(data)
 	if not status then return end
-	print("####",status, action, payload )
+	-- print("####",status, action, payload )
 	DevTool:AddData({ action, payload }, "OnCommReceived - payload-")
 
 	if action == GreatVaultList.CommAction.request then
-		DevTool:AddData(payload, "OnCommReceived")
-		print("GreatVaultList:OnCommReceived", GreatVaultList.CommAction.request)
+		-- DevTool:AddData(payload, "OnCommReceived")
+		-- print("GreatVaultList:OnCommReceived", GreatVaultList.CommAction.request)
 
-		self:SendComm(sender, GreatVaultList.CommAction.response, GreatVaultList:BuldCommData())
+		self:SendComm(sender, GreatVaultList.CommAction.response, GreatVaultList.db.global.characters)
 	elseif action == GreatVaultList.CommAction.response then 
-		-- local obj = (data)
-		DevTool:AddData(payload, "OnCommReceived response")
-		print("GreatVaultList:OnCommReceived response", GreatVaultList.CommAction.response)
+		-- -- local obj = (data)
+		-- DevTool:AddData(payload, "OnCommReceived response")
+		-- print("GreatVaultList:OnCommReceived response", GreatVaultList.CommAction.response)
 
-
-		GreatVaultListFrame.Inspect:BuildData(payload)
-		GreatVaultList:toggleWindow()
-
-
+		GreatVaultList:updateInspectData(sender, payload)
+		GreatVaultList:showWindow()
+		print("GreatVaultList: inspect data recieved from", sender)
 	end
-
-
-
-
-	DevTool:AddData(payload, "OnCommReceived --")
-	print("GreatVaultList:OnCommReceived no if")
-
 end
 
 
-
-function  GreatVaultList:BuldCommData()
-
-	DevTool:AddData(GreatVaultList.ModuleColumns, "ModuleColumns")
-
-		local ModulesColumns = _.sortBy(CopyTable(GreatVaultList.ModuleColumns), function(a) return a.index end)
-		sort(ModulesColumns, function(a, b) return a.index < b.index end)
-
-
-		
-		local charData = {}
-
-		_.forEach(GreatVaultList.db.global.characters, function(entry, char)
-			local d = {}
-			_.forEach(ModulesColumns, function(module)
-				if not entry[module.DBkey] then return end
-
-
-
-
-				if module.config.template == "GreatVaultListTableCellTripleTextTemplate" then 
-					-- print("table ", module.DBkey)
-					local t = ""
-					_.forEach(entry[module.DBkey], function(data, idx)
-						local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
-
-						local text = populate(module, entry[module.DBkey], idx)
-						-- print("table ", text)
-						if not text then 
-							local emptyStr = _.get(module, {"config", "emptyStr", idx}, _.get(module, {"config", "emptyStr"}, "-"))
-							text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
-						else
-							print("table ", text)
-						end
-	
-						t  = t .. "  " .. text
-					end)
-
-					-- print("table ", t)
-
-					table.insert(d, t)
-
-				else
-					-- print("not table ", module.DBkey)
-					local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
-
-					local  text = populate(module , entry[module.DBkey])
-					if not text then 
-						local emptyStr = _.get(module, {"config", "emptyStr", 1}, _.get(module, {"config", "emptyStr"}, "-"))
-						text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
-					end
-
-					table.insert(d, text)
-				end
-
-				
-				-- DevTool:AddData(entry[module.DBkey], module.key)
-
-				-- local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
-
-				-- local  text = populate(module , entry[module.DBkey])
-				-- if not text then 
-				-- 	local emptyStr = _.get(module, {"config", "emptyStr", 1}, _.get(module, {"config", "emptyStr"}, "-"))
-				-- 	text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
-				-- end
-				-- d[module.key] = getText(module)
-			end)
-
-			table.insert(charData, d)
-		end)
-
-		DevTool:AddData(charData)
-		return charData
-
-end
