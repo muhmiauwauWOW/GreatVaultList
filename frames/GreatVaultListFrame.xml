@@ -17,6 +17,7 @@
 	<Include file="tabs/raidLoot.xml"/>
 	<Include file="tabs/dungeonLoot.xml"/>
 	<Include file="tabs/delvesLoot.xml"/>
+	<Include file="tabs/inspect.xml"/>
 
 
    <Frame name="GreatVaultListFrame" toplevel="true" hidden="true" enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
@@ -32,6 +33,7 @@
 			</Frame>
 
 			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate"/>
+			<Frame parentKey="Inspect" inherits="GreatVaultListInspectFrameTemplate" hidden="true"/>
 			<Frame parentKey="RaidLootList" inherits="GreatVaultListRaidLootTemplate" hidden="true"/>
 			<Frame parentKey="DungeonLootList" inherits="GreatVaultListDungeonLootTemplate" hidden="true"/>
 			<Frame parentKey="DelvesLootList" inherits="GreatVaultListDelvesLootTemplate" hidden="true"/>

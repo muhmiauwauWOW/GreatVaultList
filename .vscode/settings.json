@@ -256,7 +256,8 @@
         "CreateFramePool",
         "SettingsInbound",
         "PlayerSpellsFrame",
-        "GreatVaultListFrameCloseButton"
+        "GreatVaultListFrameCloseButton",
+        "Menu"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

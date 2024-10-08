@@ -2,16 +2,17 @@ local addonName = ...
 local L, _ = GreatVaultList:GetLibs()
 
 
-GreatVaultListDungeonLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+local dungeonLootMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+GreatVaultListDungeonLootListMixin = dungeonLootMixin
 
-GreatVaultListDungeonLootListMixin.tabName = string.format(L["tabLoot_name"], DUNGEONS)
-GreatVaultListDungeonLootListMixin.sortOrder = 4
+dungeonLootMixin.tabName = string.format(L["tabLoot_name"], DUNGEONS)
+dungeonLootMixin.sortOrder = 4
 
-function GreatVaultListDungeonLootListMixin:OnLoad()
+function dungeonLootMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 end
 
-function GreatVaultListDungeonLootListMixin:BuildData()
+function dungeonLootMixin:BuildData()
 	
 	self:AddColumn(L["dungeonLoot_col1"])
 	self:AddColumn(L["tabLoot_ilvl"], true, L["dungeonLoot_col2"])

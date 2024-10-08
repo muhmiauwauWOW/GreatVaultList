@@ -1,6 +1,6 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
-GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
+GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0", "AceComm-3.0", "AceSerializer-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 local BlizzMoveAPI = _G.BlizzMoveAPI
@@ -73,7 +73,11 @@ function GreatVaultList:OnInitialize()
 	self:DataBrokerInit()
 	self:BlizzMove()
 	self:ElvUISkin()
+
+	self:InitComm()
 end
+
+
 
 function GreatVaultList:hideWindow()
 	GreatVaultListFrame:Hide()
@@ -282,4 +286,173 @@ function GreatVaultList:GetVaultState()
 	end
 
 	return "incomplete";
+end
+
+
+
+
+
+GreatVaultList.CommAction = {
+	request = "request",
+	response = "response"
+}
+
+function GreatVaultList:InitComm()
+	print("initcom")
+
+	-- Menu.ModifyMenu("MENU_UNIT_PLAYER", function(owner, rootDescription, contextData)
+	-- 	rootDescription:CreateDivider();
+	-- 	rootDescription:CreateTitle("My Addon");
+	-- 	rootDescription:CreateButton("Button", function() print("Text here!") end);
+	-- end);
+
+	local menuFN = function(owner, rootDescription, contextData)
+		rootDescription:CreateDivider();
+		rootDescription:CreateTitle(AddOnInfo[2]);
+		rootDescription:CreateButton("View Progress", function() 
+			-- print("Text here!", contextData.name) 
+			local obj = {
+				action = GreatVaultList.CommAction.request
+			}
+
+			-- self:SendCommMessage(AddOnInfo[1], self:Serialize(obj), "WHISPER", UnitName("player"))
+			self:SendComm(contextData.name,  GreatVaultList.CommAction.request)
+		end);
+	end
+
+	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
+
+
+
+
+	self:RegisterComm(AddOnInfo[1])
+
+
+
+
+
+
+	-- self:SendCommMessage(AddOnInfo[1], self:Serialize("test"), "WHISPER", UnitName("player"))
+	-- self:SendComm(UnitName("player"), "test")
+
+
+end
+
+function GreatVaultList:SendComm(recipient, action, payload)
+	if not action then return end
+	local dataStr = self:Serialize(action, payload)
+	if type(dataStr) ~= "string" then return end
+
+	self:SendCommMessage(AddOnInfo[1], dataStr, "WHISPER", recipient)
+end
+
+
+function GreatVaultList:OnCommReceived(commName, data, channel, sender)
+	if not data then return end
+	local status, action, payload = self:Deserialize(data)
+	if not status then return end
+	print("####",status, action, payload )
+	DevTool:AddData({ action, payload }, "OnCommReceived - payload-")
+
+	if action == GreatVaultList.CommAction.request then
+		DevTool:AddData(payload, "OnCommReceived")
+		print("GreatVaultList:OnCommReceived", GreatVaultList.CommAction.request)
+
+		self:SendComm(sender, GreatVaultList.CommAction.response, GreatVaultList:BuldCommData())
+	elseif action == GreatVaultList.CommAction.response then 
+		-- local obj = (data)
+		DevTool:AddData(payload, "OnCommReceived response")
+		print("GreatVaultList:OnCommReceived response", GreatVaultList.CommAction.response)
+
+
+		GreatVaultListFrame.Inspect:BuildData(payload)
+		GreatVaultList:toggleWindow()
+
+
+	end
+
+
+
+
+	DevTool:AddData(payload, "OnCommReceived --")
+	print("GreatVaultList:OnCommReceived no if")
+
+end
+
+
+
+function  GreatVaultList:BuldCommData()
+
+	DevTool:AddData(GreatVaultList.ModuleColumns, "ModuleColumns")
+
+		local ModulesColumns = _.sortBy(CopyTable(GreatVaultList.ModuleColumns), function(a) return a.index end)
+		sort(ModulesColumns, function(a, b) return a.index < b.index end)
+
+
+		
+		local charData = {}
+
+		_.forEach(GreatVaultList.db.global.characters, function(entry, char)
+			local d = {}
+			_.forEach(ModulesColumns, function(module)
+				if not entry[module.DBkey] then return end
+
+
+
+
+				if module.config.template == "GreatVaultListTableCellTripleTextTemplate" then 
+					-- print("table ", module.DBkey)
+					local t = ""
+					_.forEach(entry[module.DBkey], function(data, idx)
+						local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
+
+						local text = populate(module, entry[module.DBkey], idx)
+						-- print("table ", text)
+						if not text then 
+							local emptyStr = _.get(module, {"config", "emptyStr", idx}, _.get(module, {"config", "emptyStr"}, "-"))
+							text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+						else
+							print("table ", text)
+						end
+	
+						t  = t .. "  " .. text
+					end)
+
+					-- print("table ", t)
+
+					table.insert(d, t)
+
+				else
+					-- print("not table ", module.DBkey)
+					local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
+
+					local  text = populate(module , entry[module.DBkey])
+					if not text then 
+						local emptyStr = _.get(module, {"config", "emptyStr", 1}, _.get(module, {"config", "emptyStr"}, "-"))
+						text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+					end
+
+					table.insert(d, text)
+				end
+
+				
+				-- DevTool:AddData(entry[module.DBkey], module.key)
+
+				-- local populate = _.get(module, {"config", "populate" }, function(self, e) return e end)
+
+				-- local  text = populate(module , entry[module.DBkey])
+				-- if not text then 
+				-- 	local emptyStr = _.get(module, {"config", "emptyStr", 1}, _.get(module, {"config", "emptyStr"}, "-"))
+				-- 	text = GRAY_FONT_COLOR:WrapTextInColorCode(emptyStr)
+				-- end
+				-- d[module.key] = getText(module)
+			end)
+
+			table.insert(charData, d)
+		end)
+
+		DevTool:AddData(charData)
+		return charData
+
 end

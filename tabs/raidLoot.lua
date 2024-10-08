@@ -2,16 +2,17 @@ local addonName = ...
 local _ = LibStub("LibLodash-1"):Get()
 local L, _ = GreatVaultList:GetLibs()
 
-GreatVaultListRaidLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+local raidLootMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+GreatVaultListRaidLootListMixin = raidLootMixin
 
-GreatVaultListRaidLootListMixin.tabName = string.format(L["tabLoot_name"], RAIDS)
-GreatVaultListRaidLootListMixin.sortOrder = 5
+raidLootMixin.tabName = string.format(L["tabLoot_name"], RAIDS)
+raidLootMixin.sortOrder = 5
 
-function GreatVaultListRaidLootListMixin:OnLoad()
+function raidLootMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 end
 
-function GreatVaultListRaidLootListMixin:BuildData()
+function raidLootMixin:BuildData()
 
 
 

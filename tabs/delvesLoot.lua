@@ -1,17 +1,18 @@
 local addonName = ...
 local L, _ = GreatVaultList:GetLibs()
 
-GreatVaultListDelvesLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+local delvesLootMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+GreatVaultListDelvesLootListMixin = delvesLootMixin
 
-GreatVaultListDelvesLootListMixin.tabName = string.format(L["tabLoot_name"], DELVES_LABEL)
-GreatVaultListDelvesLootListMixin.sortOrder = 1
+delvesLootMixin.tabName = string.format(L["tabLoot_name"], DELVES_LABEL)
+delvesLootMixin.sortOrder = 1
 
 
-function GreatVaultListDelvesLootListMixin:OnLoad()
+function delvesLootMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 end
 
-function GreatVaultListDelvesLootListMixin:OnShow()
+function delvesLootMixin:OnShow()
 	GreatVaultListLootListMixin.OnShow(self)
 
 	-- Restored Coffer Key
@@ -21,7 +22,7 @@ function GreatVaultListDelvesLootListMixin:OnShow()
 	self.keys:SetWidth(self.keys.Text:GetUnboundedStringWidth() + 20)
 end
 
-function GreatVaultListDelvesLootListMixin:BuildData()
+function delvesLootMixin:BuildData()
 
     self:AddColumn(L["delvesLoot_col1"])
 	self:AddColumn(L["tabLoot_ilvl"], true, L["delvesLoot_col2"])
