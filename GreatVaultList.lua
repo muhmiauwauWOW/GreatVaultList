@@ -353,6 +353,7 @@ function GreatVaultList:InitComm()
 
 	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_PARTY", menuFN)
 
 	self:RegisterComm(AddOnInfo[1])
 end
