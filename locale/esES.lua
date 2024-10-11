@@ -63,12 +63,12 @@ L["gearTrack_Myth"] = "Mito"
 
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "Aquí puedes acceder a la configuración para realizar una variedad de ajustes."
+L["HELP_list_2"] = "Haz clic aquí para abrir la cámara y comprobar el estado de tu personaje actual."
+L["HELP_list_3"] = "Utiliza este botón de filtro para seleccionar qué personajes deben mostrarse y cuáles no. \n\nTen en cuenta que solo se mostrarán los personajes con el nivel máximo."
+L["HELP_list_4"] = "Aquí puedes buscar los nombres de tus personajes."
+L["HELP_list_5"] = "En esta tabla, tus personajes se mostrarán si han alcanzado el nivel máximo y no han sido filtrados por ti. \n\nTen en cuenta que los personajes solo aparecerán aquí si ya has iniciado sesión con ellos mientras el addon está activo."
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "Aquí se muestra el número de %s que tienes. Necesitas %s para abrir el cofre al final de una Profundidad Abundante."
+L["HELP_Loot_table"] = "Esta tabla muestra el nivel de objeto de las posibles recompensas. \n\nSi el número es rojo, el nivel de objeto es inferior al del equipo que llevas actualmente."

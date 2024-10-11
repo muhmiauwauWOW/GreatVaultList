@@ -61,12 +61,12 @@ L["gearTrack_Hero"] = "Héros"
 L["gearTrack_Myth"] = "Mythe"
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "Ici, vous pouvez accéder aux paramètres pour effectuer divers ajustements."
+L["HELP_list_2"] = "Cliquez ici pour ouvrir le coffre-fort et vérifier l'état de votre personnage actuel."
+L["HELP_list_3"] = "Utilisez ce bouton de filtre pour sélectionner les personnages à afficher et ceux à ne pas afficher. \n\nVeuillez noter que seuls les personnages ayant atteint le niveau maximum seront affichés."
+L["HELP_list_4"] = "Ici, vous pouvez rechercher les noms de vos personnages."
+L["HELP_list_5"] = "Dans ce tableau, vos personnages seront affichés s'ils ont atteint le niveau maximum et n'ont pas été filtrés par vous. \n\nVeuillez noter que les personnages n'apparaîtront ici que si vous vous êtes déjà connecté avec eux pendant que l'addon est actif."
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "Ici, le nombre de %s que vous possédez est affiché. Vous avez besoin de %s pour ouvrir le coffre à la fin d'une Profondeur Généreuse."
+L["HELP_Loot_table"] = "Ce tableau affiche le niveau d'objet des récompenses possibles. \n\nSi le nombre est rouge, le niveau d'objet est inférieur à celui de l'équipement que vous portez actuellement."

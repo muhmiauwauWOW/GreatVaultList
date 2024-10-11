@@ -63,12 +63,12 @@ L["gearTrack_Myth"] = "Mito"
 
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "Qui puoi accedere alle impostazioni per apportare una varietà di modifiche."
+L["HELP_list_2"] = "Clicca qui per aprire il vault e controllare lo stato del tuo personaggio attuale."
+L["HELP_list_3"] = "Usa questo pulsante filtro per selezionare quali personaggi devono essere visualizzati e quali no. \n\nNota che solo i personaggi con il livello massimo saranno visualizzati."
+L["HELP_list_4"] = "Qui puoi cercare i nomi dei tuoi personaggi."
+L["HELP_list_5"] = "In questa tabella, i tuoi personaggi saranno visualizzati se hanno raggiunto il livello massimo e non sono stati filtrati da te. \n\nNota che i personaggi appariranno qui solo se hai già effettuato l'accesso con loro mentre l'addon è attivo."
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "Qui viene visualizzato il numero di %s che hai. Hai bisogno di %s per aprire il forziere alla fine di una Profondità Abbondante."
+L["HELP_Loot_table"] = "Questa tabella mostra il livello degli oggetti delle possibili ricompense. \n\nSe il numero è rosso, il livello dell'oggetto è inferiore all'equipaggiamento che stai attualmente indossando."

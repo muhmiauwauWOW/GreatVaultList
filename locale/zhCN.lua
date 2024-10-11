@@ -61,12 +61,12 @@ L["gearTrack_Hero"] = "英雄"
 L["gearTrack_Myth"] = "神话"
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "在这里，您可以访问设置以进行各种调整。"
+L["HELP_list_2"] = "单击此处打开宝库并检查当前角色的状态。"
+L["HELP_list_3"] = "使用此筛选器按钮选择应显示哪些角色以及不应显示哪些角色。\n\n请注意，仅显示等级最高的角色。"
+L["HELP_list_4"] = "您可以在此处搜索角色名称。"
+L["HELP_list_5"] = "如果您的角色已达到最高等级且未被您过滤掉，则会在此表中显示。\n\n请注意，只有在插件处于活动状态时已登录的角色才会在此处显示。"
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "此处显示您拥有的 %s 数量。您需要 %s 才能在丰厚深渊的尽头打开宝箱。"
+L["HELP_Loot_table"] = "此表显示了可能奖励的物品等级。\n\n如果数字为红色，则物品等级低于您当前装备的等级。"

@@ -62,12 +62,12 @@ L["gearTrack_Myth"] = "Mito"
 
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "Aqui você pode acessar as configurações para fazer uma variedade de ajustes."
+L["HELP_list_2"] = "Clique aqui para abrir o cofre e verificar o status do seu personagem atual."
+L["HELP_list_3"] = "Use este botão de filtro para selecionar quais personagens devem ser exibidos e quais não. \n\nObserve que apenas personagens com o nível máximo serão exibidos."
+L["HELP_list_4"] = "Aqui você pode pesquisar pelos nomes dos seus personagens."
+L["HELP_list_5"] = "Nesta tabela, seus personagens serão exibidos se eles atingiram o nível máximo e não foram filtrados por você. \n\nObserve que os personagens só aparecerão aqui se você já tiver feito login com eles enquanto o addon estiver ativo."
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "Aqui, o número de %s que você possui é exibido. Você precisa de %s para abrir o baú no final de uma Profundidade Abundante."
+L["HELP_Loot_table"] = "Esta tabela mostra o nível do item das possíveis recompensas. \n\nSe o número estiver vermelho, o nível do item é menor do que o equipamento que você está usando atualmente."

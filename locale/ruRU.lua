@@ -58,12 +58,12 @@ L["gearTrack_Hero"] = "Герой"
 L["gearTrack_Myth"] = "Легенда"
 
 
-L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
-L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
-L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
-L["HELP_list_4"] = "Here you can search for your character names."
-L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+L["HELP_list_1"] = "Здесь вы можете получить доступ к настройкам, чтобы внести различные изменения."
+L["HELP_list_2"] = "Нажмите здесь, чтобы открыть хранилище и проверить состояние вашего текущего персонажа."
+L["HELP_list_3"] = "Используйте эту кнопку фильтра, чтобы выбрать, какие персонажи должны отображаться, а какие нет. \n\nОбратите внимание, что будут отображаться только персонажи с максимальным уровнем."
+L["HELP_list_4"] = "Здесь вы можете искать имена своих персонажей."
+L["HELP_list_5"] = "В этой таблице ваши персонажи будут отображаться, если они достигли максимального уровня и не были отфильтрованы вами. \n\nОбратите внимание, что персонажи будут отображаться здесь, только если вы уже вошли в систему с их помощью, пока аддон активен."
 
 
-L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
-L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."
+L["HELP_DelvesLoot_1"] = "Здесь отображается количество %s, которое у вас есть. Вам нужно %s, чтобы открыть сундук в конце Обильной Глубины."
+L["HELP_Loot_table"] = "В этой таблице показан уровень предметов возможных наград. \n\nЕсли число красное, уровень предмета ниже, чем у экипировки, которую вы носите в данный момент."
