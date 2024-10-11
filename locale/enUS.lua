@@ -25,8 +25,8 @@ L["opt_lines_desc"] = "Amount of lines to display"
 L["opt_scale_name"] = "Scale"
 L["opt_scale_desc"] = "Scale of the window"
 
-L["opt_module_name"] = "%s Module"
-L["opt_module_desc"] = "Activate or Deactivate this Module"
+L["opt_column_order_name"] = "Column Order"
+L["opt_column_order_desc"] = "Drag and Drop items to change the order of the columns"
 
 L["opt_position_name"] = "Position"
 L["opt_position_desc"] = "Change the position of the Column of this Module"
@@ -72,3 +72,15 @@ L["gearTrack_Veteran"] = "Veteran"
 L["gearTrack_Champion"] = "Champion"
 L["gearTrack_Hero"] = "Hero"
 L["gearTrack_Myth"] = "Myth"
+
+
+
+L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
+L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
+L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
+L["HELP_list_4"] = "Here you can search for your character names."
+L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+
+
+L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
+L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."

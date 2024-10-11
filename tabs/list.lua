@@ -68,6 +68,27 @@ function ListMixin:OnShow()
 end
 
 
+
+function ListMixin:GetHelpConfig()
+
+	local width = self:GetWidth()-10
+	local height = self:GetHeight() + 50
+
+	local helpConfig = {
+		FramePos = { x = 0, y = 0 },
+		FrameSize = { width = width, height = height },
+		[1] = { ButtonPos = { position = "CENTER" },  HighLightBox = { x = width - 12, y = -9, width = 24, height = 24 },	ToolTipDir = "DOWN",  ToolTipText = L["HELP_list_1"] },
+		[2] = { ButtonPos = { position = "CENTER"  },  HighLightBox = { x = width - 37, y = -9, width = 24, height = 24 }, ToolTipDir = "DOWN",  ToolTipText = L["HELP_list_2"] },
+		[3] = { ButtonPos = { position = "CENTER"},  HighLightBox = { x = width - 141, y = -9, width = 100, height = 24 }, ToolTipDir = "DOWN",  ToolTipText = L["HELP_list_3"] },
+		[4] = { ButtonPos = { position = "CENTER" }, HighLightBox = { x = 60, y = -9, width = width - 143 - 60, height = 24 },  ToolTipDir = "DOWN",   ToolTipText = L["HELP_list_4"] },
+		[5] = { ButtonPos = { position = "CENTER" }, HighLightBox = { x = 5, y = -40, width = width + 10 , height = height - 40 - 5 - 50 },  ToolTipDir = "DOWN",   ToolTipText = L["HELP_list_5"] }
+	}
+
+	return helpConfig
+end
+
+
+
 function ListMixin:RegisterHeader(header)
 	local find = _.find(self.sortHeaders, function(entry) return entry == header.sortOrder; end)
 	if find and  find > 0 then 

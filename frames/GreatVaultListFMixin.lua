@@ -63,6 +63,7 @@ end
 
 
 function GreatVaultListMixin:OnHide()
+    HelpPlate_Hide();
 end
 
 function GreatVaultListMixin:RefreshScrollFrame()

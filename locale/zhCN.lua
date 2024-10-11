@@ -59,3 +59,14 @@ L["gearTrack_Veteran"] = "老兵"
 L["gearTrack_Champion"] = "勇士"
 L["gearTrack_Hero"] = "英雄"
 L["gearTrack_Myth"] = "神话"
+
+
+L["HELP_list_1"] = "Here you can access the settings to make a variety of adjustments."
+L["HELP_list_2"] = "Click here to open the vault and check the status of your current character."
+L["HELP_list_3"] = "Use this filter button to select which characters should be displayed and which should not. \n\nPlease note that only characters with the maximum level will be displayed."
+L["HELP_list_4"] = "Here you can search for your character names."
+L["HELP_list_5"] = "In this table, your characters will be displayed if they have reached the maximum level and have not been filtered out by you. \n\nPlease note that characters will only appear here if you have already logged in with them while the addon is active."
+
+
+L["HELP_DelvesLoot_1"] = "Here, the number of %s you have is displayed. You need %s to open the chest at the end of a Bountiful Depth."
+L["HELP_Loot_table"] = "This table shows the item level of the possible rewards. \n\nIf the number is red, the item level is lower than the equipment you are currently wearing."

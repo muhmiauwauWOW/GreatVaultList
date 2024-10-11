@@ -11,6 +11,22 @@ function GreatVaultListRaidLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 end
 
+function GreatVaultListRaidLootListMixin:GetHelpConfig()
+
+	local width = self:GetWidth()
+	local height = self:GetHeight() + 50
+
+
+
+	local helpConfig = {
+		FramePos = { x = 0, y = 0 },
+		FrameSize = { width = width, height = height },
+		[1] = { ButtonPos = { position = "CENTER" }, HighLightBox = { x = 5, y = -40, width = width + 10 , height = height - 40 - 5 - 50 },  ToolTipDir = "RIGHT",   ToolTipText = L["HELP_Loot_table"] },
+	}
+
+	return helpConfig
+end
+
 function GreatVaultListRaidLootListMixin:BuildData()
 
 

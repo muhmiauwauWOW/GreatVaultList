@@ -5,6 +5,7 @@
 
     <Frame name="GreatVaultListListFrameTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListListMixin" virtual="true">
         <Frames>
+            <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
             <Button parentKey="SettingsButton">
                 <Size x="20" y="20"/>
                 <Anchors>

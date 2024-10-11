@@ -21,6 +21,23 @@ function GreatVaultListDelvesLootListMixin:OnShow()
 	self.keys:SetWidth(self.keys.Text:GetUnboundedStringWidth() + 20)
 end
 
+function GreatVaultListDelvesLootListMixin:GetHelpConfig()
+
+	local width = self:GetWidth()
+	local height = self:GetHeight() + 50
+
+	local info = C_CurrencyInfo.GetCurrencyInfo(3028)
+
+	local helpConfig = {
+		FramePos = { x = 0, y = 0 },
+		FrameSize = { width = width, height = height },
+		[1] = { ButtonPos = { position = "CENTER" }, HighLightBox = { x = 5, y = -40, width = width + 10 , height = height - 40 - 5 - 50 },  ToolTipDir = "RIGHT",   ToolTipText = L["HELP_Loot_table"] },
+		[2] = { ButtonPos = { position = "CENTER" },  HighLightBox = { x = width - 210, y = -9, width = 210, height = 30 },	ToolTipDir = "DOWN",  ToolTipText = string.format(L["HELP_DelvesLoot_1"], info.name) },
+	}
+
+	return helpConfig
+end
+
 function GreatVaultListDelvesLootListMixin:BuildData()
 
     self:AddColumn(L["delvesLoot_col1"])
