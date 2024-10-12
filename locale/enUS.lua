@@ -6,16 +6,17 @@ end
 
 
 
-L["Bindings_toggle_window"] = "Toggle window" -- need translation
+L["Bindings_toggle_window"] = "Toggle window"
+
+L["highestReward"] = ""
+L["highestReward_tooltip_title"] = "Highest Reward"
+L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" 
 
 
 L["character"] = "Character"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
-L["highestReward"] = "R" -- need translation
-L["highestReward_tooltip_title"] = "Highest Reward" -- need translation
-L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" -- need translation
 
 L["OpenVault"] = "View Vault"
 
@@ -48,7 +49,7 @@ L["opt_columns_ilevel_floatNumber_desc"] = "Control how many numbers should be d
 
 -- Tabs
 L["opt_tab_actve_name"] = "%s"
-L["opt_tab_actve_desc"] = "Aktiviert oder deaktiviert diesen Tab \n\nName: %s\nID: %s"
+L["opt_tab_actve_desc"] = "Enable or disable this tab \n\nName: %s\nID: %s"
 
 
 L["opt_tab_delvesLoot_showKeys_name"] = "Show key info"

@@ -5,6 +5,12 @@ if not L then
 end
 
 
+L["Bindings_toggle_window"] = "Переключить окно"
+
+L["highestReward_tooltip_title"] = "Наивысшая награда"
+L["highestReward_tooltip_desc"] = "Уровень предмета наивысшей разблокированной награды Великого Хранилища" 
+
+
 L["character"] = "Персонаж"
 L["ilevel"] = "ilvl"
 L["keystone"] = "Ключ"

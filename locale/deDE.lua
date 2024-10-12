@@ -5,6 +5,12 @@ if not L then
 end
 
 
+L["Bindings_toggle_window"] = "Fenster umschalten"
+
+L["highestReward_tooltip_title"] = "Höchste Belohnung" 
+L["highestReward_tooltip_desc"] = "Gegenstandsstufe der höchsten freigeschalteten Belohnung der großen Schatzkammer"
+
+
 L["character"] = "Charakter"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Schlüsselstein"

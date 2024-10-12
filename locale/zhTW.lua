@@ -4,6 +4,11 @@ if not L then
 	return
 end
 
+L["Bindings_toggle_window"] = "切換視窗"
+
+L["highestReward_tooltip_title"] = "最高獎勵"
+L["highestReward_tooltip_desc"] = "已解鎖的最高大秘境寶庫獎勵的物品等級" 
+
 
 L["character"] = "角色"
 L["ilevel"] = "裝備等級"

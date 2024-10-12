@@ -4,6 +4,12 @@ if not L then
 	return
 end
 
+L["Bindings_toggle_window"] = "Basculer la fenêtre"
+
+L["highestReward"] = "R"
+L["highestReward_tooltip_title"] = "Récompense la plus élevée"
+L["highestReward_tooltip_desc"] = "Niveau d'objet de la meilleure récompense de coffre-fort débloquée"
+
 
 L["character"] = "Personnage"
 L["ilevel"] = "Niveau d'objet"

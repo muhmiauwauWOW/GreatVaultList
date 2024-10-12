@@ -5,6 +5,13 @@ if not L then
 end
 
 
+L["Bindings_toggle_window"] = "Toggle window"
+
+L["highestReward_tooltip_title"] = "Highest Reward"
+L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" 
+
+
+
 L["character"] = "角色"
 L["ilevel"] = "装备等级"
 L["keystone"] = "大秘境钥匙"
@@ -25,6 +32,28 @@ L["opt_position_desc"] = "更改此模块列的位置"
 
 L["opt_minimap_name"] = "隐藏小地图按钮"
 L["opt_minimap_desc"] = "启用或禁用小地图按钮的可见性"
+
+
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "使用职业颜色"
+L["opt_columns_character_useClassColors_desc"] = "使用默认或自定义职业颜色显示角色名称 \n\n自定义颜色请使用 'ColorTools Class Colors' 插件。"
+
+
+L["opt_columns_ilevel_floatNumber_name"] = "浮点数"
+L["opt_columns_ilevel_floatNumber_desc"] = "控制小数点后显示的位数。"
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "启用或禁用此选项卡 \n\n名称: %s\nID: %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "显示钥匙信息"
+L["opt_tab_delvesLoot_showKeys_desc"] = "切换钥匙信息的显示"
+
+
+
+
 
 L["ResultsText"] = "没有角色显示"
 

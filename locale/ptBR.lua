@@ -4,6 +4,11 @@ if not L then
 	return
 end
 
+L["Bindings_toggle_window"] = "Alternar janela"
+
+L["highestReward_tooltip_title"] = "Maior Recompensa"
+L["highestReward_tooltip_desc"] = "Nível de item da maior recompensa do Grande Cofre desbloqueada" 
+
 
 L["character"] = "Personagem"
 L["ilevel"] = "Nível de item"
