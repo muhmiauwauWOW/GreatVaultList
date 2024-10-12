@@ -160,7 +160,6 @@ function GreatVaultListOptions:InitColumnCategory()
     local setting = Settings.RegisterAddOnSetting(self.ColumnsSubcategory, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
 
 
-    DevTool:AddData(GREATVAULTLIST_COLUMNS)
     setting:SetValueChangedCallback(function(self)
         local value = self:GetValue()
         if not value then return end

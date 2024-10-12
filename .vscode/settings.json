@@ -257,7 +257,9 @@
         "SettingsInbound",
         "PlayerSpellsFrame",
         "GreatVaultListFrameCloseButton",
-        "HelpPlate"
+        "HelpPlate",
+        "CreateSettingsButtonInitializer",
+        "SETTINGS_KEYBINDINGS_LABEL"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

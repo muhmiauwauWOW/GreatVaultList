@@ -26,6 +26,28 @@ L["opt_position_desc"] = "이 모듈의 열 위치 변경"
 L["opt_minimap_name"] = "미니맵 버튼 숨기기"
 L["opt_minimap_desc"] = "미니맵 버튼 표시 여부 토글"
 
+
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "직업 색상 사용"
+L["opt_columns_character_useClassColors_desc"] = "캐릭터 이름에 기본 또는 사용자 지정 직업 색상을 사용합니다. \n\n사용자 지정의 경우 'ColorTools Class Colors' 애드온을 사용하세요."
+
+
+L["opt_columns_ilevel_floatNumber_name"] = "소수점 이하 자릿수"
+L["opt_columns_ilevel_floatNumber_desc"] = "소수점 뒤에 표시할 숫자의 수를 제어합니다."
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "이 탭을 활성화하거나 비활성화합니다. \n\n이름: %s\nID: %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "열쇠 정보 표시"
+L["opt_tab_delvesLoot_showKeys_desc"] = "열쇠 정보 표시 여부 토글"
+
+
+
+
+
 L["ResultsText"] = "표시할 캐릭터가 없습니다"
 
 -- tabs loot general

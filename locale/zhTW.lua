@@ -26,6 +26,28 @@ L["opt_position_desc"] = "變更此模組欄的位置"
 L["opt_minimap_name"] = "隱藏小地圖按鈕"
 L["opt_minimap_desc"] = "啟用或停用小地圖按鈕的顯示"
 
+
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "使用職業顏色"
+L["opt_columns_character_useClassColors_desc"] = "使用預設或自訂職業顏色顯示角色名稱 \n\n自訂顏色請使用 'ColorTools Class Colors' 插件。"
+
+
+L["opt_columns_ilevel_floatNumber_name"] = "浮點數"
+L["opt_columns_ilevel_floatNumber_desc"] = "控制小數點後顯示的位數。"
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "啟用或停用此分頁 \n\n名稱: %s\nID: %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "顯示鑰匙資訊"
+L["opt_tab_delvesLoot_showKeys_desc"] = "切換鑰匙資訊的顯示"
+
+
+
+
+
 L["ResultsText"] = "沒有角色顯示"
 
 -- tabs loot general

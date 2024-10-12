@@ -26,6 +26,28 @@ L["opt_position_desc"] = "Changer la position de la colonne de ce module"
 L["opt_minimap_name"] = "Cacher le bouton de la mini-carte"
 L["opt_minimap_desc"] = "Activer ou désactiver la visibilité du bouton de la mini-carte"
 
+
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "Utiliser les couleurs de classe"
+L["opt_columns_character_useClassColors_desc"] = "Utiliser les couleurs de classe par défaut ou personnalisées pour le nom du personnage \n\nPour la personnalisation, utiliser l'addon 'ColorTools Class Colors'."
+
+
+L["opt_columns_ilevel_floatNumber_name"] = "Nombres à virgule flottante"
+L["opt_columns_ilevel_floatNumber_desc"] = "Contrôler le nombre de chiffres à afficher après la virgule."
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "Activer ou désactiver cet onglet \n\nNom : %s\nID : %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "Afficher les informations sur les clés"
+L["opt_tab_delvesLoot_showKeys_desc"] = "Activer/désactiver l'affichage des informations sur les clés"
+
+
+
+
+
 L["ResultsText"] = "Aucun personnage à afficher"
 
 -- tabs loot general

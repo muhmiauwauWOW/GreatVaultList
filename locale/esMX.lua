@@ -26,6 +26,28 @@ L["opt_position_desc"] = "Cambiar la posición de la columna de este módulo"
 L["opt_minimap_name"] = "Ocultar botón del minimapa"
 L["opt_minimap_desc"] = "Activar o desactivar la visibilidad del botón del minimapa"
 
+
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "Usar colores de clase"
+L["opt_columns_character_useClassColors_desc"] = "Usar colores de clase predeterminados o personalizados para el nombre del personaje \n\nPara personalizar, usa el addon 'ColorTools Class Colors'."
+
+
+L["opt_columns_ilevel_floatNumber_name"] = "Números decimales"
+L["opt_columns_ilevel_floatNumber_desc"] = "Controla cuántos números se deben mostrar después del punto decimal."
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "Activar o desactivar esta pestaña \n\nNombre: %s\nID: %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "Mostrar información clave"
+L["opt_tab_delvesLoot_showKeys_desc"] = "Alternar la visualización de la información clave"
+
+
+
+
+
 L["ResultsText"] = "No hay personajes para mostrar"
 
 -- tabs loot general
