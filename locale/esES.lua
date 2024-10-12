@@ -11,6 +11,8 @@ L["keystone"] = "Piedra angular"
 
 L["OpenVault"] = "Ver bóveda"
 
+L["opt_category_columns"] = "Columnas"
+
 L["opt_lines_name"] = "Líneas"
 L["opt_lines_desc"] = "Cantidad de líneas a mostrar"
 
@@ -25,6 +27,12 @@ L["opt_position_desc"] = "Cambiar la posición de la columna de este módulo"
 
 L["opt_minimap_name"] = "Ocultar botón del minimapa"
 L["opt_minimap_desc"] = "Activar o desactivar la visibilidad del botón del minimapa"
+
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "Activar esta pestaña"
+
+L["opt_tab_delvesLoot_showKeys_name"] = "Mostrar información clave"
+L["opt_tab_delvesLoot_showKeys_desc"] = "Alternar la visualización de la información clave"
 
 L["ResultsText"] = "No hay personajes que mostrar"
 

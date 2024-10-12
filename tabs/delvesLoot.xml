@@ -7,7 +7,7 @@
     <Frame name="GreatVaultListDelvesLootTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListDelvesLootListMixin" virtual="true">
         <Frames>
             <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
-            <Frame parentKey="keys" >
+            <Frame parentKey="keys" hidden="true">
                 <Size x="0" y="20"/>
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="-10" y="-15"/>

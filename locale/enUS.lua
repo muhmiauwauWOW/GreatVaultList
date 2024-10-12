@@ -19,6 +19,8 @@ L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vaul
 
 L["OpenVault"] = "View Vault"
 
+L["opt_category_columns"] = "Columns"
+
 L["opt_lines_name"] = "Lines"
 L["opt_lines_desc"] = "Amount of lines to display"
 
@@ -35,9 +37,25 @@ L["opt_minimap_name"] = "Hide minimap button"
 L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
 
 
+-- Columns
+L["opt_columns_character_useClassColors_name"] = "Use Class Colors"
+L["opt_columns_character_useClassColors_desc"] = "Use default or custom Class Colors for character name \n\nFor custom use the addon 'ColorTools Class Colors'."
 
-L["opt_tab_actve_name"] = "Active"
-L["opt_tab_actve_desc"] = "Activate this tab"
+
+L["opt_columns_ilevel_floatNumber_name"] = "Float numbers"
+L["opt_columns_ilevel_floatNumber_desc"] = "Control how many numbers should be displayed after the decimal point."
+
+
+-- Tabs
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "Aktiviert oder deaktiviert diesen Tab \n\nName: %s\nID: %s"
+
+
+L["opt_tab_delvesLoot_showKeys_name"] = "Show key info"
+L["opt_tab_delvesLoot_showKeys_desc"] = "Toggle display of the key infomation"
+
+
+
 
 
 L["ResultsText"] = "No characters to display"

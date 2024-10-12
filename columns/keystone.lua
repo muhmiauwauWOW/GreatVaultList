@@ -30,7 +30,7 @@ Column.config = {
         function(self)
             GreatVaultList.Data:store(self.config, true)
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
+                GreatVaultListFrame:RefreshScrollFrame()
             end
         end
     },

@@ -4,6 +4,27 @@ local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
 Column.DBkey = "name"
+
+Column.Option = {}
+function Column:AddOptions(category, optionTable)
+    Column.Option = optionTable
+
+	local setting = Settings.RegisterAddOnSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], true)
+
+	setting:SetValueChangedCallback(function(self)
+        if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+            GreatVaultListFrame:RefreshScrollFrame()
+        end
+	end)
+
+	Settings.CreateCheckbox(category, setting, L["opt_columns_character_useClassColors_desc"])
+end
+
+local function getUnitColor(playerClass)
+    return (type(_G.CUSTOM_CLASS_COLORS) == "table") and _G.CUSTOM_CLASS_COLORS[playerClass] or _G.RAID_CLASS_COLORS[playerClass]
+end
+
+
 Column.config = {
     ["index"] = 2,
     ["defaultIndex"] = 2,
@@ -28,5 +49,16 @@ Column.config = {
 
         return characterInfo
     end,
+    ["populate"] = function(self, name)
+        if not name or type(name) ~= "string" then return end
+        if not self.rowData then return end
+        if not self.rowData.data then return end
+
+        if Column.Option.useClassColors and self.rowData.data.class then
+            return getUnitColor(self.rowData.data.class):WrapTextInColorCode(name)
+        end
+
+        return name
+    end
 
 }

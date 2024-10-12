@@ -38,6 +38,7 @@ local default_global_data = {
 			minimap = {
 				hide = false,
 			},
+			columns = {},
 			tabs = {
 				['*'] = {
 					active = true,
@@ -133,7 +134,8 @@ GREATVAULTLIST_COLUMNS = {
 			active = true,
 			index = self.config.defaultIndex,
             id = self.key,
-            name = self.config.header.text or ""
+            name = self.config.header.text or "",
+			module = self
 		}
 
 		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 

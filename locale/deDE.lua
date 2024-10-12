@@ -29,6 +29,14 @@ L["opt_position_desc"] = "Ändern der Position der Spalte dieses Moduls"
 L["opt_minimap_name"] = "Minimap Button ausblenden"
 L["opt_minimap_desc"] = "Ein- oder Ausblenden des Minikarte-Buttons"
 
+L["opt_tab_actve_name"] = "%s"
+L["opt_tab_actve_desc"] = "Aktiviert oder deaktiviert diesen Tab \n\nName: %s\nID: %s"
+
+L["opt_tab_delvesLoot_showKeys_name"] = "Schlüsselinfo anzeigen"
+L["opt_tab_delvesLoot_showKeys_desc"] = "Anzeige der Schlüsselinformationen umschalten"
+
+
+
 L["ResultsText"] = "Keine Charaktere zum anzeigen"
 
 
