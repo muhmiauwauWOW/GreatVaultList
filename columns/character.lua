@@ -9,7 +9,7 @@ Column.Option = {}
 function Column:AddOptions(category, optionTable)
     Column.Option = optionTable
 
-	local setting = Settings.RegisterAddOnSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], true)
+	local setting = Settings.RegisterAddOnSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], false)
 
 	setting:SetValueChangedCallback(function(self)
         if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
