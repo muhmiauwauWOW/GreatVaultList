@@ -16,6 +16,15 @@ function GreatVaultListOptions:init()
     Settings.RegisterAddOnCategory(category)
     GreatVaultList.OptionsID = category:GetID()
 
+
+    -- Init columns category
+    self:InitColumnCategory()
+    -- Init Tabs category
+    self:InitTabsCategory()
+
+
+
+
     local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
     setting:SetValueChangedCallback(function(self)
         if self:GetValue() then 
@@ -51,37 +60,142 @@ function GreatVaultListOptions:init()
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
     Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
 
-    self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
+
+
+
+
+
+
+
+
+    do
+		local function onButtonClick()
+            local keybindsCategory = SettingsPanel:GetCategory(Settings.KEYBINDINGS_CATEGORY_ID);
+            local keybindsLayout = SettingsPanel:GetLayout(keybindsCategory);
+            for _, initializer in keybindsLayout:EnumerateInitializers() do
+                if initializer.data.name == BINDING_HEADER_GreatVaultList then
+                    initializer.data.expanded = true;
+                    Settings.OpenToCategory(Settings.KEYBINDINGS_CATEGORY_ID, BINDING_HEADER_GreatVaultList);
+                    return;
+                end
+            end
+		end
+
+        local addSearchTags = false;
+		local initializer = CreateSettingsButtonInitializer("", SETTINGS_KEYBINDINGS_LABEL, onButtonClick, nil, addSearchTags);
+		layout:AddInitializer(initializer);
+	end
+
+
+    -- Settings.OpenToCategory(GreatVaultList.OptionsID)
 end
 
 
 
-function GreatVaultListOptions:addModule(module)    
-    local cbSetting = Settings.RegisterAddOnSetting(self.category, "moduleactive"..module.key, "active", GreatVaultList.db.global.Options.modules[module.key], "boolean", module.key, true)
-    local sliderSetting = Settings.RegisterAddOnSetting(self.category, "moduleindex"..module.key, "index", GreatVaultList.db.global.Options.modules[module.key], "number", module.key, module.config.index)
 
-    cbSetting:SetValueChangedCallback(function(self)
-        local value = self:GetValue()
-        
-        if value == true then 
-            module:Enable()
-        else 
-            module:Disable()
+
+
+function GreatVaultListOptions:InitTabsCategory()
+    self.TabsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category, "Tabs");
+    self.tabsSubcategories = {}
+
+    _.forEach(GreatVaultList.Tabs.registeredTabs, function(entry, id)
+        local name = entry.name
+
+        local checkboxName = string.format(L["opt_tab_actve_name"], name, id )
+        local checkboxTooltip = string.format(L["opt_tab_actve_desc"], name, id )
+
+        local setting = Settings.RegisterAddOnSetting(self.TabsSubcategory, id .. "active", "active", GreatVaultList.db.global.Options.tabs[id], "boolean", checkboxName, true)
+        setting:SetValueChangedCallback(function(self)
+            local value = self:GetValue()
+            if value then 
+                entry:Enable()
+            else 
+                entry:Disable()
+            end
+        end)
+
+        Settings.CreateCheckbox(self.TabsSubcategory, setting, checkboxTooltip)
+
+        -- add tab spezific optionsTable
+        local tabFrame = _G["GreatVaultList_TabFrame_"..id]
+        if tabFrame.AddOptions then
+            local category = Settings.RegisterVerticalLayoutSubcategory(self.TabsSubcategory, name);
+            Settings.RegisterAddOnCategory(category);
+            self.tabsSubcategories[id] = category
+
+            tabFrame:AddOptions(self.tabsSubcategories[id])
         end
-        
-        GreatVaultList:updateData()
+    end)
+end
+
+
+
+
+
+function GreatVaultListOptions:InitColumnCategory()
+    self.ColumnsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category,  L["opt_category_columns"]);
+    self.columnsSubcategories = {}
+
+    local default = {}
+    local options = {}
+     _.forEach(GreatVaultList.RegisterdModules, function(entry, key)
+        default[key] = { 
+			active = entry.active,
+			index = entry.index,
+            id = entry.id
+		}
+
+        options[key] = { 
+            id = entry.id,
+            name = entry.name
+		}
+
+        self:AddColumnCategory(entry)
+
     end)
 
-    sliderSetting:SetValueChangedCallback(function(self)
-        GreatVaultList:updateData()
+
+
+    local setting = Settings.RegisterAddOnSetting(self.ColumnsSubcategory, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
+
+
+    setting:SetValueChangedCallback(function(self)
+        local value = self:GetValue()
+        if not value then return end
+
+        _.forEach(GreatVaultList.RegisterdModules, function(entry, name)
+            local module = entry.module
+            local mode = value[name].active
+            if mode ~=  module.enabledState  then
+                if mode then
+                    module:Enable()
+                else
+                    module:Disable()
+                end
+            end
+            GreatVaultList:updateData(true)
+        end)
     end)
 
-    local options = Settings.CreateSliderOptions(0, 10, 1)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    Settings.CreateColumnOrder(self.ColumnsSubcategory, setting,  options,  L["opt_column_order_desc"])
 
-    local initializer = CreateSettingsCheckboxSliderInitializer(
-            cbSetting, string.format(L["opt_module_name"], module.key), L["opt_module_desc"],
-            sliderSetting, options, L["opt_position_name"], L["opt_position_desc"]
-    );
-    self.layout:AddInitializer(initializer);
+
+end
+
+
+
+function GreatVaultListOptions:AddColumnCategory(entry)
+    local module = entry.module
+    if not module.AddOptions then return end
+    local name = entry.name
+
+    local category = Settings.RegisterVerticalLayoutSubcategory(self.ColumnsSubcategory, name);
+    Settings.RegisterAddOnCategory(category);
+    self.columnsSubcategories[entry.id] = category
+
+    if not GreatVaultList.db.global.Options.columns[module.key] or  type(GreatVaultList.db.global.Options.columns[module.key]) ~= "table" then
+        GreatVaultList.db.global.Options.columns[module.key] = {}
+    end
+    module:AddOptions(category, GreatVaultList.db.global.Options.columns[module.key])
 end

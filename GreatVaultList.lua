@@ -1,4 +1,5 @@
 local addonName = ...
+local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
@@ -11,23 +12,11 @@ end
 GVL_OPEN_VAULT = L["OpenVault"]
 
 
-function GreatVaultList_OnAddonCompartmentClick(addonName, buttonName)
-	if buttonName == "RightButton" then
-		Settings.OpenToCategory(GreatVaultList.OptionsID)
-	else
-		GreatVaultList:toggleWindow()
-	end
-end
+_G["BINDING_HEADER_GreatVaultList"] = AddOnInfo[2]
+_G["BINDING_NAME_GreatVaultList_toggle_window"] = L["Bindings_toggle_window"]
 
 
-local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
--- add data broker support 
-local ldb =  LibStub("LibDataBroker-1.1"):NewDataObject(AddOnInfo[2], {
-	type = "data source",
-	icon = C_AddOns.GetAddOnMetadata(addonName, "IconTexture"),
-	OnClick = GreatVaultList_OnAddonCompartmentClick,
-})
-GreatVaultList.minimapIcon = LibStub("LibDBIcon-1.0")
+
 
 
 GreatVaultList.config = {
@@ -35,9 +24,11 @@ GreatVaultList.config = {
 }
 
 
+
 local default_global_data = {
 	global = {
-		sort = 2,
+		sort = -1,
+		sortReverse = false,
 		characters = {},
 		Options = {
 			modules = {},
@@ -47,6 +38,13 @@ local default_global_data = {
 			minimap = {
 				hide = false,
 			},
+			columns = {},
+			tabs = {
+				['*'] = {
+					active = true,
+					index = nil
+				}
+			}
 		},
 	}
 }
@@ -72,22 +70,16 @@ end
 
 
 
+
 function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
-	GreatVaultList.Data:init()
-	GreatVaultList:slashcommand()
-	GreatVaultList.minimapIcon:Register(addonName, ldb, self.db.global.Options.minimap)
+	self.Data:init()
 
-	if BlizzMoveAPI then 
-		GreatVaultListFrame.Drag:Hide()
-		BlizzMoveAPI:RegisterAddOnFrames({
-			["GreatVaultList"] = { 
-				["GreatVaultListFrame"] = {}
-			},
-		});
-	else
-		GreatVaultListFrame:SetScale(self.db.global.Options.scale)
-	end
+	self:slashcommand()
+	
+	self:DataBrokerInit()
+	self:BlizzMove()
+	self:ElvUISkin()
 end
 
 function GreatVaultList:hideWindow()
@@ -100,8 +92,8 @@ function GreatVaultList:showWindow()
 	end
 
 	GreatVaultList.Data:storeAll()
-	GreatVaultList:updateData(true)
-	--GreatVaultList:demoMode()
+	GreatVaultList:updateData()
+	-- GreatVaultList:demoMode()
 	GreatVaultListFrame:Show()
 end
 
@@ -118,52 +110,85 @@ function GreatVaultList:slashcommand()
 	SLASH_GV1 = "/gv"
 	SLASH_GV2 = "/greatvault"
 	SlashCmdList["GV"] = function(msg)
-		GreatVaultList:toggleWindow()
+		if msg == "reset" then 
+			self.db:ResetDB("global")
+			C_UI.Reload()
+		else
+			GreatVaultList:toggleWindow()
+		end
 	end
 end
 
+GreatVaultList.RegisterdModules = {}
 GreatVaultList.ModuleColumns = {}
-local optionsInit = true
 
+GreatVaultList.DataCheck = nil
 
 GREATVAULTLIST_COLUMNS = {
 	OnInitialize = function(self)
-		if optionsInit then 
-			GreatVaultListOptions:init()
-			optionsInit = false
+		if not WeeklyRewardsFrame then
+			WeeklyRewards_LoadUI();
 		end
 
-		GreatVaultList.db.global.Options.modules[self.key] =  GreatVaultList.db.global.Options.modules[self.key] or { active = true, index = self.config.index }
-		GreatVaultListOptions:addModule(self)
-	end,
+		GreatVaultList.RegisterdModules[self.key] = {
+			active = true,
+			index = self.config.defaultIndex,
+            id = self.key,
+            name = self.config.header.text or "",
+			module = self
+		}
 
+		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
+			active = true,
+			index = self.config.defaultIndex,
+			id = self.key
+		}
+
+		if GreatVaultList.DataCheck then GreatVaultList.DataCheck:Cancel() end
+
+		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
+			GreatVaultList.DataCheck:Cancel()
+			GreatVaultListOptions:init()
+			
+			-- GreatVaultList:toggleWindow()
+		end)
+	end,
 	OnEnable = function(self)
-		-- return if already active
 		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
 
 		-- register col
 		table.insert(GreatVaultList.ModuleColumns, {
 			key = self.key,
+			DBkey = self.DBkey or self.key,
 			index = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
+			defaultIndex = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
 			config = self.config
 		})
 
 		-- store data 
 		if self.config.store then
-			GreatVaultList.Data:store(self.config, true)
+			C_Timer.After(3, function()
+				GreatVaultList.Data:store(self.config, true)
+			end)
 		end
 
 		-- register events
 		if self.config.event then
-			GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event)
+			self.config.eventHandle = GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event)
 				self.config.event[2](self, event)
 			end)
 		end
 	end,
 	OnDisable = function(self)
+		if GreatVaultList.db.global.Options.modules[self.key].active then return end
+
 		local fidx = _.findIndex(GreatVaultList.ModuleColumns, function(entry) return entry.key == self.key end)
 		if fidx > 0 then
 			table.remove(GreatVaultList.ModuleColumns, fidx)
+		end
+
+		if self.config.eventHandle then
+			GreatVaultList:UnregisterBucket(self.config.eventHandle)
 		end
 	end
 }
@@ -192,10 +217,11 @@ function GreatVaultList:updateData(refresh)
 	local data = {}
 	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
-			return entry[_.get(cEntry, { "config", "sort", "store" })]
+			return entry[_.get(cEntry, { "DBkey" })]
 		end)
 		d.name = key
 		d.enabled = entry.enabled == nil and true or entry.enabled
+		d.data = entry
 		d.selected = key == UnitName("player")
 		table.insert(data, d)
 	end)
@@ -246,3 +272,22 @@ end
 
 
 
+
+
+function GreatVaultList:GetVaultState()
+	if C_WeeklyRewards.HasAvailableRewards() then
+		return "collect";
+	end
+
+	local rewardCheck = false
+	_.forEach(Enum.WeeklyRewardChestThresholdType, function(type)
+		if rewardCheck then return end
+		rewardCheck = WeeklyRewardsUtil.HasUnlockedRewards(type)
+	end)
+
+	if rewardCheck then
+		return "complete";
+	end
+
+	return "incomplete";
+end

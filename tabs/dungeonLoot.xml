@@ -1,0 +1,13 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+    <Include file="dungeonLoot.lua"/>
+
+
+    <Frame name="GreatVaultListDungeonLootTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListDungeonLootListMixin" virtual="true">
+        <Frames>
+            <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
+        </Frames>
+    </Frame>
+    
+</Ui>

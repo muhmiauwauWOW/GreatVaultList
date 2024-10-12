@@ -1,0 +1,83 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+    <Include file="list.lua"/>
+
+    <Frame name="GreatVaultListListFrameTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListListMixin" virtual="true">
+        <Frames>
+            <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
+            <Button parentKey="SettingsButton">
+                <Size x="20" y="20"/>
+                <Anchors>
+                    <Anchor point="CENTER" relativeKey="$parent" relativePoint="TOPRIGHT" x="-10" y="-22"/>
+                </Anchors>
+                <HighlightTexture parentKey="HighlightTexture" atlas="QuestLog-icon-setting" setAllPoints="true" alphaMode="ADD" alpha=".2"/>
+                <NormalTexture parentKey="NormalTexture" atlas="QuestLog-icon-setting" setAllPoints="true" />
+                <Scripts>
+                    <OnClick>
+                        Settings.OpenToCategory(GreatVaultList.OptionsID)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="OpenVault" mixin="GreatVaultListListOpenVaultMixin">
+                <Size x="20" y="20"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.SettingsButton" relativePoint="LEFT" x="-5" y="0"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="handlesTexture" atlas="greatVault-handles-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="centerPlateTexture" atlas="greatVault-centerPlate-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </Texture>
+                        
+                    </Layer>
+                    <Layer level="HIGHLIGHT">
+                        <Texture parentKey="HighlightTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true"  alphaMode="ADD" alpha=".2" scale="0.1851852">
+                            <Anchors>
+                                <Anchor point="CENTER"/>
+                            </Anchors>
+                        </Texture>								
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick method="OnClick"/>
+                    <OnShow method="OnShow"/>
+                </Scripts>
+            </Button>
+
+            <DropdownButton parentKey="Filter" mixin="GreatVaultListListFilterMixin" inherits="WowStyle1FilterDropdownTemplate" >
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.OpenVault" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnLoad method="OnLoad"/>
+                    <OnShow method="OnShow"/>
+                </Scripts>
+            </DropdownButton>
+
+            <EditBox parentKey="Search" autoFocus="false" historyLines="1" bytes="64" mixin="GreatVaultListListSearchBoxMixin" inherits="SearchBoxTemplate">
+                <Size x="241" y="22"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="70" y="-11"/>
+                    <Anchor point="RIGHT" relativeKey="$parent.Filter" relativePoint="LEFT" x="-10" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnLoad method="OnLoad"/>
+                    <OnEnterPressed method="OnEnterPressed"/>
+                </Scripts>
+            </EditBox>
+        </Frames>
+    </Frame>
+</Ui>

@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="GreatVaultList_toggle_window" runOnUp="false" category="BINDING_HEADER_GreatVaultList">
+        GreatVaultList:toggleWindow()
+	</Binding>
+</Bindings>

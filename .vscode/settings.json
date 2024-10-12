@@ -251,7 +251,15 @@
         "SearchBoxTemplate_OnLoad",
         "LFG_LIST_NO_RESULTS_FOUND",
         "GreatVaultButtonMixin",
-        "PaperDollFrame_UpdateStats"
+        "PaperDollFrame_UpdateStats",
+        "SettingsControlMixin",
+        "CreateFramePool",
+        "SettingsInbound",
+        "PlayerSpellsFrame",
+        "GreatVaultListFrameCloseButton",
+        "HelpPlate",
+        "CreateSettingsButtonInitializer",
+        "SETTINGS_KEYBINDINGS_LABEL"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

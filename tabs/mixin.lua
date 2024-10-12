@@ -4,6 +4,7 @@ local L, _ = GreatVaultList:GetLibs()
 
 GreatVaultListLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
 
+GreatVaultListLootListMixin.id = ""
 GreatVaultListLootListMixin.tabName = ""
 GreatVaultListLootListMixin.sortOrder = 1
 
@@ -15,13 +16,8 @@ function GreatVaultListLootListMixin:OnLoad()
 	self.columnConfig = {}
 	self.columns = {}
 
-
 	self:BuildData()
 	self:init()
-
-	GreatVaultListFrame:HookScript("OnLoad", function() 
-		GreatVaultListFrame:AddTabFn(self.tabName, self); --Delves Item Level Loot Table
-	end)
 end
 
 function GreatVaultListLootListMixin:OnShow()
@@ -46,41 +42,7 @@ end
 
 
 function GreatVaultListLootListMixin:colorItemLvl(itemlvl, ilvl)
-
-    local function ColorGradient(perc, r1, g1, b1, r2, g2, b2)
-        if perc >= 1 then
-            local r, g, b = r2, g2, b2 -- select(select('#', ...) - 2, ...)
-            return r, g, b
-        elseif perc <= 0 then
-            local r, g, b = r1, g1, b1
-            return r, g, b
-        end
-    
-        -- local num = 2 -- select('#', ...) / 3
-        -- local segment, relperc = math.modf(perc) --*(num-1))
-        -- local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
-    
-        return r1 + (r2 - r1) * perc, g1 + (g2 - g1) * perc, b1 + (b2 - b1) * perc
-    end
-
-
-    local function ColorDiff(a, b)
-        local diff = a - b
-        local perc = (diff + 10) / 30
-    
-        local r, g, b
-        if perc < 0 then -- higher ilevel than us
-            perc = perc * -1
-            r, g, b = ColorGradient(perc, 1, 1, 0, 0, 1, 0)
-        else
-            r, g, b = ColorGradient(perc, 1, 1, 0, 1, 0, 0)
-        end
-        return r, g, b
-    end
-
-    local r1, g1, b1 = ColorDiff(itemlvl, ilvl)
-
-    return CreateColor(r1, g1, b1):WrapTextInColorCode(ilvl)
+    return GreatVaultList.Util:colorItemLvl(itemlvl, ilvl, 10, 30)
 end
 
 

@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+    <Include file="TableCell.lua"/>
+
+
+    <Frame name="GreatVaultListTableCellTextTemplate" mixin="GreatVaultListTableCellTextMixin" virtual="true">
+		<Size x="0" y="16"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString parentKey="Text" inherits="Number13FontWhite" justifyH="LEFT" setAllPoints="true"/>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Frame name="GreatVaultListTableCellIconTemplate" mixin="GreatVaultListTableCellIconMixin" virtual="true">
+		<Size x="0" y="16"/>
+		<Frames>
+			<Frame parentKey="IconFrame">
+				<Size x="15" y="15"/>
+				<Anchors>
+					<Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" x="0" y="0"/>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Icon" atlas="classicon-paladin" useAtlasSize="true" setAllPoints="true" />
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+	</Frame>
+
+
+   <Frame name="GreatVaultListTableCellTripleTextTemplate" mixin="GreatVaultListTableCellTripleTextMixin" virtual="true">
+		<Size x="0" y="16"/>
+      <Frames>
+			<Frame parentKey="Text1" inherits="GreatVaultListTableCellTextTemplate">
+				<Anchors>
+					<Anchor point="LEFT"  x="0" y="0"/>
+				</Anchors>
+			</Frame>
+         <Frame parentKey="Text2" inherits="GreatVaultListTableCellTextTemplate">
+				<Anchors>
+					<Anchor point="CENTER" x="0" y="0"/>
+				</Anchors>
+			</Frame>
+         <Frame parentKey="Text3" inherits="GreatVaultListTableCellTextTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" x="0" y="0"/>
+				</Anchors>
+			</Frame>
+      </Frames>
+	</Frame>
+</Ui>

@@ -1,0 +1,57 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+	<Script file="GreatVaultListFMixin.lua"/>
+
+
+
+	<Include file="frames/TableCell.xml"/>
+	<Include file="frames/TableHeaderString.xml"/>
+	<Include file="frames/TableLine.xml"/>
+	<Include file="frames/ItemList.xml"/>
+	<Include file="frames/Content.xml"/>
+	<Include file="frames/HelpButton.xml"/>
+	<Include file="frames/list.xml"/>
+
+
+	<Include file="tabs/mixin.lua"/>
+	<Include file="tabs/raidLoot.xml"/>
+	<Include file="tabs/dungeonLoot.xml"/>
+	<Include file="tabs/delvesLoot.xml"/>
+
+
+   <Frame name="GreatVaultListFrame" toplevel="true" hidden="true" enableMouse="true" parent="UIParent" mixin="GreatVaultListMixin" inherits="PortraitFrameTemplate, TabSystemOwnerTemplate" >
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Frames>
+			<Frame parentKey="Drag">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="0"/>
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="TOPRight" x="0" y="-60"/>
+				</Anchors>
+			</Frame>
+
+			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate"/>
+			<!-- <Frame parentKey="RaidLootList" inherits="GreatVaultListRaidLootTemplate" hidden="true"/>
+			<Frame parentKey="DungeonLootList" inherits="GreatVaultListDungeonLootTemplate" hidden="true"/>
+			<Frame parentKey="DelvesLootList" inherits="GreatVaultListDelvesLootTemplate" hidden="true"/> -->
+
+			<Frame parentKey="TabSystem" inherits="TabSystemTemplate">
+				<KeyValues>
+					<KeyValue key="minTabWidth" value="70" type="number"/>
+					<KeyValue key="maxTabWidth" value="320" type="number"/>
+				</KeyValues>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="22" y="2"/>
+				</Anchors>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnShow method="OnShow"/>
+			<OnHide method="OnHide"/>
+		</Scripts>
+	</Frame>
+
+</Ui>

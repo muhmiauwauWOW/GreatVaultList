@@ -16,18 +16,14 @@ local DIFFICULTY_NAMES = {
 
 local PRIMARY_RAIDS = { DifficultyUtil.ID.PrimaryRaidLFR, DifficultyUtil.ID.PrimaryRaidNormal, DifficultyUtil.ID.PrimaryRaidHeroic, DifficultyUtil.ID.PrimaryRaidMythic };
 
+
 Column.key = ColumKey
 Column.config = {
-    ["index"] = 4,
+    ["defaultIndex"] = 5,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate",
     ["width"] = 100,
     ["padding"] = 0, 
-    ["header"] =  { key = ColumKey, text = RAIDS, width = 40, canSort = true},
-    ["subCols"] = 3,
-    ["sort"] = {
-        ["key"] = ColumKey,
-        ["store"] = ColumKey,
-    },
+    ["header"] =  { key = ColumKey, text = RAIDS, canSort = true},
     ["sortFn"] = function(a, b, comp)
         local a1Level = _.indexOf(PRIMARY_RAIDS, a[1].level)
         local b1Level = _.indexOf(PRIMARY_RAIDS, b[1].level)
@@ -93,7 +89,7 @@ Column.config = {
     ["populate"] = function(self, data, idx)
         if type(data) ~= "table" then return nil end
         local activity = _.get(data, {idx}, {} )
-        local text = nil -- set default 
+        local text = nil -- set default
         
         if not activity.progress then return nil end
         if not activity.threshold then return nil end
