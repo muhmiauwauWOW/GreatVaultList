@@ -11,6 +11,8 @@ L["keystone"] = "Schlüsselstein"
 
 L["OpenVault"] = "Schatzkammer ansehen"
 
+L["opt_category_columns"] = "Spalten"
+
 L["opt_lines_name"] = "Zeilen"
 L["opt_lines_desc"] = "Anzahl der anzuzeigenden Zeilen"
 

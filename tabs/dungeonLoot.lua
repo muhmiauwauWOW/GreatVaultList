@@ -2,9 +2,19 @@ local addonName = ...
 local L, _ = GreatVaultList:GetLibs()
 
 
+local TabID = "dungeonLoot"
+local Tab = GreatVaultList:NewModule(TabID, GREATVAULTLIST_TABS)
+
+Tab.id = TabID
+Tab.name = string.format(L["tabLoot_name"], DUNGEONS)
+Tab.template = "GreatVaultListDungeonLootTemplate"
+
+
+
 GreatVaultListDungeonLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
 
-GreatVaultListDungeonLootListMixin.tabName = string.format(L["tabLoot_name"], DUNGEONS)
+GreatVaultListDungeonLootListMixin.id = TabID
+GreatVaultListDungeonLootListMixin.tabName = Tab.name
 GreatVaultListDungeonLootListMixin.sortOrder = 4
 
 function GreatVaultListDungeonLootListMixin:OnLoad()

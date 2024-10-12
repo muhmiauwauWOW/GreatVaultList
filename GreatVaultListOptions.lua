@@ -16,6 +16,14 @@ function GreatVaultListOptions:init()
     Settings.RegisterAddOnCategory(category)
     GreatVaultList.OptionsID = category:GetID()
 
+
+    self:InitTabsCategory()
+    -- Init columns category
+    self:InitColumnCategory()
+
+
+
+
     local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
     setting:SetValueChangedCallback(function(self)
         if self:GetValue() then 
@@ -54,6 +62,16 @@ function GreatVaultListOptions:init()
 
 
 
+
+
+
+
+
+
+
+    
+
+
     self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Modules"));
 
     local default = {}
@@ -69,7 +87,13 @@ function GreatVaultListOptions:init()
             id = entry.id,
             name = entry.name
 		}
+
+        self:AddColumnCategory(entry)
+
     end)
+
+
+  
     
 
     local setting = Settings.RegisterAddOnSetting(self.category, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
@@ -90,4 +114,62 @@ function GreatVaultListOptions:init()
 
 
     Settings.CreateColumnOrder(self.category, setting,  options,  L["opt_column_order_desc"])
+
+    -- Settings.OpenToCategory(GreatVaultList.OptionsID)
+    -- Settings.OpenToCategory(GreatVaultList.OptionsID)
+end
+
+
+
+
+
+
+function GreatVaultListOptions:InitTabsCategory()
+    self.TabsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category, "Tabs");
+    self.tabsSubcategories = {}
+
+    _.forEach(GreatVaultList.Tabs.registeredTabs, function(entry, id)
+        local name = entry.name
+        local category = Settings.RegisterVerticalLayoutSubcategory(self.TabsSubcategory, name);
+        Settings.RegisterAddOnCategory(category);
+        self.tabsSubcategories[id] = category
+
+        local setting = Settings.RegisterAddOnSetting(self.tabsSubcategories[id], id .. "active", "active", GreatVaultList.db.global.Options.tabs[id], "boolean", L["opt_tab_actve_name"], true)
+        setting:SetValueChangedCallback(function(self)
+            local value = self:GetValue()
+            print("value", value, entry:IsEnabled())
+            if value then 
+                entry:Enable()
+            else 
+                entry:Disable()
+            end
+
+        end)
+        Settings.CreateCheckbox(self.tabsSubcategories[id], setting, L["opt_tab_actve_desc"])
+
+        local tabFrame = _G["GreatVaultList_TabFrame_"..id]
+        if tabFrame.AddConfig then
+            tabFrame:AddConfig(self.tabsSubcategories[id])
+        end
+
+    end)
+end
+
+
+
+
+
+function GreatVaultListOptions:InitColumnCategory()
+    self.ColumnsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category,  L["opt_category_columns"]);
+    self.columnsSubcategories = {}
+end
+
+
+
+function GreatVaultListOptions:AddColumnCategory(entry)
+
+    local name = string.format("%s (%s)", entry.name, entry.id)
+    local category = Settings.RegisterVerticalLayoutSubcategory(self.ColumnsSubcategory, name);
+    Settings.RegisterAddOnCategory(category);
+    self.columnsSubcategories[entry.id] = category
 end

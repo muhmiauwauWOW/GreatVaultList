@@ -42,6 +42,7 @@ misc/ElvUISkin.lua
 
 GreatVaultListUtil.lua
 GreatVaultListData.lua
+GreatVaultListTabs.lua
 
 ColumnOrderSettings.xml
 GreatVaultListOptions.lua

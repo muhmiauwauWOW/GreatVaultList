@@ -11,9 +11,9 @@
 	<Include file="frames/ItemList.xml"/>
 	<Include file="frames/Content.xml"/>
 	<Include file="frames/HelpButton.xml"/>
+	<Include file="frames/list.xml"/>
 
 
-	<Include file="tabs/list.xml"/>
 	<Include file="tabs/mixin.lua"/>
 	<Include file="tabs/raidLoot.xml"/>
 	<Include file="tabs/dungeonLoot.xml"/>
@@ -33,9 +33,9 @@
 			</Frame>
 
 			<Frame parentKey="ListFrame" inherits="GreatVaultListListFrameTemplate"/>
-			<Frame parentKey="RaidLootList" inherits="GreatVaultListRaidLootTemplate" hidden="true"/>
+			<!-- <Frame parentKey="RaidLootList" inherits="GreatVaultListRaidLootTemplate" hidden="true"/>
 			<Frame parentKey="DungeonLootList" inherits="GreatVaultListDungeonLootTemplate" hidden="true"/>
-			<Frame parentKey="DelvesLootList" inherits="GreatVaultListDelvesLootTemplate" hidden="true"/>
+			<Frame parentKey="DelvesLootList" inherits="GreatVaultListDelvesLootTemplate" hidden="true"/> -->
 
 			<Frame parentKey="TabSystem" inherits="TabSystemTemplate">
 				<KeyValues>

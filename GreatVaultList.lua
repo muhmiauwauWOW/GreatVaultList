@@ -38,6 +38,12 @@ local default_global_data = {
 			minimap = {
 				hide = false,
 			},
+			tabs = {
+				['*'] = {
+					active = true,
+					index = nil
+				}
+			}
 		},
 	}
 }
@@ -142,7 +148,7 @@ GREATVAULTLIST_COLUMNS = {
 			GreatVaultList.DataCheck:Cancel()
 			GreatVaultListOptions:init()
 			
-	
+			-- GreatVaultList:toggleWindow()
 		end)
 	end,
 	OnEnable = function(self)

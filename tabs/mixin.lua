@@ -4,6 +4,7 @@ local L, _ = GreatVaultList:GetLibs()
 
 GreatVaultListLootListMixin  = CreateFromMixins(GreatVaultListListMixin);
 
+GreatVaultListLootListMixin.id = ""
 GreatVaultListLootListMixin.tabName = ""
 GreatVaultListLootListMixin.sortOrder = 1
 
@@ -15,13 +16,8 @@ function GreatVaultListLootListMixin:OnLoad()
 	self.columnConfig = {}
 	self.columns = {}
 
-
 	self:BuildData()
 	self:init()
-
-	GreatVaultListFrame:HookScript("OnLoad", function() 
-		GreatVaultListFrame:AddTabFn(self.tabName, self); --Delves Item Level Loot Table
-	end)
 end
 
 function GreatVaultListLootListMixin:OnShow()
