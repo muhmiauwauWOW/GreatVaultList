@@ -5,6 +5,12 @@ if not L then
 end
 
 
+L["Bindings_toggle_window"] = "Alternar ventana"
+
+L["highestReward_tooltip_title"] = "Recompensa más alta" 
+L["highestReward_tooltip_desc"] = "Nivel de objeto de la recompensa de la gran cámara acorazada desbloqueada más alta"
+
+
 L["character"] = "Personaje"
 L["ilevel"] = "Nivel de objeto"
 L["keystone"] = "Piedra angular"

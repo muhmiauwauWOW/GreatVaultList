@@ -156,9 +156,9 @@ function ListMixin:calcAutoWidthColumns(data, columnConfig, columns)
 			self.tframe:Init(self, index, columns, columnConfig)
 			self.tframe:Populate(entry, index)
 			local w = math.ceil(self.tframe.Text:GetStringWidth())
-			maxWidth = w > maxWidth and w or maxWidth
+			maxWidth = math.max(w, maxWidth)
 		end)
-
+		
 		column.width = maxWidth + ( (column.padding or GreatVaultList.config.defaultCellPadding ) * 2)
 		return column
 	end)

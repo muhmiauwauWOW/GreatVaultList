@@ -6,6 +6,12 @@ end
 
 
 
+L["Bindings_toggle_window"] = "Attiva/disattiva finestra"
+
+L["highestReward_tooltip_title"] = "Ricompensa più alta"
+L["highestReward_tooltip_desc"] = "Livello oggetto della ricompensa della volta più alta sbloccata" 
+
+
 L["character"] = "Personaggio"
 L["ilevel"] = "Liv. Oggetto"
 L["keystone"] = "Chiave del Potere"

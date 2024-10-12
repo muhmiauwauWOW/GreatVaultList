@@ -51,8 +51,8 @@ Column.config = {
     end,
     ["populate"] = function(self, name)
         if not name or type(name) ~= "string" then return end
-        if not self.rowData then return end
-        if not self.rowData.data then return end
+        if not self.rowData then return name end
+        if not self.rowData.data then return name end
 
         if Column.Option.useClassColors and self.rowData.data.class then
             return getUnitColor(self.rowData.data.class):WrapTextInColorCode(name)

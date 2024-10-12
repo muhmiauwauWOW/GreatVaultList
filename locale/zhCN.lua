@@ -5,10 +5,10 @@ if not L then
 end
 
 
-L["Bindings_toggle_window"] = "Toggle window"
+L["Bindings_toggle_window"] = "切换窗口"
 
-L["highestReward_tooltip_title"] = "Highest Reward"
-L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" 
+L["highestReward_tooltip_title"] = "最高奖励"
+L["highestReward_tooltip_desc"] = "已解锁的最高大秘境宝库奖励的物品等级" 
 
 
 

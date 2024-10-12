@@ -5,6 +5,12 @@ if not L then
 end
 
 
+L["Bindings_toggle_window"] = "창 전환"
+
+L["highestReward_tooltip_title"] = "최고 보상"
+L["highestReward_tooltip_desc"] = "잠금 해제된 가장 높은 대장장이의 금고 보상의 아이템 레벨" 
+
+
 L["character"] = "캐릭터"
 L["ilevel"] = "아이템 레벨"
 L["keystone"] = "쐐기돌"
