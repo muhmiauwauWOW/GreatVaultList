@@ -8,6 +8,9 @@ function GreatVaultList.ElvUi:Init()
     if not C_AddOns.IsAddOnLoaded("ElvUI") then return end
 	
 	local E, L, V, P, G = unpack(ElvUI)
+	self.E = E
+	if not self.E .private.skins.blizzard.enable then return end
+
 	local S = E:GetModule("Skins")
 	self.S = S
 
@@ -69,6 +72,7 @@ end
 
 function GreatVaultList.ElvUi:AddTab(tab)
 	if not C_AddOns.IsAddOnLoaded("ElvUI") then return end
+	if not self.E .private.skins.blizzard.enable then return end
 	if not tab then return end
 	self:HandleSellList(tab.ItemList)
     for widget in GreatVaultListFrame.TabSystem.tabPool:EnumerateActive() do
