@@ -49,17 +49,9 @@ function GreatVaultListMixin:RemoveTab(id)
     local findIndex = _.findIndex(self.internalTabTracker.tabbedElements, function(tab, idx) return tab.id == id end)
     if findIndex  == -1 then return end
 
-
-    -- DevTool:AddData(self.internalTabTracker.tabbedElements[findIndex])
-    -- self.internalTabTracker.tabbedElements[findIndex]:Hide()
-    -- table.remove(self.internalTabTracker.tabbedElements, findIndex)
-    -- table.remove(self.TabSystem.tabs, findIndex)
-
-
     for widget in self.TabSystem.tabPool:EnumerateActive() do
         if widget.tabID == findIndex then
             widget:Hide()
-            -- self.TabSystem.tabPool:Release(widget)
         end
     end
 

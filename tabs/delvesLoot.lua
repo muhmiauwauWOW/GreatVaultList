@@ -21,10 +21,7 @@ function GreatVaultListDelvesLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
 	local keysState = GreatVaultList.db.global.Options.tabs[self.id].showKeys
 	self:SetKeysState(keysState)
-end
-
-function GreatVaultListDelvesLootListMixin:OnShow()
-	GreatVaultListLootListMixin.OnShow(self)	
+	-- GreatVaultList.ElvUi:AddTab(self)
 end
 
 function GreatVaultListDelvesLootListMixin:SetKeysState(state)

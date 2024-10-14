@@ -9,6 +9,9 @@ function GreatVaultList.Tabs:Add(id, name, template)
 	GreatVaultList:assert(name, "GreatVaultList.Tabs:Add", 'Argument (name) missing')
 	GreatVaultList:assert(template, "GreatVaultList.Tabs:Add", 'Argument (template) missing')
 
+
+	
+
 	local findIndex = _.findIndex(GreatVaultListFrame.internalTabTracker.tabbedElements, function(tab, idx) return tab.id == id end)
 	if findIndex  ~= -1 then
 	
@@ -28,9 +31,8 @@ function GreatVaultList.Tabs:Add(id, name, template)
 
 	local frame = CreateFrame("Frame", "GreatVaultList_TabFrame_" .. id,GreatVaultListFrame, template)
 	frame:Hide()
-	GreatVaultListFrame:AddNamedTab(name, frame)
-
-	
+	GreatVaultListFrame:AddNamedTab(name, frame)	
+	GreatVaultList.ElvUi:AddTab(frame)
 end
 
 function GreatVaultList.Tabs:Remove(id)

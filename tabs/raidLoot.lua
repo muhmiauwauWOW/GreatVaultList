@@ -20,6 +20,7 @@ GreatVaultListRaidLootListMixin.sortOrder = 5
 
 function GreatVaultListRaidLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
+	-- GreatVaultList.ElvUi:AddTab(self)
 end
 
 function GreatVaultListRaidLootListMixin:GetHelpConfig()

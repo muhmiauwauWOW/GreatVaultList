@@ -1,11 +1,15 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
+local L, _ = GreatVaultList:GetLibs()
+
+GreatVaultList.ElvUi = {}
 
 -- support for all the ELVUI fanbois out there
-function GreatVaultList:ElvUISkin()
+function GreatVaultList.ElvUi:Init()
     if not C_AddOns.IsAddOnLoaded("ElvUI") then return end
 	
 	local E, L, V, P, G = unpack(ElvUI)
 	local S = E:GetModule("Skins")
+	self.S = S
 
 	GreatVaultListFrame:StripTextures()
 	GreatVaultListFrame:SetTemplate("Transparent")
@@ -25,6 +29,7 @@ function GreatVaultList:ElvUISkin()
 	S:HandleButton(GreatVaultListFrame.ListFrame.Filter)
 
 
+	
 	local function HandleHeaders(frame)
 		local maxHeaders = frame.HeaderContainer:GetNumChildren()
 		for i, header in next, { frame.HeaderContainer:GetChildren() } do
@@ -44,8 +49,8 @@ function GreatVaultList:ElvUISkin()
 		end
 	end
 
-	
-	local function HandleSellList(frame)
+
+	self.HandleSellList = function(self, frame)
 		frame:StripTextures()
 		frame:SetTemplate('Transparent')
 
@@ -56,8 +61,17 @@ function GreatVaultList:ElvUISkin()
 
 		hooksecurefunc(frame, 'RefreshScrollFrame', HandleHeaders)
 	end
-	HandleSellList(GreatVaultListFrame.ListFrame.ItemList)
-	HandleSellList(GreatVaultListFrame.RaidLootList.ItemList)
-	HandleSellList(GreatVaultListFrame.DungeonLootList.ItemList)
-	HandleSellList(GreatVaultListFrame.DelvesLootList.ItemList)
+
+
+	self:HandleSellList(GreatVaultListFrame.ListFrame.ItemList)
+end
+
+
+function GreatVaultList.ElvUi:AddTab(tab)
+	if not C_AddOns.IsAddOnLoaded("ElvUI") then return end
+	if not tab then return end
+	self:HandleSellList(tab.ItemList)
+    for widget in GreatVaultListFrame.TabSystem.tabPool:EnumerateActive() do
+		self.S:HandleTab(widget)
+    end
 end

@@ -19,6 +19,7 @@ GreatVaultListDungeonLootListMixin.sortOrder = 4
 
 function GreatVaultListDungeonLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
+	-- GreatVaultList.ElvUi:AddTab(self)
 end
 
 function GreatVaultListDungeonLootListMixin:GetHelpConfig()

@@ -79,7 +79,7 @@ function GreatVaultList:OnInitialize()
 	
 	self:DataBrokerInit()
 	self:BlizzMove()
-	self:ElvUISkin()
+	self.ElvUi:Init()
 end
 
 function GreatVaultList:hideWindow()
