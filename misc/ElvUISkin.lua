@@ -11,7 +11,7 @@ GreatVaultList.ElvUi.init = false
 function GreatVaultList.ElvUi:isActive()
 	if not C_AddOns.IsAddOnLoaded("ElvUI") then return false end
 	self.E = self.E or unpack(ElvUI)
-	if not self.E .private.skins.blizzard.enable then return false end
+	if not self.E.private.skins.blizzard.enable then return false end
 	if not GreatVaultList.db.global.Options.ElvUiSkin then return false end
 	self.S = self.S or self.E:GetModule("Skins")
 
