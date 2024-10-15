@@ -44,7 +44,8 @@ local default_global_data = {
 					active = true,
 					index = nil
 				}
-			}
+			},
+			ElvUiSkin = true
 		},
 	}
 }

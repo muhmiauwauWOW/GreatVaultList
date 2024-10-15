@@ -8,6 +8,7 @@ local BlizzMoveAPI = _G.BlizzMoveAPI
 GreatVaultListOptions = {}
 
 
+
 function GreatVaultListOptions:init()
     local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
     local category, layout = Settings.RegisterVerticalLayoutCategory(AddOnInfo[2])
@@ -22,9 +23,7 @@ function GreatVaultListOptions:init()
     -- Init Tabs category
     self:InitTabsCategory()
 
-
-
-
+    
     local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide", GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"], GreatVaultList.db.global.Options.minimap.hide)
     setting:SetValueChangedCallback(function(self)
         if self:GetValue() then 
@@ -63,10 +62,7 @@ function GreatVaultListOptions:init()
 
 
 
-
-
-
-
+    GreatVaultList.ElvUi:AddOption(self.category)
 
     do
 		local function onButtonClick()
@@ -88,6 +84,8 @@ function GreatVaultListOptions:init()
 
 
     -- Settings.OpenToCategory(GreatVaultList.OptionsID)
+
+
 end
 
 

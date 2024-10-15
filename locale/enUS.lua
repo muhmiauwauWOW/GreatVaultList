@@ -38,6 +38,10 @@ L["opt_minimap_name"] = "Hide minimap button"
 L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
 
 
+L["opt_ElvUiSkin_name"] = "Use ElvUi Skin"
+L["opt_ElvUiSkin_desc"] = "Changing this settings need a reload to take effect"
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Use Class Colors"
 L["opt_columns_character_useClassColors_desc"] = "Use default or custom Class Colors for character name \n\nFor custom use the addon 'ColorTools Class Colors'."
