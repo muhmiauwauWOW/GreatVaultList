@@ -151,9 +151,10 @@ function GreatVaultListOptions:InitColumnCategory()
 		}
 
         self:AddColumnCategory(entry)
-
     end)
 
+
+    local changesModules = CopyTable(GreatVaultList.db.global.Options.modules)
 
 
     local setting = Settings.RegisterAddOnSetting(self.ColumnsSubcategory, "modules", "modules", GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
@@ -162,19 +163,23 @@ function GreatVaultListOptions:InitColumnCategory()
     setting:SetValueChangedCallback(function(self)
         local value = self:GetValue()
         if not value then return end
-
+      
         _.forEach(GreatVaultList.RegisterdModules, function(entry, name)
             local module = entry.module
             local mode = value[name].active
-            if mode ~=  module.enabledState  then
+
+            if changesModules[name].active ~= mode then
                 if mode then
                     module:Enable()
                 else
                     module:Disable()
                 end
             end
-            GreatVaultList:updateData(true)
         end)
+
+        GreatVaultList:updateData(true)
+        changesModules = CopyTable(GreatVaultList.db.global.Options.modules)
+
     end)
 
     Settings.CreateColumnOrder(self.ColumnsSubcategory, setting,  options,  L["opt_column_order_desc"])

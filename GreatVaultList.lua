@@ -153,12 +153,10 @@ GREATVAULTLIST_COLUMNS = {
 		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
 			GreatVaultList.DataCheck:Cancel()
 			GreatVaultListOptions:init()
-			
-			-- GreatVaultList:toggleWindow()
 		end)
 	end,
 	OnEnable = function(self)
-		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
+		if not GreatVaultList.db.global.Options.modules[self.key].active then self:Disable(); return; end
 
 		-- register col
 		table.insert(GreatVaultList.ModuleColumns, {
@@ -184,7 +182,7 @@ GREATVAULTLIST_COLUMNS = {
 		end
 	end,
 	OnDisable = function(self)
-		if GreatVaultList.db.global.Options.modules[self.key].active then return end
+		if GreatVaultList.db.global.Options.modules[self.key].active then self:Enable(); return; end
 
 		local fidx = _.findIndex(GreatVaultList.ModuleColumns, function(entry) return entry.key == self.key end)
 		if fidx > 0 then
