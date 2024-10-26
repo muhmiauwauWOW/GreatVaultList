@@ -14,6 +14,7 @@ L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vaul
 
 
 L["character"] = "Character"
+L["realm"] = "Realm"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
 
@@ -45,6 +46,9 @@ L["opt_ElvUiSkin_desc"] = "Changing this settings need a reload to take effect"
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Use Class Colors"
 L["opt_columns_character_useClassColors_desc"] = "Use default or custom Class Colors for character name \n\nFor custom use the addon 'ColorTools Class Colors'."
+
+L["opt_columns_character_showRealmName_name"] = "Show realm name"
+L["opt_columns_character_showRealmName_desc"] = "Show the realm name of the character"
 
 
 L["opt_columns_ilevel_floatNumber_name"] = "Float numbers"

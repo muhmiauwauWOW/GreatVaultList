@@ -12,7 +12,7 @@ local WeeklyRewardChestThresholdType = {
 
 Column.key = ColumKey
 Column.config = {
-    ["defaultIndex"] = 3,
+    ["defaultIndex"] = 4,
     ["width"] = 40,
     ["autoWidth"] = true,
     ["header"] = { key = ColumKey, text = L[ColumKey], canSort = true },

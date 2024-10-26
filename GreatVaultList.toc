@@ -57,5 +57,6 @@ columns/class.lua
 columns/ilevel.lua
 columns/keystone.lua
 columns/raid.lua
+columns/realm.lua
 columns/world.lua
 columns/highestReward.lua

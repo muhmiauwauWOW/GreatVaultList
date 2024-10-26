@@ -117,6 +117,7 @@ function GreatVaultListOptions:InitTabsCategory()
 
         -- add tab spezific optionsTable
         local tabFrame = _G["GreatVaultList_TabFrame_"..id]
+        if not tabFrame then return end
         if tabFrame.AddOptions then
             local category = Settings.RegisterVerticalLayoutSubcategory(self.TabsSubcategory, name);
             Settings.RegisterAddOnCategory(category);

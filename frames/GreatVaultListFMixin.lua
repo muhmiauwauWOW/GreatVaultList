@@ -64,7 +64,7 @@ function GreatVaultListMixin:UpdateSize(width)
     self.width = width or self.width
 
 	local tabsWidth = self.TabSystem:GetWidth() + 50
-	self.width = math.max(tabsWidth, self.width)
+	self.width = math.max(tabsWidth, self.width, 300)
 
     if not GreatVaultList.db then return  end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7

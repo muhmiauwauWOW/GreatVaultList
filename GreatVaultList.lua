@@ -131,8 +131,11 @@ GREATVAULTLIST_COLUMNS = {
 			WeeklyRewards_LoadUI();
 		end
 
+
+		local defaultState = (self.config.defaultState == nil) and true or self.config.defaultState
+
 		GreatVaultList.RegisterdModules[self.key] = {
-			active = true,
+			active = defaultState,
 			index = self.config.defaultIndex,
             id = self.key,
             name = self.config.header.text or "",
@@ -140,7 +143,7 @@ GREATVAULTLIST_COLUMNS = {
 		}
 
 		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
-			active = true,
+			active = defaultState,
 			index = self.config.defaultIndex,
 			id = self.key
 		}

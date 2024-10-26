@@ -152,12 +152,13 @@ function ListMixin:calcAutoWidthColumns(data, columnConfig, columns)
 		self.tframe.Text:SetText(column.header.text)
 		local maxWidth = math.ceil(self.tframe.Text:GetStringWidth()) + addSpace -- addSpace for arrow 
 
-		_.forEach(data, function(entry)
+		_.forEach(data, function(rowData)			
 			self.tframe:Init(self, index, columns, columnConfig)
-			self.tframe:Populate(entry, index)
+			self.tframe:Populate(rowData, index)
 			local w = math.ceil(self.tframe.Text:GetStringWidth())
 			maxWidth = math.max(w, maxWidth)
 		end)
+
 		
 		column.width = maxWidth + ( (column.padding or GreatVaultList.config.defaultCellPadding ) * 2)
 		return column
@@ -171,7 +172,11 @@ function ListMixin:UpdateFilteredData(str)
 		self.ItemList.data = _.filter(self.data, function(entry) 
 			return 	entry.enabled 
 					and 
-					string.find(string.lower(entry.name), str, 0, true)
+					(
+						string.find(string.lower(entry.data.name), str, 0, true)
+						or 
+						string.find(string.lower(entry.data.realm), str, 0, true)
+					)
 		end)
 	else
 		self.ItemList.data = _.filter(self.data, function(entry) return entry.enabled end)

@@ -9,15 +9,26 @@ Column.Option = {}
 function Column:AddOptions(category, optionTable)
     Column.Option = optionTable
 
+    local function SetValueChangedCallback(setting, cb)
+        setting:SetValueChangedCallback(function(self)
+            if cb and type(cb) == "function" then cb(self) end
+
+            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultListFrame:RefreshScrollFrame()
+            end
+        end)
+    end
+    
+    -- showRealmName
 	local setting = Settings.RegisterAddOnSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], false)
-
-	setting:SetValueChangedCallback(function(self)
-        if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-            GreatVaultListFrame:RefreshScrollFrame()
-        end
-	end)
-
+    SetValueChangedCallback(setting)
 	Settings.CreateCheckbox(category, setting, L["opt_columns_character_useClassColors_desc"])
+
+
+    -- showRealmName
+    local setting = Settings.RegisterAddOnSetting(category, "showRealmName", "showRealmName", optionTable, "boolean", L["opt_columns_character_showRealmName_name"], false)
+    SetValueChangedCallback(setting)
+	Settings.CreateCheckbox(category, setting, L["opt_columns_character_showRealmName_desc"])
 end
 
 local function getUnitColor(playerClass)
@@ -45,6 +56,7 @@ Column.config = {
         characterInfo.name = UnitName("player")
         characterInfo.class = className
         characterInfo.realm = GetRealmName()
+        characterInfo.normalizedRealm = GetNormalizedRealmName()
         characterInfo.level = UnitLevel("player")
 
         return characterInfo
@@ -53,7 +65,13 @@ Column.config = {
         if not name or type(name) ~= "string" then return end
         if not self.rowData then return name end
         if not self.rowData.data then return name end
+        
+          -- showRealmName
+        if Column.Option.showRealmName and self.rowData.data.normalizedRealm then
+            name = string.format("%s-%s", name, self.rowData.data.normalizedRealm)
+        end
 
+        -- useClassColors
         if Column.Option.useClassColors and self.rowData.data.class then
             return getUnitColor(self.rowData.data.class):WrapTextInColorCode(name)
         end

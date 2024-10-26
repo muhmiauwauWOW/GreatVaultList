@@ -21,7 +21,7 @@ end
 
 
 Column.config = {
-    ["defaultIndex"] = 4,
+    ["defaultIndex"] = 5,
     ["width"] = 40,
     ["autoWidth"] = true,
     ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true},
