@@ -25,9 +25,10 @@ end
 function GreatVaultList.Data:write()
 	if self.disabled then return end
 	self.characterInfo.lastUpdate = time()
-	
-	local obj = self:get()
-	obj = self.characterInfo
+
+	local playerGUID = UnitGUID("player")
+	if not playerGUID then return end
+	GreatVaultList.db.global.characters[playerGUID] = self.characterInfo
 end
 
 function GreatVaultList.Data:store(config, write)
