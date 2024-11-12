@@ -37,7 +37,6 @@ end
 
 
 Column.config = {
-    ["index"] = 2,
     ["defaultIndex"] = 2,
     ["width"] = 100,
     ["autoWidth"] = true,

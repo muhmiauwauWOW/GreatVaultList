@@ -153,6 +153,7 @@ GREATVAULTLIST_COLUMNS = {
 		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
 			GreatVaultList.DataCheck:Cancel()
 			GreatVaultListOptions:init()
+			GreatVaultList.Data:storeAll()
 		end)
 	end,
 	OnEnable = function(self)
@@ -166,13 +167,6 @@ GREATVAULTLIST_COLUMNS = {
 			defaultIndex = _.get(GreatVaultList.db.global.Options.modules, { self.key, "index" }, self.config.index),
 			config = self.config
 		})
-
-		-- store data 
-		if self.config.store then
-			C_Timer.After(3, function()
-				GreatVaultList.Data:store(self.config, true)
-			end)
-		end
 
 		-- register events
 		if self.config.event then
@@ -216,15 +210,21 @@ function GreatVaultList:updateData(refresh)
 		return entry.key
 	end)
 
+
 	local data = {}
 	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
 			return entry[_.get(cEntry, { "DBkey" })]
 		end)
+
+		if entry.enabled == nil then
+			entry.enabled = true
+		end
+		
 		d.name = key
-		d.enabled = entry.enabled == nil and true or entry.enabled
+		d.enabled = entry.enabled
 		d.data = entry
-		d.selected = key == UnitName("player")
+		d.selected = (key == UnitName("player")) or (key == UnitGUID("player"))
 		table.insert(data, d)
 	end)
 

@@ -284,21 +284,17 @@ function GreatVaultListListFilterMixin:OnShow()
 	self.init = true
 
 	local function IsSelected(filter)
-		local find = _.find(GreatVaultList.db.global.characters, function(entry)
-			return entry.name == filter
-		end)
-		if find == nil then return  end
-		if find.enabled == nil then return true end
-		return find.enabled;
+		return GreatVaultList.db.global.characters[filter].enabled
 	end
 	
 	local function SetSelected(filter)
-		local find = _.find(GreatVaultList.db.global.characters, function(entry) return entry.name == filter end)
-
-		find.enabled = not find.enabled
+		local character = GreatVaultList.db.global.characters[filter]
+		if not character then return end
+		character.enabled = not character.enabled
+		
 		local findItemList = _.find(self:GetParent().data, function(entry) return entry.name == filter end)
+		findItemList.enabled = character.enabled
 
-		findItemList.enabled = find.enabled
 		self:GetParent():UpdateFilteredData()
 		self:GetParent().Search:Reset();
 
@@ -310,7 +306,7 @@ function GreatVaultListListFilterMixin:OnShow()
 	self:SetupMenu(function(dropdown, rootDescription)
 		rootDescription:SetTag("MENU_GREATVAULTLIST_FILTER");
 		_.forEach(GreatVaultList.db.global.characters, function(char, key)
-			rootDescription:CreateCheckbox(char.name, IsSelected, SetSelected, char.name);
+			rootDescription:CreateCheckbox(char.name, IsSelected, SetSelected, key);
 		end)
 	end);
 end
