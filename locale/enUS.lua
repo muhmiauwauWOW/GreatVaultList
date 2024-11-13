@@ -43,6 +43,22 @@ L["opt_ElvUiSkin_name"] = "Use ElvUi Skin"
 L["opt_ElvUiSkin_desc"] = "Changing this settings need a reload to take effect"
 
 
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "Delete character data"
+
+L["opt_CharacterDelete_slider_name"] = "Select character to delete"
+L["opt_CharacterDelete_slider_desc"] = "Select a character to delete from the list."
+
+L["opt_CharacterDelete_btn_name"] = "Delete selected character"
+
+L["opt_CharacterDelete_confirm_text"] = "Are you sure you want to delete the selected character data? This action cannot be undone."
+
+
+
+
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Use Class Colors"
 L["opt_columns_character_useClassColors_desc"] = "Use default or custom Class Colors for character name \n\nFor custom use the addon 'ColorTools Class Colors'."

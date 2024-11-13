@@ -259,7 +259,11 @@
         "GreatVaultListFrameCloseButton",
         "HelpPlate",
         "CreateSettingsButtonInitializer",
-        "SETTINGS_KEYBINDINGS_LABEL"
+        "SETTINGS_KEYBINDINGS_LABEL",
+        "StaticPopupDialogs",
+        "StaticPopup_Show",
+        "YES",
+        "NO"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
