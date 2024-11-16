@@ -1,9 +1,6 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
-
 local L, _ = GreatVaultList:GetLibs()
-
 GreatVaultList.Inspect = LibStub("AceAddon-3.0"):NewAddon("GreatVaultListInspect", "AceComm-3.0", "AceSerializer-3.0");
-
 local wState = LibStub("wState-1")
 
 
@@ -15,45 +12,44 @@ GreatVaultList.Inspect.CommAction = {
 }
 
 GreatVaultList.Inspect.States = {
-	green = "green",
-	yellow = "yellow",
-	red = "red"
+	idle = "IDLE",
+	requestReceived = "REQUEST-RECEIVED",
+	requestSent = "REQUEST-SENT",
+	established = "ESTABLISHED",
+	transmitSend = "TRANSMIT-SENT",
+	transmitReceived = "TRANSMIT-RECEIVED",
+	transmitDone = "TRANSMIT-DONE",
+
 }
 function GreatVaultList.Inspect:InitComm()
 
 	local wStateConfig = {
-		initial = 'green',
+		id = "Inspect",
+		initial = self.States.idle,
 		events = {
-			warn = {
-				from = self.States.green,
-				to = self.States.yellow
+			SendRequest = {
+				from = self.States.idle,
+				to = self.States.requestSent
 			},
-			panic = {
-				from = self.States.yellow,
-				to = GreatVaultList.Inspect.States.red
+			GetRequest = {
+				from = self.States.idle,
+				to = self.States.requestReceived
 			},
-			calm = {
-				from = self.States.red,
-				to =self.States.yellow
-			},
-			clear = {
-				from = self.States.yellow,
-				to = self.States.green
-			}
 		}
 	}
 	
 	
 	self.wState = wState.create(self, wStateConfig)
 	-- print(self.wState.current)
-	-- self.wState:warn("Ddd")
-	-- print(self.wState.current)
+	self.wState:SendRequest("Muhmiauwaudh")
+	print(self.wState.current)
 
 	local menuFN = function(owner, rootDescription, contextData)
 		rootDescription:CreateDivider();
 		rootDescription:CreateTitle(GreatVaultList.AddOnInfo[2]);
 		rootDescription:CreateButton("View Progress", function()
-			self:SendComm(contextData.name, GreatVaultList.Inspect.CommAction.request)
+			self.wState:SendRequest(contextData.name)
+			print(self.wState.current)
 		end);
 	end
 
@@ -64,13 +60,21 @@ function GreatVaultList.Inspect:InitComm()
 	self:RegisterComm(GreatVaultList.AddOnInfo[1])
 end
 
-function GreatVaultList.Inspect:OnStateYellow(event, from, to, msg)
-	print("is yellow", self, event, from, to, msg)
+function GreatVaultList.Inspect:OnSendRequest(event, from, to, recipient)
+	print("ON SendRequest", recipient)
+	self:SendComm(recipient, self.CommAction.request)
 end
 
-function GreatVaultList.Inspect:OnWarn(event, from, to, msg)
-	print("is warn", self, event, from, to, msg)
-end
+
+
+
+-- function GreatVaultList.Inspect:OnStateYellow(event, from, to, msg)
+-- 	print("is yellow", self, event, from, to, msg)
+-- end
+
+-- function GreatVaultList.Inspect:OnWarn(event, from, to, msg)
+-- 	print("is warn", self, event, from, to, msg)
+-- end
 
 function GreatVaultList.Inspect:SendComm(recipient, action, payload)
 	if not action then return end
