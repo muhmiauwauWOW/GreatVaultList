@@ -4,7 +4,7 @@ local L, _ = GreatVaultList:GetLibs()
 
 Column.key = ColumKey
 Column.config = {
-    ["defaultIndex"] = 8,
+    ["defaultIndex"] = 9,
     ["width"] = 180,
     ["autoWidth"] = true,
     ["header"] =  { key = ColumKey, text = L[ColumKey], canSort = true},
@@ -30,7 +30,7 @@ Column.config = {
         function(self)
             GreatVaultList.Data:store(self.config, true)
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultList.ScrollFrame.ScollFrame:Refresh()
+                GreatVaultListFrame:RefreshScrollFrame()
             end
         end
     },

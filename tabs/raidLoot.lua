@@ -2,17 +2,44 @@ local addonName = ...
 local _ = LibStub("LibLodash-1"):Get()
 local L, _ = GreatVaultList:GetLibs()
 
-local raidLootMixin  = CreateFromMixins(GreatVaultListLootListMixin);
-GreatVaultListRaidLootListMixin = raidLootMixin
 
-raidLootMixin.tabName = string.format(L["tabLoot_name"], RAIDS)
-raidLootMixin.sortOrder = 5
+local TabID = "raidLoot"
+local Tab = GreatVaultList:NewModule(TabID, GREATVAULTLIST_TABS)
 
-function raidLootMixin:OnLoad()
+Tab.id = TabID
+Tab.name = string.format(L["tabLoot_name"], RAIDS)
+Tab.template = "GreatVaultListRaidLootTemplate"
+
+
+GreatVaultListRaidLootListMixin  = CreateFromMixins(GreatVaultListLootListMixin);
+
+GreatVaultListRaidLootListMixin.id = TabID
+GreatVaultListRaidLootListMixin.tabName = Tab.name
+GreatVaultListRaidLootListMixin.sortOrder = 5
+
+
+function GreatVaultListRaidLootListMixin:OnLoad()
 	GreatVaultListLootListMixin.OnLoad(self)
+	-- GreatVaultList.ElvUi:AddTab(self)
 end
 
-function raidLootMixin:BuildData()
+function GreatVaultListRaidLootListMixin:GetHelpConfig()
+
+	local width = self:GetWidth()
+	local height = self:GetHeight() + 50
+
+
+
+	local helpConfig = {
+		FramePos = { x = 0, y = 0 },
+		FrameSize = { width = width, height = height },
+		[1] = { ButtonPos = { position = "CENTER" }, HighLightBox = { x = 5, y = -40, width = width + 10 , height = height - 40 - 5 - 50 },  ToolTipDir = "RIGHT",   ToolTipText = L["HELP_Loot_table"] },
+	}
+
+	return helpConfig
+end
+
+function GreatVaultListRaidLootListMixin:BuildData()
 
 
 

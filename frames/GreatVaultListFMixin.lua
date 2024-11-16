@@ -9,7 +9,7 @@ GreatVaultListMixin = {}
 function GreatVaultListMixin:OnLoad()
 	TabSystemOwnerMixin.OnLoad(self);
 	self:SetTabSystem(self.TabSystem);
-	self:AddTabFn("List", self.ListFrame);
+	self:AddNamedTab("List", self.ListFrame);
 	self:SetTab(1)
 
 
@@ -36,6 +36,7 @@ function GreatVaultListMixin:OnLoad()
     end)
 
 	tinsert(UISpecialFrames, self:GetName())
+
 end
 
 function GreatVaultListMixin:OnShow()
@@ -44,8 +45,18 @@ function GreatVaultListMixin:OnShow()
 end
 
 
-function GreatVaultListMixin:AddTabFn(key, ...)
-    self:AddNamedTab(key, ...);
+function GreatVaultListMixin:RemoveTab(id)
+    local findIndex = _.findIndex(self.internalTabTracker.tabbedElements, function(tab, idx) return tab.id == id end)
+    if findIndex  == -1 then return end
+
+    for widget in self.TabSystem.tabPool:EnumerateActive() do
+        if widget.tabID == findIndex then
+            widget:Hide()
+        end
+    end
+
+    self.TabSystem:MarkDirty();
+    self:SetTab(1)
 end
 
 
@@ -53,7 +64,7 @@ function GreatVaultListMixin:UpdateSize(width)
     self.width = width or self.width
 
 	local tabsWidth = self.TabSystem:GetWidth() + 50
-	self.width = math.max(tabsWidth, self.width)
+	self.width = math.max(tabsWidth, self.width, 300)
 
     if not GreatVaultList.db then return  end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7
@@ -63,6 +74,7 @@ end
 
 
 function GreatVaultListMixin:OnHide()
+    HelpPlate_Hide();
 end
 
 function GreatVaultListMixin:RefreshScrollFrame()

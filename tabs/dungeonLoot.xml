@@ -5,6 +5,9 @@
 
 
     <Frame name="GreatVaultListDungeonLootTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListDungeonLootListMixin" virtual="true">
+        <Frames>
+            <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
+        </Frames>
     </Frame>
     
 </Ui>

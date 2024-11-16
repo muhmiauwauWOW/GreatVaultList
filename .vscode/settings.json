@@ -257,7 +257,13 @@
         "SettingsInbound",
         "PlayerSpellsFrame",
         "GreatVaultListFrameCloseButton",
-        "Menu"
+        "HelpPlate",
+        "CreateSettingsButtonInitializer",
+        "SETTINGS_KEYBINDINGS_LABEL",
+        "StaticPopupDialogs",
+        "StaticPopup_Show",
+        "YES",
+        "NO"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

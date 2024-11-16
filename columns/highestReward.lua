@@ -12,7 +12,7 @@ local WeeklyRewardChestThresholdType = {
 
 Column.key = ColumKey
 Column.config = {
-    ["defaultIndex"] = 3,
+    ["defaultIndex"] = 4,
     ["width"] = 40,
     ["autoWidth"] = true,
     ["header"] = { key = ColumKey, text = L[ColumKey], canSort = true },
@@ -52,9 +52,9 @@ Column.config = {
         return characterInfo
     end,
     ["populate"] = function(self, number)
-        if not self.rowData then return end
-       if type(number) ~= "number" then return number end
-
-       return GreatVaultList.Util:colorItemLvl(self.rowData.data.averageItemLevel, number, 3, 6)
+        if not self.rowData then return number end
+        if type(number) ~= "number" then return number end
+        
+        return GreatVaultList.Util:colorItemLvl(self.rowData.data.averageItemLevel, number, 3, 6)
     end
 }

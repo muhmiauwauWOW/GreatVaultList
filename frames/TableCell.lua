@@ -17,7 +17,7 @@ function TableCellBaseMixin:PopulateFn(rowData, dataIndex, idx)
     local text
     local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
     if fn and type(fn) == "function" then 
-        text = fn(self, rowData[dataIndex], idx)
+        text = fn({rowData = rowData}, rowData[dataIndex], idx)
     else 
         text = rowData[dataIndex]
     end

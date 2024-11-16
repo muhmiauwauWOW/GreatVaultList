@@ -1,4 +1,4 @@
-﻿## Interface: 110002
+﻿## Interface: 110005
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Version: @project-version@
@@ -19,9 +19,7 @@ Libs/LibStub/LibStub.lua
 Libs/CallbackHandler-1.0/CallbackHandler-1.0.xml
 Libs/AceAddon-3.0/AceAddon-3.0.xml
 Libs/AceEvent-3.0/AceEvent-3.0.xml
-Libs/AceComm-3.0/AceComm-3.0.xml
 Libs/AceLocale-3.0/AceLocale-3.0.xml
-Libs/AceSerializer-3.0/AceSerializer-3.0.xml
 Libs/AceDB-3.0/AceDB-3.0.xml
 Libs/AceTimer-3.0/AceTimer-3.0.xml
 Libs/AceBucket-3.0/AceBucket-3.0.xml
@@ -44,6 +42,7 @@ misc/ElvUISkin.lua
 
 GreatVaultListUtil.lua
 GreatVaultListData.lua
+GreatVaultListTabs.lua
 
 ColumnOrderSettings.xml
 GreatVaultListOptions.lua
@@ -58,5 +57,6 @@ columns/class.lua
 columns/ilevel.lua
 columns/keystone.lua
 columns/raid.lua
+columns/realm.lua
 columns/world.lua
 columns/highestReward.lua

@@ -12,7 +12,7 @@ local DIFFICULTY_NAMES = {
 
 Column.key = ColumKey
 Column.config = {
-    ["defaultIndex"] = 7,
+    ["defaultIndex"] = 8,
     ["template"] = "GreatVaultListTableCellTripleTextTemplate", 
     ["width"] = 100,
     ["padding"] = 0, 

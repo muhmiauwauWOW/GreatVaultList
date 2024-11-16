@@ -1,6 +1,6 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
-GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0", "AceComm-3.0", "AceSerializer-3.0");
+GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 local BlizzMoveAPI = _G.BlizzMoveAPI
@@ -38,6 +38,14 @@ local default_global_data = {
 			minimap = {
 				hide = false,
 			},
+			columns = {},
+			tabs = {
+				['*'] = {
+					active = true,
+					index = nil
+				}
+			},
+			ElvUiSkin = true
 		},
 	}
 }
@@ -72,12 +80,8 @@ function GreatVaultList:OnInitialize()
 	
 	self:DataBrokerInit()
 	self:BlizzMove()
-	self:ElvUISkin()
-
-	self:InitComm()
+	self.ElvUi:Init()
 end
-
-
 
 function GreatVaultList:hideWindow()
 	GreatVaultListFrame:Hide()
@@ -127,15 +131,19 @@ GREATVAULTLIST_COLUMNS = {
 			WeeklyRewards_LoadUI();
 		end
 
+
+		local defaultState = (self.config.defaultState == nil) and true or self.config.defaultState
+
 		GreatVaultList.RegisterdModules[self.key] = {
-			active = true,
+			active = defaultState,
 			index = self.config.defaultIndex,
             id = self.key,
-            name = self.config.header.text or ""
+            name = self.config.header.text or "",
+			module = self
 		}
 
 		GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
-			active = true,
+			active = defaultState,
 			index = self.config.defaultIndex,
 			id = self.key
 		}
@@ -145,12 +153,11 @@ GREATVAULTLIST_COLUMNS = {
 		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
 			GreatVaultList.DataCheck:Cancel()
 			GreatVaultListOptions:init()
-			
-	
+			GreatVaultList.Data:storeAll()
 		end)
 	end,
 	OnEnable = function(self)
-		if not GreatVaultList.db.global.Options.modules[self.key].active then return end
+		if not GreatVaultList.db.global.Options.modules[self.key].active then self:Disable(); return; end
 
 		-- register col
 		table.insert(GreatVaultList.ModuleColumns, {
@@ -161,13 +168,6 @@ GREATVAULTLIST_COLUMNS = {
 			config = self.config
 		})
 
-		-- store data 
-		if self.config.store then
-			C_Timer.After(3, function()
-				GreatVaultList.Data:store(self.config, true)
-			end)
-		end
-
 		-- register events
 		if self.config.event then
 			self.config.eventHandle = GreatVaultList:RegisterBucketEvent(self.config.event[1], 0.5, function(event)
@@ -176,7 +176,7 @@ GREATVAULTLIST_COLUMNS = {
 		end
 	end,
 	OnDisable = function(self)
-		if GreatVaultList.db.global.Options.modules[self.key].active then return end
+		if GreatVaultList.db.global.Options.modules[self.key].active then self:Enable(); return; end
 
 		local fidx = _.findIndex(GreatVaultList.ModuleColumns, function(entry) return entry.key == self.key end)
 		if fidx > 0 then
@@ -210,15 +210,21 @@ function GreatVaultList:updateData(refresh)
 		return entry.key
 	end)
 
+
 	local data = {}
 	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
 			return entry[_.get(cEntry, { "DBkey" })]
 		end)
+
+		if entry.enabled == nil then
+			entry.enabled = true
+		end
+		
 		d.name = key
-		d.enabled = entry.enabled == nil and true or entry.enabled
+		d.enabled = entry.enabled
 		d.data = entry
-		d.selected = key == UnitName("player")
+		d.selected = (key == UnitName("player")) or (key == UnitGUID("player"))
 		table.insert(data, d)
 	end)
 
@@ -229,52 +235,6 @@ function GreatVaultList:updateData(refresh)
 
 	GreatVaultListFrame.ListFrame:init(cols, data, colConfig, refresh)
 end
-
-
-
-function GreatVaultList:updateInspectData(name, payload)
-	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
-		'no "ModuleColumns" found, try to enable modules in the options')
-	if _.size(payload) == 0 then return end -- fail silent
-
-	_.map(GreatVaultList.ModuleColumns, function(entry, key)
-		-- fallback for no modules options, should never happen...
-		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
-		{ active = true, index = entry.config.index }
-		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
-	end)
-
-	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
-
-	local colConfig = {}
-	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
-		colConfig[entry.key] = entry.config
-		return entry.key
-	end)
-
-	local data = {}
-	_.forEach(payload, function(entry, key)
-		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
-			return entry[_.get(cEntry, { "DBkey" })]
-		end)
-		d.name = key
-		d.enabled = entry.enabled == nil and true or entry.enabled
-		d.data = entry
-		d.selected = key == UnitName("player")
-		table.insert(data, d)
-	end)
-
-
-	 DevTool:AddData(data, "updateInspectData data")
-	-- DevTool:AddData(cols, "cols")
-	-- DevTool:AddData(colConfig, "colConfig")
-
-	GreatVaultListFrame.Inspect:init(cols, data, colConfig)
-
-	GreatVaultListFrame.Inspect:SetSender(name)
-end
-
-
 
 function GreatVaultList:demoMode()
 	_.map(GreatVaultList.ModuleColumns, function(entry, key)
@@ -314,6 +274,8 @@ end
 
 
 
+
+
 function GreatVaultList:GetVaultState()
 	if C_WeeklyRewards.HasAvailableRewards() then
 		return "collect";
@@ -331,63 +293,3 @@ function GreatVaultList:GetVaultState()
 
 	return "incomplete";
 end
-
-
-
-
-
-GreatVaultList.CommAction = {
-	request = "request",
-	response = "response"
-}
-
-function GreatVaultList:InitComm()
-
-	local menuFN = function(owner, rootDescription, contextData)
-		rootDescription:CreateDivider();
-		rootDescription:CreateTitle(AddOnInfo[2]);
-		rootDescription:CreateButton("View Progress", function()
-			self:SendComm(contextData.name,  GreatVaultList.CommAction.request)
-		end);
-	end
-
-	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
-	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
-	Menu.ModifyMenu("MENU_UNIT_PARTY", menuFN)
-
-	self:RegisterComm(AddOnInfo[1])
-end
-
-function GreatVaultList:SendComm(recipient, action, payload)
-	if not action then return end
-	local dataStr = self:Serialize(action, payload)
-	if type(dataStr) ~= "string" then return end
-
-	self:SendCommMessage(AddOnInfo[1], dataStr, "WHISPER", recipient)
-end
-
-
-function GreatVaultList:OnCommReceived(commName, data, channel, sender)
-	if not data then return end
-	local status, action, payload = self:Deserialize(data)
-	if not status then return end
-	-- print("####",status, action, payload )
-	DevTool:AddData({ action, payload }, "OnCommReceived - payload-")
-
-	if action == GreatVaultList.CommAction.request then
-		-- DevTool:AddData(payload, "OnCommReceived")
-		-- print("GreatVaultList:OnCommReceived", GreatVaultList.CommAction.request)
-
-		self:SendComm(sender, GreatVaultList.CommAction.response, GreatVaultList.db.global.characters)
-	elseif action == GreatVaultList.CommAction.response then 
-		-- -- local obj = (data)
-		-- DevTool:AddData(payload, "OnCommReceived response")
-		-- print("GreatVaultList:OnCommReceived response", GreatVaultList.CommAction.response)
-
-		GreatVaultList:updateInspectData(sender, payload)
-		GreatVaultList:showWindow()
-		print("GreatVaultList: inspect data recieved from", sender)
-	end
-end
-
-
