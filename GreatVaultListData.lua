@@ -5,6 +5,7 @@ GreatVaultList.Data = {}
 
 function GreatVaultList.Data:init()
 	GreatVaultList.db.global.characters = GreatVaultList.db.global.characters or {}
+	DevTool:AddData(self:get(), "self:get()")
 	self.characterInfo = Mixin({}, self:get())
 	self.disabled = UnitLevel("player") < GetMaxLevelForPlayerExpansion()
 end
@@ -12,6 +13,8 @@ end
 function GreatVaultList.Data:get()
 	local playerGUID  = UnitGUID("player")
 	local info = GreatVaultList.db.global.characters[playerGUID]
+
+	-- check for old method
 	if not info then 
 		local playerName = UnitName("player")
 		info = GreatVaultList.db.global.characters[playerName]
@@ -19,6 +22,12 @@ function GreatVaultList.Data:get()
 			GreatVaultList.db.global.characters[playerName] = nil
 		end
 	end
+
+	-- new character
+	if not info then 
+		info = {}
+	end
+	
 	return info
 end
 
