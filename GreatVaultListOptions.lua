@@ -103,7 +103,9 @@ function GreatVaultListOptions:init()
 
         _.forEach(GreatVaultList.db.global.characters, function(entry, key)
             i = i + 1;
-            deleteOptions:Add(i, entry.name);
+
+            local name = entry.normalizedRealm and string.format("%s-%s", entry.name, entry.normalizedRealm) or entry.name
+            deleteOptions:Add(i, name);
             table.insert(deleteOptionsKeys, key)
         end)
 
