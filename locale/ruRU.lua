@@ -38,6 +38,7 @@ L["opt_minimap_desc"] = "Вкл/выкл кнопку миникарты"
 L["opt_ElvUiSkin_name"] = "Использовать скин ElvUI"
 L["opt_ElvUiSkin_desc"] = "Для вступления изменений в силу необходима перезагрузка интерфейса"
 
+
 -- Character Delete
 L["opt_CharacterDelete_title"] = "Удалить данные персонажа"
 
@@ -47,6 +48,7 @@ L["opt_CharacterDelete_slider_desc"] = "Выберите персонажа дл
 L["opt_CharacterDelete_btn_name"] = "Удалить выбранного персонажа"
 
 L["opt_CharacterDelete_confirm_text"] = "Вы уверены, что хотите удалить выбранные данные персонажа? Это действие не может быть отменено."
+
 
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Использовать цвета классов"

@@ -13,6 +13,8 @@ L["highestReward_tooltip_desc"] = "Nivel de objeto de la recompensa de la gran c
 
 L["character"] = "Personaje"
 L["realm"] = "Realm"
+L["realm"] = "Reino"
+
 L["ilevel"] = "Nivel de objeto"
 L["keystone"] = "Piedra angular"
 
@@ -32,6 +34,18 @@ L["opt_position_desc"] = "Cambiar la posición de la columna de este módulo"
 
 L["opt_minimap_name"] = "Ocultar botón del minimapa"
 L["opt_minimap_desc"] = "Activar o desactivar la visibilidad del botón del minimapa"
+
+
+L["opt_ElvUiSkin_name"] = "Usar diseño ElvUI";
+L["opt_ElvUiSkin_desc"] = "Para aplicar los cambios, se necesita un reinicio.";
+
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "Borrar datos del personaje";
+L["opt_CharacterDelete_slider_name"] = "Seleccionar personaje a borrar";
+L["opt_CharacterDelete_slider_desc"] = "Selecciona un personaje de la lista para borrarlo.";
+L["opt_CharacterDelete_btn_name"] = "Borrar personaje seleccionado";
+L["opt_CharacterDelete_confirm_text"] = "¿Estás seguro de que quieres borrar los datos de este personaje? Esta acción no se puede deshacer.";
 
 
 -- Columns

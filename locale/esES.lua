@@ -41,10 +41,15 @@ L["opt_tab_actve_desc"] = "Activar esta pestaña"
 L["opt_ElvUiSkin_name"] = "Usar diseño ElvUI"
 L["opt_ElvUiSkin_desc"] = "Se necesita un reinicio para que los cambios surtan efecto."
 
+
+-- Character Delete
 L["opt_CharacterDelete_title"] = "Borrar datos de personaje"
+
 L["opt_CharacterDelete_slider_name"] = "Seleccionar personaje a borrar"
 L["opt_CharacterDelete_slider_desc"] = "Selecciona un personaje de la lista para borrarlo."
+
 L["opt_CharacterDelete_btn_name"] = "Borrar personaje seleccionado"
+
 L["opt_CharacterDelete_confirm_text"] = "¿Seguro que quieres borrar los datos del personaje seleccionado? Esta acción no se puede deshacer."
 
 

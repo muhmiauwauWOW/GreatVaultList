@@ -33,6 +33,18 @@ L["opt_minimap_name"] = "Ocultar botão do minimapa"
 L["opt_minimap_desc"] = "Alternar a visibilidade do botão do minimapa"
 
 
+L["opt_ElvUiSkin_name"] = "Usar tema ElvUI";
+L["opt_ElvUiSkin_desc"] = "Alterar esta configuração requer um recarregamento para surtir efeito.";
+
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "Apagar dados do personagem";
+L["opt_CharacterDelete_slider_name"] = "Selecione o personagem a apagar";
+L["opt_CharacterDelete_slider_desc"] = "Selecione um personagem da lista para apagar.";
+L["opt_CharacterDelete_btn_name"] = "Apagar personagem selecionado";
+L["opt_CharacterDelete_confirm_text"] = "Tem certeza de que deseja apagar os dados do personagem selecionado? Esta ação não pode ser desfeita.";
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Usar cores de classe"
 L["opt_columns_character_useClassColors_desc"] = "Use cores de classe padrão ou personalizadas para o nome do personagem \n\nPara personalizado, use o addon 'ColorTools Class Colors'."

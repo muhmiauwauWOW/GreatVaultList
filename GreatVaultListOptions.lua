@@ -99,7 +99,7 @@ function GreatVaultListOptions:init()
     local function GetOptions()
         local deleteOptions = Settings.CreateControlTextContainer();
         local i = 0
-        deleteOptions:Add(0, "Select Character");
+        deleteOptions:Add(0, "");
 
         _.forEach(GreatVaultList.db.global.characters, function(entry, key)
             i = i + 1;

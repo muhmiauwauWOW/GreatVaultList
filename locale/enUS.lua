@@ -43,7 +43,6 @@ L["opt_ElvUiSkin_name"] = "Use ElvUi Skin"
 L["opt_ElvUiSkin_desc"] = "Changing this settings need a reload to take effect"
 
 
-
 -- Character Delete
 L["opt_CharacterDelete_title"] = "Delete character data"
 
@@ -53,10 +52,6 @@ L["opt_CharacterDelete_slider_desc"] = "Select a character to delete from the li
 L["opt_CharacterDelete_btn_name"] = "Delete selected character"
 
 L["opt_CharacterDelete_confirm_text"] = "Are you sure you want to delete the selected character data? This action cannot be undone."
-
-
-
-
 
 
 -- Columns

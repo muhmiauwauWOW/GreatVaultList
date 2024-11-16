@@ -33,6 +33,18 @@ L["opt_minimap_name"] = "隱藏小地圖按鈕"
 L["opt_minimap_desc"] = "啟用或停用小地圖按鈕的顯示"
 
 
+L["opt_ElvUiSkin_name"] = "使用ElvUI介面";
+L["opt_ElvUiSkin_desc"] = "更改此設定需要重新載入才能生效";
+
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "刪除角色資料";
+L["opt_CharacterDelete_slider_name"] = "選擇要刪除的角色";
+L["opt_CharacterDelete_slider_desc"] = "從列表中選擇要刪除的角色。";
+L["opt_CharacterDelete_btn_name"] = "刪除已選角色";
+L["opt_CharacterDelete_confirm_text"] = "您確定要刪除所選角色的資料嗎？此動作無法復原。";
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "使用職業顏色"
 L["opt_columns_character_useClassColors_desc"] = "使用預設或自訂職業顏色顯示角色名稱 \n\n自訂顏色請使用 'ColorTools Class Colors' 插件。"

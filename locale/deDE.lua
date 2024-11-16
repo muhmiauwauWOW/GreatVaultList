@@ -42,10 +42,11 @@ L["opt_ElvUiSkin_name"] = "ElvUI Skin verwenden"
 L["opt_ElvUiSkin_desc"] = "Änderungen an dieser Einstellung benötigen einen Reload, um wirksam zu werden."
 
 
+-- Character Delete
 L["opt_CharacterDelete_title"] = "Charakterdaten löschen"
-L["opt_CharacterDelete_slider_name"] = "Charakter zum Löschen auswählen"
+L["opt_CharacterDelete_slider_name"] = "Charakter auswählen"
 L["opt_CharacterDelete_slider_desc"] = "Wähle einen Charakter aus der Liste zum Löschen aus."
-L["opt_CharacterDelete_btn_name"] = "Ausgewählten Charakter löschen"
+L["opt_CharacterDelete_btn_name"] = "Gewählten Charakter löschen"
 L["opt_CharacterDelete_confirm_text"] = "Bist du sicher, dass du die Daten des ausgewählten Charakters löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
 
 

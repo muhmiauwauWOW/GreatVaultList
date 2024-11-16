@@ -34,6 +34,18 @@ L["opt_minimap_name"] = "미니맵 버튼 숨기기"
 L["opt_minimap_desc"] = "미니맵 버튼 표시 여부 토글"
 
 
+L["opt_ElvUiSkin_name"] = "ElvUI 스킨 사용";
+L["opt_ElvUiSkin_desc"] = "이 설정을 변경하려면 다시 로드해야 효과가 적용됩니다.";
+
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "캐릭터 데이터 삭제";
+L["opt_CharacterDelete_slider_name"] = "삭제할 캐릭터 선택";
+L["opt_CharacterDelete_slider_desc"] = "목록에서 삭제할 캐릭터를 선택합니다.";
+L["opt_CharacterDelete_btn_name"] = "선택한 캐릭터 삭제";
+L["opt_CharacterDelete_confirm_text"] = "선택한 캐릭터 데이터를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.";
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "직업 색상 사용"
 L["opt_columns_character_useClassColors_desc"] = "캐릭터 이름에 기본 또는 사용자 지정 직업 색상을 사용합니다. \n\n사용자 지정의 경우 'ColorTools Class Colors' 애드온을 사용하세요."

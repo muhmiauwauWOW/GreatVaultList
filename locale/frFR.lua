@@ -33,6 +33,18 @@ L["opt_minimap_name"] = "Cacher le bouton de la mini-carte"
 L["opt_minimap_desc"] = "Activer ou désactiver la visibilité du bouton de la mini-carte"
 
 
+L["opt_ElvUiSkin_name"] = "Utiliser le thème ElvUI";
+L["opt_ElvUiSkin_desc"] = "Un rechargement est nécessaire pour que les modifications prennent effet.";
+
+
+-- Character Delete
+L["opt_CharacterDelete_title"] = "Supprimer les données du personnage";
+L["opt_CharacterDelete_slider_name"] = "Sélectionner le personnage à supprimer";
+L["opt_CharacterDelete_slider_desc"] = "Sélectionnez un personnage dans la liste pour le supprimer.";
+L["opt_CharacterDelete_btn_name"] = "Supprimer le personnage sélectionné";
+L["opt_CharacterDelete_confirm_text"] = "Êtes-vous sûr de vouloir supprimer les données du personnage sélectionné ? Cette action est irréversible.";
+
+
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Utiliser les couleurs de classe"
 L["opt_columns_character_useClassColors_desc"] = "Utiliser les couleurs de classe par défaut ou personnalisées pour le nom du personnage \n\nPour la personnalisation, utiliser l'addon 'ColorTools Class Colors'."
