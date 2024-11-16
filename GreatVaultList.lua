@@ -1,6 +1,9 @@
 local addonName = ...
 local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
+-- GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0", "AceComm-3.0", "AceSerializer-3.0");
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
+GreatVaultList.AddOnInfo = AddOnInfo
+
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 local BlizzMoveAPI = _G.BlizzMoveAPI
@@ -81,6 +84,7 @@ function GreatVaultList:OnInitialize()
 	self:DataBrokerInit()
 	self:BlizzMove()
 	self.ElvUi:Init()
+	self.Inspect:InitComm()
 end
 
 function GreatVaultList:hideWindow()
@@ -268,6 +272,7 @@ function GreatVaultList:demoMode()
 	-- DevTool:AddData(cols, "cols")
 	-- DevTool:AddData(colConfig, "colConfig")
 	GreatVaultListFrame.ListFrame:init(cols, demoData, colConfig, true)
+
 end
 
 

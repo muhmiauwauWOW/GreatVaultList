@@ -5,7 +5,6 @@ GreatVaultList.Data = {}
 
 function GreatVaultList.Data:init()
 	GreatVaultList.db.global.characters = GreatVaultList.db.global.characters or {}
-	DevTool:AddData(self:get(), "self:get()")
 	self.characterInfo = Mixin({}, self:get())
 	self.disabled = UnitLevel("player") < GetMaxLevelForPlayerExpansion()
 end

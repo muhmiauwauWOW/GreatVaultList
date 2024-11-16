@@ -5,7 +5,8 @@ function GreatVaultList:BlizzMove()
 		GreatVaultListFrame.Drag:Hide()
 		BlizzMoveAPI:RegisterAddOnFrames({
 			["GreatVaultList"] = { 
-				["GreatVaultListFrame"] = {}
+				["GreatVaultListFrame"] = {},
+				["GreatVaultListInspectFrame"] = {}
 			},
 		});
 	else
