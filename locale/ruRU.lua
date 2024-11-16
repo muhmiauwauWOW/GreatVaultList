@@ -38,6 +38,15 @@ L["opt_minimap_desc"] = "Вкл/выкл кнопку миникарты"
 L["opt_ElvUiSkin_name"] = "Использовать скин ElvUI"
 L["opt_ElvUiSkin_desc"] = "Для вступления изменений в силу необходима перезагрузка интерфейса"
 
+-- Character Delete
+L["opt_CharacterDelete_title"] = "Удалить данные персонажа"
+
+L["opt_CharacterDelete_slider_name"] = "Выберите персонажа для удаления"
+L["opt_CharacterDelete_slider_desc"] = "Выберите персонажа для удаления из списка."
+
+L["opt_CharacterDelete_btn_name"] = "Удалить выбранного персонажа"
+
+L["opt_CharacterDelete_confirm_text"] = "Вы уверены, что хотите удалить выбранные данные персонажа? Это действие не может быть отменено."
 
 -- Columns
 L["opt_columns_character_useClassColors_name"] = "Использовать цвета классов"
@@ -49,14 +58,12 @@ L["opt_columns_character_showRealmName_desc"] = "Показать названи
 L["opt_columns_ilevel_floatNumber_name"] = "Числа с плавающей точкой"
 L["opt_columns_ilevel_floatNumber_desc"] = "Управление количеством цифр, отображаемых после десятичной точки."
 
-
 -- Tabs
 L["opt_tab_actve_name"] = "%s"
 L["opt_tab_actve_desc"] = "Включить или отключить эту вкладку \n\nИмя: %s\nID: %s"
 
 L["opt_tab_delvesLoot_showKeys_name"] = "Показать информацию о ключе"
 L["opt_tab_delvesLoot_showKeys_desc"] = "Вкл/выкл отображение информации о ключе"
-
 
 L["ResultsText"] = "Нет персонажей для отображения"
 
