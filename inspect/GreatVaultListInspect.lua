@@ -6,7 +6,7 @@ local wState = LibStub("wState-1")
 local LibSerialize = LibStub("LibSerialize")
 local LibDeflate = LibStub("LibDeflate")
 
-DevTool = DevTool or { AddData = function() end }
+DevTool = DevTool or { AddData = function(str, name) end }
 
 
 GreatVaultList.Inspect.timeout = {
@@ -249,7 +249,7 @@ function GreatVaultList.Inspect:SendComm(recipient, action, payload, cb)
 	if not action then return end
 
 	local serialized = LibSerialize:Serialize({action, payload})
-    local compressed = LibDeflate:CompressDeflate(serialized)
+    local compressed = LibDeflate:CompressDeflate(serialized, { level = 4 })
     local dataStr = LibDeflate:EncodeForWoWAddonChannel(compressed)
 
 
