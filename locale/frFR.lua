@@ -11,6 +11,7 @@ L["highestReward_tooltip_desc"] = "Niveau d'objet de la meilleure récompense de
 
 
 L["character"] = "Personnage"
+L["realm"] = "Royaume";
 L["ilevel"] = "Niveau d'objet"
 L["keystone"] = "Pierre angulaire"
 

@@ -13,6 +13,7 @@ L["highestReward_tooltip_desc"] = "已解锁的最高大秘境宝库奖励的物
 
 
 L["character"] = "角色"
+L["realm"] = "服务器";
 L["ilevel"] = "装备等级"
 L["keystone"] = "大秘境钥匙"
 

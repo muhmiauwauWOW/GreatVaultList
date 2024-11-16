@@ -12,6 +12,7 @@ L["highestReward_tooltip_desc"] = "Nivel de objeto de la recompensa de la gran c
 
 
 L["character"] = "Personaje"
+L["realm"] = "Reino"
 L["ilevel"] = "Nivel de objeto"
 L["keystone"] = "Piedra angular"
 
@@ -36,6 +37,16 @@ L["opt_minimap_desc"] = "Activar o desactivar la visibilidad del botón del mini
 
 L["opt_tab_actve_name"] = "%s"
 L["opt_tab_actve_desc"] = "Activar esta pestaña"
+
+L["opt_ElvUiSkin_name"] = "Usar diseño ElvUI"
+L["opt_ElvUiSkin_desc"] = "Se necesita un reinicio para que los cambios surtan efecto."
+
+L["opt_CharacterDelete_title"] = "Borrar datos de personaje"
+L["opt_CharacterDelete_slider_name"] = "Seleccionar personaje a borrar"
+L["opt_CharacterDelete_slider_desc"] = "Selecciona un personaje de la lista para borrarlo."
+L["opt_CharacterDelete_btn_name"] = "Borrar personaje seleccionado"
+L["opt_CharacterDelete_confirm_text"] = "¿Seguro que quieres borrar los datos del personaje seleccionado? Esta acción no se puede deshacer."
+
 
 L["opt_tab_delvesLoot_showKeys_name"] = "Mostrar información clave"
 L["opt_tab_delvesLoot_showKeys_desc"] = "Alternar la visualización de la información clave"

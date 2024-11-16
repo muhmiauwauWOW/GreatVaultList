@@ -13,6 +13,7 @@ L["highestReward_tooltip_desc"] = "Livello oggetto della ricompensa della volta 
 
 
 L["character"] = "Personaggio"
+L["realm"] = "Reame"
 L["ilevel"] = "Liv. Oggetto"
 L["keystone"] = "Chiave del Potere"
 

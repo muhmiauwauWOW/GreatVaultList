@@ -14,6 +14,7 @@ L["highestReward_tooltip_desc"] = "Gegenstandsstufe der höchsten freigeschaltet
 L["character"] = "Charakter"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Schlüsselstein"
+L["realm"] = "Realm"
 
 L["OpenVault"] = "Schatzkammer ansehen"
 
@@ -34,6 +35,22 @@ L["opt_position_desc"] = "Ändern der Position der Spalte dieses Moduls"
 
 L["opt_minimap_name"] = "Minimap Button ausblenden"
 L["opt_minimap_desc"] = "Ein- oder Ausblenden des Minikarte-Buttons"
+
+
+
+L["opt_ElvUiSkin_name"] = "ElvUI Skin verwenden"
+L["opt_ElvUiSkin_desc"] = "Änderungen an dieser Einstellung benötigen einen Reload, um wirksam zu werden."
+
+
+L["opt_CharacterDelete_title"] = "Charakterdaten löschen"
+L["opt_CharacterDelete_slider_name"] = "Charakter zum Löschen auswählen"
+L["opt_CharacterDelete_slider_desc"] = "Wähle einen Charakter aus der Liste zum Löschen aus."
+L["opt_CharacterDelete_btn_name"] = "Ausgewählten Charakter löschen"
+L["opt_CharacterDelete_confirm_text"] = "Bist du sicher, dass du die Daten des ausgewählten Charakters löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+
+
+L["opt_columns_character_showRealmName_name"] = "Realmbereich anzeigen"
+L["opt_columns_character_showRealmName_desc"] = "Zeigt den Realmbereich des Charakters an."
 
 
 -- Columns

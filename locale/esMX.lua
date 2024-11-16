@@ -12,6 +12,7 @@ L["highestReward_tooltip_desc"] = "Nivel de objeto de la recompensa de la gran c
 
 
 L["character"] = "Personaje"
+L["realm"] = "Realm"
 L["ilevel"] = "Nivel de objeto"
 L["keystone"] = "Piedra angular"
 

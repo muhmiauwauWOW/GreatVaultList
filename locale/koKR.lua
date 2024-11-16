@@ -12,6 +12,7 @@ L["highestReward_tooltip_desc"] = "잠금 해제된 가장 높은 대장장이�
 
 
 L["character"] = "캐릭터"
+L["realm"] = "서버"
 L["ilevel"] = "아이템 레벨"
 L["keystone"] = "쐐기돌"
 
