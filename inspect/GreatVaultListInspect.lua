@@ -1,64 +1,12 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
 local L, _ = GreatVaultList:GetLibs()
-GreatVaultList.Inspect = LibStub("AceAddon-3.0"):NewAddon("GreatVaultListInspect", "AceComm-3.0", "AceSerializer-3.0");
+GreatVaultList.Inspect = LibStub("AceAddon-3.0"):NewAddon("GreatVaultListInspect", "AceComm-3.0");
 local wState = LibStub("wState-1")
 
+local LibSerialize = LibStub("LibSerialize")
+local LibDeflate = LibStub("LibDeflate")
 
-
-
-
-
-local function serializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
-
-    local tmp = string.rep(" ", depth)
-    if name then 
-    	if not string.match(name, '^[a-zA-z_][a-zA-Z0-9_]*$') then
-    		name = string.gsub(name, "'", "\\'")
-    		name = "['".. name .. "']"
-    	end
-    	tmp = tmp .. name .. " = "
-     end
-
-    if type(val) == "table" then
-        tmp = tmp .. "{" .. (not skipnewlines and "\n" or "")
-
-        for k, v in pairs(val) do
-            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. "," .. (not skipnewlines and "\n" or "")
-        end
-
-        tmp = tmp .. string.rep(" ", depth) .. "}"
-    elseif type(val) == "number" then
-        tmp = tmp .. tostring(val)
-    elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
-    elseif type(val) == "boolean" then
-        tmp = tmp .. (val and "true" or "false")
-    else
-        tmp = tmp .. "\"[inserializeable datatype:" .. type(val) .. "]\""
-    end
-
-    return tmp
-end
-
-local function Serialize(...)
-	local rString = "return true"
-
-	_.forEach({...}, function(entry)
-		rString = rString .. ", " .. serializeTable(entry)
-	end)
-
-	return rString
-end
-
-local function Deserialize(str)
-	local f = loadstring(str)
-	return f()
-end
-
-
-
+DevTool = DevTool or { AddData = function() end }
 
 
 GreatVaultList.Inspect.timeout = {
@@ -169,20 +117,13 @@ function GreatVaultList.Inspect:InitComm()
 
 	-- self.wStateSender:SendRequest("Muhmiauwaudh")
 
-	-- local d = Serialize({"ddd"})
-	-- local e, d = Deserialize(d)
-	-- local f = self:Serialize("ddd", "	\tt se", "ddd")
-	-- print(f, d, e, t)
-	-- DevTools_Dump(d)
-
-
 end
 
 
 
 function GreatVaultList.Inspect:OnStateChange(id, event, ...)
 	DevTool:AddData({...}, id .. " OnStateChange " .. event)
-	print(event, "SENDER:", self.wStateSender.current,"RECEIVER:",  self.wStateReceiver.current)
+	--print(event, "SENDER:", self.wStateSender.current,"RECEIVER:",  self.wStateReceiver.current)
 end
 
 
@@ -258,15 +199,6 @@ function GreatVaultList.Inspect:OnSendData(id, event, from, to, recipient)
 	-- print("ON SendData", recipient)
 	--GreatVaultList.db.global.characters
 
-	-- local kleiner = {}
-	-- local i = 0
-	-- _.forEach(GreatVaultList.db.global.characters, function(entry, key)
-	-- 	i = i + 1
-	-- 	if i == 1 then 
-	-- 		kleiner[key] = entry
-	-- 	end
-	-- end)
-
 	self:SendComm(recipient, self.CommAction.sendData, GreatVaultList.db.global.characters, function()
 		self.wStateReceiver:Done()
 	end)
@@ -286,7 +218,7 @@ end
 
 
 function GreatVaultList.Inspect:OnDone(id, event, from, to, recipient)
-	print("ON Done")
+	-- print("ON Done")
 	-- TODO: Do Stuff here
 
 	self.wStateReceiver:ToIdle()
@@ -315,7 +247,12 @@ end
 
 function GreatVaultList.Inspect:SendComm(recipient, action, payload, cb)
 	if not action then return end
-	local dataStr = Serialize(action, payload)
+
+	local serialized = LibSerialize:Serialize({action, payload})
+    local compressed = LibDeflate:CompressDeflate(serialized)
+    local dataStr = LibDeflate:EncodeForWoWAddonChannel(compressed)
+
+
 	if type(dataStr) ~= "string" then return end
 
 	local cbFn = function() end
@@ -334,12 +271,16 @@ end
 
 function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 	if not data then return end
-	local status, action, payload = Deserialize(data)
-	if not status then
-		print(action)
-		assert(false, action)
-		return 
-	end
+	local decoded = LibDeflate:DecodeForWoWAddonChannel(data)
+    if not decoded then return end
+    local decompressed = LibDeflate:DecompressDeflate(decoded)
+    if not decompressed then return end
+    local success, data = LibSerialize:Deserialize(decompressed)
+	if not success then	return 	end
+	local action, payload = table.unpack(data)
+
+
+	DevTool:AddData(action,"OnCommReceived")
 
 
 	if action == self.CommAction.request then
@@ -350,11 +291,9 @@ function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 		self.wStateSender:DeclinedRequest(sender)
 	elseif action == self.CommAction.established then
 		if self.wStateReceiver.current == self.States.established then 
-			print("###### READY TO SEND DATA")
 			self.wStateReceiver:SendData(sender)
 		end
 	elseif action == self.CommAction.sendData then
-		print("### ## action", action)
 		self.wStateSender:ReceiveData(sender, payload)
 	end
 end
@@ -394,7 +333,7 @@ function GreatVaultList.Inspect:updateInspectData(name, payload)
 	end)
 
 
-	DevTool:AddData(data, "updateInspectData data")
+	-- DevTool:AddData(data, "updateInspectData data")
 	-- DevTool:AddData(cols, "cols")
 	-- DevTool:AddData(colConfig, "colConfig")
 
