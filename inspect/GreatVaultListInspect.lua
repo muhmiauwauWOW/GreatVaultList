@@ -6,112 +6,361 @@ local wState = LibStub("wState-1")
 
 
 
-GreatVaultList.Inspect.CommAction = {
-	request = "request",
-	response = "response"
+
+
+local function serializeTable(val, name, skipnewlines, depth)
+    skipnewlines = skipnewlines or false
+    depth = depth or 0
+
+    local tmp = string.rep(" ", depth)
+    if name then 
+    	if not string.match(name, '^[a-zA-z_][a-zA-Z0-9_]*$') then
+    		name = string.gsub(name, "'", "\\'")
+    		name = "['".. name .. "']"
+    	end
+    	tmp = tmp .. name .. " = "
+     end
+
+    if type(val) == "table" then
+        tmp = tmp .. "{" .. (not skipnewlines and "\n" or "")
+
+        for k, v in pairs(val) do
+            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. "," .. (not skipnewlines and "\n" or "")
+        end
+
+        tmp = tmp .. string.rep(" ", depth) .. "}"
+    elseif type(val) == "number" then
+        tmp = tmp .. tostring(val)
+    elseif type(val) == "string" then
+        tmp = tmp .. string.format("%q", val)
+    elseif type(val) == "boolean" then
+        tmp = tmp .. (val and "true" or "false")
+    else
+        tmp = tmp .. "\"[inserializeable datatype:" .. type(val) .. "]\""
+    end
+
+    return tmp
+end
+
+local function Serialize(...)
+	local rString = "return true"
+
+	_.forEach({...}, function(entry)
+		rString = rString .. ", " .. serializeTable(entry)
+	end)
+
+	return rString
+end
+
+local function Deserialize(str)
+	local f = loadstring(str)
+	return f()
+end
+
+
+
+
+
+GreatVaultList.Inspect.timeout = {
+	sender =  nil,
+	receiver = nil
 }
+
+GreatVaultList.Inspect.CommAction = {
+	request = "REQUEST",
+	acceptRequest = "ACCEPT-REQUEST",
+	declineRequest = "DECLINE-REQUEST",
+	established = "ESTABLISHED",
+	response = "RESPONSE",
+	sendData = "SEND-DATA"
+}
+
 
 GreatVaultList.Inspect.States = {
-	idle = "IDLE",
-	requestReceived = "REQUEST-RECEIVED",
-	requestSent = "REQUEST-SENT",
-	established = "ESTABLISHED",
-	transmitSend = "TRANSMIT-SENT",
-	transmitReceived = "TRANSMIT-RECEIVED",
-	transmitDone = "TRANSMIT-DONE",
+	idle = "Idle",
+	requestReceived = "RequestReceived",
+	requestSent = "RequestSent",
+	established = "Established",
+	transmitSend = "TransmitSend",
+	transmitReceived = "TransmitReceived",
+	transmitDone = "TransmitDone",
 
 }
+
 function GreatVaultList.Inspect:InitComm()
 
-	local wStateConfig = {
-		id = "Inspect",
+	self:RegisterComm(GreatVaultList.AddOnInfo[1])
+	self:AddContextMenusEntries()
+
+
+	local wStateSenderConfig = {
+		id = "InspectSender",
 		initial = self.States.idle,
 		events = {
 			SendRequest = {
 				from = self.States.idle,
 				to = self.States.requestSent
 			},
+			AcceptedRequest = {
+				from = self.States.requestSent,
+				to = self.States.established
+			},
+			DeclinedRequest = {
+				from = self.States.requestSent,
+				to = self.States.idle
+			},
+			Timeout = {
+				from = self.States.established,
+				to = self.States.idle
+			},
+			ReceiveData = {
+				from = self.States.established,
+				to = self.States.transmitReceived
+			},
+			Done = {
+				from = self.States.transmitReceived,
+				to = self.States.transmitDone
+			},
+			ToIdle = {
+				from = self.States.transmitDone,
+				to = self.States.idle
+			}
+		}
+	}
+
+	local wStateReceiverConfig = {
+		id = "InspectReceiver",
+		initial = self.States.idle,
+		events = {
 			GetRequest = {
 				from = self.States.idle,
 				to = self.States.requestReceived
 			},
+			AcceptRequest =	{
+				from = self.States.requestReceived,
+				to = self.States.established
+			},
+			DeclineRequest = {
+				from = self.States.requestReceived,
+				to = self.States.idle
+			},
+			Timeout = {
+				from = self.States.established,
+				to = self.States.idle
+			},
+			SendData = {
+				from = self.States.established,
+				to = self.States.transmitSend
+			},
+			Done = {
+				from = self.States.transmitSend,
+				to = self.States.transmitDone
+			},
+			ToIdle = {
+				from = self.States.transmitDone,
+				to = self.States.idle
+			}
 		}
 	}
 	
 	
-	self.wState = wState.create(self, wStateConfig)
-	-- print(self.wState.current)
-	self.wState:SendRequest("Muhmiauwaudh")
-	print(self.wState.current)
+	self.wStateSender = wState.create(self, wStateSenderConfig)
+	self.wStateReceiver = wState.create(self, wStateReceiverConfig)
 
+	-- self.wStateSender:SendRequest("Muhmiauwaudh")
+
+	-- local d = Serialize({"ddd"})
+	-- local e, d = Deserialize(d)
+	-- local f = self:Serialize("ddd", "	\tt se", "ddd")
+	-- print(f, d, e, t)
+	-- DevTools_Dump(d)
+
+
+end
+
+
+
+function GreatVaultList.Inspect:OnStateChange(id, event, ...)
+	DevTool:AddData({...}, id .. " OnStateChange " .. event)
+	print(event, "SENDER:", self.wStateSender.current,"RECEIVER:",  self.wStateReceiver.current)
+end
+
+
+
+function GreatVaultList.Inspect:OnSendRequest(id, event, from, to, recipient)
+	-- print("ON SendRequest", recipient)
+	self:SendComm(recipient, self.CommAction.request)
+	-- TODO: UI state change open window and show loading screen
+end
+
+
+function GreatVaultList.Inspect:OnGetRequest(id, event, from, to, sender)
+	-- print("ON GetRequest", sender)
+	-- TODO: implement guard here
+
+	local allow = true
+
+	if allow then 
+		self.wStateReceiver:AcceptRequest(sender)
+	else 
+		self.wStateReceiver:DeclinedRequest(sender)
+	end
+end
+
+function GreatVaultList.Inspect:OnAcceptRequest(id, event, from, to, sender)
+	-- print("ON AcceptRequest", sender)
+	self:SendComm(sender,  self.CommAction.acceptRequest)
+end
+
+function GreatVaultList.Inspect:OnDeclineRequest(id, event, from, to, sender)
+	-- print("ON DeclineRequest", sender)
+	self:SendComm(sender,  self.CommAction.declineRequest)
+end
+
+
+function GreatVaultList.Inspect:OnAcceptedRequest(id, event, from, to, recipient)
+	-- print("ON AcceptedRequest", recipient)
+	self:SendComm(recipient, self.CommAction.established)
+	-- TODO: UI state change
+end
+
+function GreatVaultList.Inspect:OnDeclinedRequest(id, event, from, to, recipient)
+	-- print("ON DeclinedRequest", recipient)
+	-- TODO: cleanUp UI
+end
+
+
+
+function GreatVaultList.Inspect:OnEnterStateEstablished(id, event, from, to)
+	-- print("On State Established", id)
+
+	if id == self.wStateSender.id then 
+		self.timeout.sender = C_Timer.NewTimer(60, function()
+			self.wStateSender:Timeout()
+		end)
+	elseif id == self.wStateReceiver.id then
+		self.timeout.receiver = C_Timer.NewTimer(60, function()
+			self.wStateReceiver:Timeout()
+		end)
+	end	
+end
+
+function GreatVaultList.Inspect:OnTimeout(id, event, from, to, recipient)
+	-- print("ON Timeout")
+	self.timeout.sender:Cancel()
+	self.timeout.receiver:Cancel()
+
+	-- TODO: cleanUp UI
+end
+
+
+function GreatVaultList.Inspect:OnSendData(id, event, from, to, recipient)
+	-- print("ON SendData", recipient)
+	--GreatVaultList.db.global.characters
+
+	-- local kleiner = {}
+	-- local i = 0
+	-- _.forEach(GreatVaultList.db.global.characters, function(entry, key)
+	-- 	i = i + 1
+	-- 	if i == 1 then 
+	-- 		kleiner[key] = entry
+	-- 	end
+	-- end)
+
+	self:SendComm(recipient, self.CommAction.sendData, GreatVaultList.db.global.characters, function()
+		self.wStateReceiver:Done()
+	end)
+
+	-- TODO: cleanUp UI
+end
+
+function GreatVaultList.Inspect:OnReceiveData(id, event, from, to, sender, data)
+	-- print("ON ReceiveData", sender, data)
+
+	self:updateInspectData(sender, data)
+	self.InspectFrame:Show()
+	self.wStateSender:Done()
+	print("GreatVaultList: inspect data recieved from", sender)
+end
+
+
+
+function GreatVaultList.Inspect:OnDone(id, event, from, to, recipient)
+	print("ON Done")
+	-- TODO: Do Stuff here
+
+	self.wStateReceiver:ToIdle()
+	self.wStateSender:ToIdle()
+end
+
+
+
+
+
+
+function GreatVaultList.Inspect:AddContextMenusEntries()
 	local menuFN = function(owner, rootDescription, contextData)
 		rootDescription:CreateDivider();
 		rootDescription:CreateTitle(GreatVaultList.AddOnInfo[2]);
 		rootDescription:CreateButton("View Progress", function()
-			self.wState:SendRequest(contextData.name)
-			print(self.wState.current)
+			self.wStateSender:SendRequest(contextData.name)
 		end);
 	end
 
 	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PARTY", menuFN)
-
-	self:RegisterComm(GreatVaultList.AddOnInfo[1])
-end
-
-function GreatVaultList.Inspect:OnSendRequest(event, from, to, recipient)
-	print("ON SendRequest", recipient)
-	self:SendComm(recipient, self.CommAction.request)
 end
 
 
-
-
--- function GreatVaultList.Inspect:OnStateYellow(event, from, to, msg)
--- 	print("is yellow", self, event, from, to, msg)
--- end
-
--- function GreatVaultList.Inspect:OnWarn(event, from, to, msg)
--- 	print("is warn", self, event, from, to, msg)
--- end
-
-function GreatVaultList.Inspect:SendComm(recipient, action, payload)
+function GreatVaultList.Inspect:SendComm(recipient, action, payload, cb)
 	if not action then return end
-	local dataStr = self:Serialize(action, payload)
+	local dataStr = Serialize(action, payload)
 	if type(dataStr) ~= "string" then return end
 
-	self:SendCommMessage(GreatVaultList.AddOnInfo[1], dataStr, "WHISPER", recipient)
+	local cbFn = function() end
+
+	if action == self.CommAction.sendData then 
+		cbFn = function(e, cur, all)
+			DevTool:AddData(cur .. "/" .. all, "Transmit progress")
+			if cur == all then
+				cb()
+			end
+		end
+	end
+
+	self:SendCommMessage(GreatVaultList.AddOnInfo[1], dataStr, "WHISPER", recipient, "NORMAL", cbFn)
 end
 
 function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 	if not data then return end
-	local status, action, payload = self:Deserialize(data)
-	if not status then return end
-	-- print("####",status, action, payload )
-	DevTool:AddData({ action, payload }, "OnCommReceived - payload-")
+	local status, action, payload = Deserialize(data)
+	if not status then
+		print(action)
+		assert(false, action)
+		return 
+	end
 
-	if action == GreatVaultList.Inspect.CommAction.request then
-		-- DevTool:AddData(payload, "OnCommReceived")
-		-- print("GreatVaultList:OnCommReceived", GreatVaultList.CommAction.request)
 
-		self:SendComm(sender, GreatVaultList.Inspect.CommAction.response, GreatVaultList.db.global.characters)
-	elseif action == GreatVaultList.Inspect.CommAction.response then
-		-- -- local obj = (data)
-		-- DevTool:AddData(payload, "OnCommReceived response")
-		-- print("GreatVaultList:OnCommReceived response", GreatVaultList.CommAction.response)
-
-		self:updateInspectData(sender, payload)
-		self.InspectFrame:Show()
-		print("GreatVaultList: inspect data recieved from", sender)
+	if action == self.CommAction.request then
+		self.wStateReceiver:GetRequest(sender)
+	elseif action == self.CommAction.acceptRequest then
+		self.wStateSender:AcceptedRequest(sender)
+	elseif action == self.CommAction.declineRequest then
+		self.wStateSender:DeclinedRequest(sender)
+	elseif action == self.CommAction.established then
+		if self.wStateReceiver.current == self.States.established then 
+			print("###### READY TO SEND DATA")
+			self.wStateReceiver:SendData(sender)
+		end
+	elseif action == self.CommAction.sendData then
+		print("### ## action", action)
+		self.wStateSender:ReceiveData(sender, payload)
 	end
 end
 
 function GreatVaultList.Inspect:updateInspectData(name, payload)
-	self.InspectFrame = self.InspectFrame or
-		_G
-		["GreatVaultListInspectFrame"] --CreateFrame("Frame", "GreatVaultListInspectFrame", UIParent, "GreatVaultListInspectFrameTemplate")
-
+	self.InspectFrame = self.InspectFrame or _G["GreatVaultListInspectFrame"] 
 
 	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
 		'no "ModuleColumns" found, try to enable modules in the options')

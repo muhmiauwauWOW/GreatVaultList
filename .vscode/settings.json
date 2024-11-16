@@ -264,7 +264,8 @@
         "StaticPopup_Show",
         "YES",
         "NO",
-        "Menu"
+        "Menu",
+        "nop"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

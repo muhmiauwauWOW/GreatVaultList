@@ -24,7 +24,7 @@
             <Layer level="OVERLAY">
                 <FontString parentKey="InspectText" inherits="Number14FontWhite" justifyH="CENTER">
                     <Anchors>
-                        <Anchor point="TOP" x="0" y="-40"/>
+                        <Anchor point="TOP" x="0" y="-35"/>
                     </Anchors>
                 </FontString>
             </Layer>
