@@ -17,6 +17,7 @@ externals:
   Libs/LibLodash: https://github.com/muhmiauwauWOW/LibLodash.git
   Libs/LibDBIcon-1.0: https://repos.curseforge.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
   Libs/LibDataBroker-1.1: https://repos.curseforge.com/wow/libdatabroker-1-1
+  Libs/wState: https://github.com/muhmiauwauWOW/wState.git
   Libs/LibDeflate: 
       url: https://github.com/SafeteeWoW/LibDeflate.git
       tag: 1.0.2-release

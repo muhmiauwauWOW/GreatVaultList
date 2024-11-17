@@ -26,12 +26,9 @@ Libs/AceBucket-3.0/AceBucket-3.0.xml
 Libs/LibLodash/LibLodash.lua
 Libs/LibDataBroker-1.1/LibDataBroker-1.1.lua
 Libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
-
-Libs/wState/wState.lua
-
-
 Libs/LibSerialize/LibSerialize.lua
 Libs/LibDeflate/LibDeflate.lua
+Libs/wState/wState.xml
 
 
 locale/locale.xml
