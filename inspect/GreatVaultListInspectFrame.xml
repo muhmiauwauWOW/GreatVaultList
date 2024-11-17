@@ -17,7 +17,36 @@
 				</Anchors>
 			</Frame>
 
-			<Frame parentKey="ListFrame" inherits="GreatVaultListContentTemplate"  mixin="GreatVaultListInspectListMixin"/>
+			<Frame parentKey="DarkOverlay" setAllPoints="true" hidden="true" frameLevel="100">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="3" y="-21"/>
+					<Anchor point="BOTTOMRIGHT" x="-3" y="3"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture setAllPoints="true">
+							<Color r="0" g="0" b="0" a="0.8"/>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="LoadingSpinner" hidden="true" inherits="SpinnerTemplate" frameLevel="200">
+				<Size x="90" y="90"/>
+				<Anchors>
+					<Anchor point="CENTER" x="0" y="-15"/>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<FontString parentKey="SearchingText" inherits="GameFontNormalHuge4" text="Await Data">
+							<Anchors>
+								<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="10"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<Frame parentKey="ListFrame" inherits="GreatVaultListContentTemplate" hidden="true"  mixin="GreatVaultListInspectListMixin"/>
 
 		</Frames>
 		<Layers>

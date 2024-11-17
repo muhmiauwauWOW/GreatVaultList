@@ -35,7 +35,9 @@ GreatVaultList.Inspect.States = {
 
 }
 
-function GreatVaultList.Inspect:InitComm()
+function GreatVaultList.Inspect:init()
+
+	self.InspectFrame = self.InspectFrame or _G["GreatVaultListInspectFrame"]
 
 	self:RegisterComm(GreatVaultList.AddOnInfo[1])
 	self:AddContextMenusEntries()
@@ -110,24 +112,24 @@ function GreatVaultList.Inspect:InitComm()
 			}
 		}
 	}
-	
-	
+
+
 	self.wStateSender = wState.create(self, wStateSenderConfig)
 	self.wStateReceiver = wState.create(self, wStateReceiverConfig)
 
-	-- self.wStateSender:SendRequest("Muhmiauwaudh")
+	self.wStateSender:SendRequest("Muhmiauwaudh")
 
 end
 
 
-
+-- sender and recipient
 function GreatVaultList.Inspect:OnStateChange(id, event, ...)
 	DevTool:AddData({...}, id .. " OnStateChange " .. event)
-	--print(event, "SENDER:", self.wStateSender.current,"RECEIVER:",  self.wStateReceiver.current)
+	--print(event, "SENDER:", self.wStateSender.current, "RECEIVER:",  self.wStateReceiver.current)
 end
 
 
-
+-- sender
 function GreatVaultList.Inspect:OnSendRequest(id, event, from, to, recipient)
 	-- print("ON SendRequest", recipient)
 	self:SendComm(recipient, self.CommAction.request)
@@ -135,6 +137,7 @@ function GreatVaultList.Inspect:OnSendRequest(id, event, from, to, recipient)
 end
 
 
+-- recipient
 function GreatVaultList.Inspect:OnGetRequest(id, event, from, to, sender)
 	-- print("ON GetRequest", sender)
 	-- TODO: implement guard here
@@ -144,15 +147,17 @@ function GreatVaultList.Inspect:OnGetRequest(id, event, from, to, sender)
 	if allow then 
 		self.wStateReceiver:AcceptRequest(sender)
 	else 
-		self.wStateReceiver:DeclinedRequest(sender)
+		self.wStateReceiver:DeclineRequest(sender)
 	end
 end
 
+-- recipient
 function GreatVaultList.Inspect:OnAcceptRequest(id, event, from, to, sender)
 	-- print("ON AcceptRequest", sender)
 	self:SendComm(sender,  self.CommAction.acceptRequest)
 end
 
+-- recipient
 function GreatVaultList.Inspect:OnDeclineRequest(id, event, from, to, sender)
 	-- print("ON DeclineRequest", sender)
 	self:SendComm(sender,  self.CommAction.declineRequest)
@@ -162,16 +167,18 @@ end
 function GreatVaultList.Inspect:OnAcceptedRequest(id, event, from, to, recipient)
 	-- print("ON AcceptedRequest", recipient)
 	self:SendComm(recipient, self.CommAction.established)
-	-- TODO: UI state change
+
+	self.InspectFrame:ShowLoading()
 end
 
+-- sender
 function GreatVaultList.Inspect:OnDeclinedRequest(id, event, from, to, recipient)
 	-- print("ON DeclinedRequest", recipient)
-	-- TODO: cleanUp UI
+
+	UIErrorsFrame:AddMessage(string.format("%s denied your inspect request", recipient), RED_FONT_COLOR:GetRGBA());
 end
 
-
-
+-- sender and recipient 
 function GreatVaultList.Inspect:OnEnterStateEstablished(id, event, from, to)
 	-- print("On State Established", id)
 
@@ -186,6 +193,8 @@ function GreatVaultList.Inspect:OnEnterStateEstablished(id, event, from, to)
 	end	
 end
 
+
+-- sender and recipient 
 function GreatVaultList.Inspect:OnTimeout(id, event, from, to, recipient)
 	-- print("ON Timeout")
 	self.timeout.sender:Cancel()
@@ -194,7 +203,7 @@ function GreatVaultList.Inspect:OnTimeout(id, event, from, to, recipient)
 	-- TODO: cleanUp UI
 end
 
-
+-- recipient 
 function GreatVaultList.Inspect:OnSendData(id, event, from, to, recipient)
 	-- print("ON SendData", recipient)
 	--GreatVaultList.db.global.characters
@@ -206,17 +215,17 @@ function GreatVaultList.Inspect:OnSendData(id, event, from, to, recipient)
 	-- TODO: cleanUp UI
 end
 
+-- sender 
 function GreatVaultList.Inspect:OnReceiveData(id, event, from, to, sender, data)
 	-- print("ON ReceiveData", sender, data)
 
-	self:updateInspectData(sender, data)
-	self.InspectFrame:Show()
+	self.InspectFrame:updateData(sender, data)
+	self.InspectFrame:HideLoading()
 	self.wStateSender:Done()
-	print("GreatVaultList: inspect data recieved from", sender)
 end
 
 
-
+-- sender and recipient 
 function GreatVaultList.Inspect:OnDone(id, event, from, to, recipient)
 	-- print("ON Done")
 	-- TODO: Do Stuff here
@@ -247,7 +256,6 @@ end
 
 function GreatVaultList.Inspect:SendComm(recipient, action, payload, cb)
 	if not action then return end
-
 	local serialized = LibSerialize:Serialize({action, payload})
     local compressed = LibDeflate:CompressDeflate(serialized, { level = 4 })
     local dataStr = LibDeflate:EncodeForWoWAddonChannel(compressed)
@@ -279,8 +287,7 @@ function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 	if not success then	return 	end
 	local action, payload = table.unpack(data)
 
-
-	DevTool:AddData(action,"OnCommReceived")
+	-- DevTool:AddData(action,"OnCommReceived")
 
 
 	if action == self.CommAction.request then
@@ -296,47 +303,4 @@ function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 	elseif action == self.CommAction.sendData then
 		self.wStateSender:ReceiveData(sender, payload)
 	end
-end
-
-function GreatVaultList.Inspect:updateInspectData(name, payload)
-	self.InspectFrame = self.InspectFrame or _G["GreatVaultListInspectFrame"] 
-
-	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
-		'no "ModuleColumns" found, try to enable modules in the options')
-	if _.size(payload) == 0 then return end -- fail silent
-
-	_.map(GreatVaultList.ModuleColumns, function(entry, key)
-		-- fallback for no modules options, should never happen...
-		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
-			{ active = true, index = entry.config.index }
-		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
-	end)
-
-	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
-
-	local colConfig = {}
-	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
-		colConfig[entry.key] = entry.config
-		return entry.key
-	end)
-
-	local data = {}
-	_.forEach(payload, function(entry, key)
-		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
-			return entry[_.get(cEntry, { "DBkey" })]
-		end)
-		d.name = key
-		d.enabled = entry.enabled == nil and true or entry.enabled
-		d.data = entry
-		d.selected = key == UnitName("player")
-		table.insert(data, d)
-	end)
-
-
-	-- DevTool:AddData(data, "updateInspectData data")
-	-- DevTool:AddData(cols, "cols")
-	-- DevTool:AddData(colConfig, "colConfig")
-
-	GreatVaultListInspectFrame.InspectText:SetText(name)
-	GreatVaultListInspectFrame.ListFrame:init(cols, data, colConfig, true)
 end

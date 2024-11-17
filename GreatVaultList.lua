@@ -79,12 +79,13 @@ function GreatVaultList:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("GreatVaultList2DB", default_global_data, true)
 	self.Data:init()
 
+	self.Inspect:init()
+
 	self:slashcommand()
 	
 	self:DataBrokerInit()
 	self:BlizzMove()
 	self.ElvUi:Init()
-	self.Inspect:InitComm()
 end
 
 function GreatVaultList:hideWindow()

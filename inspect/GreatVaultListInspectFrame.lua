@@ -1,6 +1,5 @@
-
-
-
+local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
+local L, _ = GreatVaultList:GetLibs()
 
 local InspectMixin = {}
 
@@ -33,14 +32,73 @@ function InspectMixin:OnShow()
 end
 
 
+function InspectMixin:UpdateSize()
+    self.width = math.max(GreatVaultListFrame:GetWidth(), 600)
 
-function InspectMixin:UpdateSize(width)
-    self.width = width or self.width
+    -- self:SetScale(2)
 
-    if not GreatVaultList.db then return  end 
+    if not GreatVaultList.db then return end 
     local height = (GreatVaultList.db.global.Options.lines * 21) + 60 + 19  + 7
-    self:SetWidth(self.width + 5)
+    self:SetWidth(self.width)
     self:SetHeight(height)
+end
+
+
+
+function InspectMixin:ShowLoading()
+    self.InspectText:Hide()
+    self.ListFrame:Hide()
+    self.DarkOverlay:Show()
+    self.LoadingSpinner:Show()
+    self:Show()
+end
+
+function InspectMixin:HideLoading()
+    self.ListFrame:Show()
+    self.InspectText:Show()
+    self.DarkOverlay:Hide()
+    self.LoadingSpinner:Hide()
+ end
+
+
+
+ function InspectMixin:updateData(name, payload)
+	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
+		'no "ModuleColumns" found, try to enable modules in the options')
+	if _.size(payload) == 0 then return end -- fail silent
+	
+
+	_.map(GreatVaultList.ModuleColumns, function(entry, key)
+		-- fallback for no modules options, should never happen...
+		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
+			{ active = true, index = entry.config.index }
+		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
+	end)
+
+	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
+
+	local colConfig = {}
+	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
+		colConfig[entry.key] = entry.config
+		return entry.key
+	end)
+
+	local data = {}
+	_.forEach(payload, function(entry, key)
+		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
+			return entry[_.get(cEntry, { "DBkey" })]
+		end)
+		d.name = key
+		d.enabled = entry.enabled == nil and true or entry.enabled
+		d.data = entry
+		d.selected = key == UnitName("player")
+		table.insert(data, d)
+	end)
+
+
+
+	self.InspectText:SetText(name)
+	self.ListFrame:init(cols, data, colConfig, true)
 end
 
 
