@@ -266,7 +266,8 @@
         "NO",
         "Menu",
         "nop",
-        "UIErrorsFrame"
+        "UIErrorsFrame",
+        "Raid"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

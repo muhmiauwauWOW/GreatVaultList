@@ -75,6 +75,21 @@ L["opt_tab_delvesLoot_showKeys_name"] = "Show key info"
 L["opt_tab_delvesLoot_showKeys_desc"] = "Toggle display of the key infomation"
 
 
+-- Inspect
+L["opt_inspect_category"] = "Inspect"
+L["opt_inspect_permission_title"] = "Set Inspect Permissions"
+
+L["opt_inspect_permission_BattleNetFriend_name"] = "BattleNet Friend"
+L["opt_inspect_permission_BattleNetFriend_desc"] = "Allow inspect request from BattleNet Friends"
+L["opt_inspect_permission_Friend_name"] = "Friend"
+L["opt_inspect_permission_Friend_desc"] = "Allow inspect request from Friends"
+L["opt_inspect_permission_Guild_name"] = "Guild Member"
+L["opt_inspect_permission_Guild_desc"] = "Allow inspect request from Guild Members"
+L["opt_inspect_permission_Group_name"] = "Group Member"
+L["opt_inspect_permission_Group_desc"] = "Allow inspect request from Group Members"
+L["opt_inspect_permission_Raid_name"] = "Raid Member"
+L["opt_inspect_permission_Raid_desc"] = "Allow inspect request from Raid Members"
+
 
 
 

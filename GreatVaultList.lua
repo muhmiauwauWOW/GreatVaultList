@@ -8,8 +8,10 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
 local BlizzMoveAPI = _G.BlizzMoveAPI
 
+DevTool = DevTool or { AddData = function(str, name) end }
+
 function GreatVaultList:GetLibs()
-	return L, _
+	return L, _, DevTool
 end
 
 GVL_OPEN_VAULT = L["OpenVault"]
@@ -46,6 +48,15 @@ local default_global_data = {
 				['*'] = {
 					active = true,
 					index = nil
+				}
+			},
+			inspect = {
+				permissions = {
+					BattleNetFriend = true,
+					Friend = true,
+					Guild = true,
+					Group = false,
+					Raid = false
 				}
 			},
 			ElvUiSkin = true

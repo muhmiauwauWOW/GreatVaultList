@@ -18,6 +18,7 @@ function GreatVaultListMixin:OnLoad()
 	self:GetPortrait():SetPoint("TOPLEFT", -2, 5)
 	self:GetPortrait():SetSize(55, 55)
 
+    self:SetTitleOffsets(0, 0)
 	self:SetTitle(AddOnInfo[2]) -- set addon name as title
 
     self.width = 800

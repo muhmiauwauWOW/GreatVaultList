@@ -1,12 +1,15 @@
 local GreatVaultList = LibStub("AceAddon-3.0"):GetAddon("GreatVaultList")
-local L, _ = GreatVaultList:GetLibs()
+local L, _, DevTool = GreatVaultList:GetLibs()
 GreatVaultList.Inspect = LibStub("AceAddon-3.0"):NewAddon("GreatVaultListInspect", "AceComm-3.0");
+GreatVaultList.Inspect.Guard = LibStub("PermissionGuard-1")
 local wState = LibStub("wState-1")
+
+
 
 local LibSerialize = LibStub("LibSerialize")
 local LibDeflate = LibStub("LibDeflate")
 
-DevTool = DevTool or { AddData = function(str, name) end }
+
 
 
 GreatVaultList.Inspect.timeout = {
@@ -37,6 +40,8 @@ GreatVaultList.Inspect.States = {
 
 function GreatVaultList.Inspect:init()
 
+	self.Guard:SetPermissions(GreatVaultList.db.global.Options.inspect.permissions)
+
 	self.InspectFrame = self.InspectFrame or _G["GreatVaultListInspectFrame"]
 
 	self:RegisterComm(GreatVaultList.AddOnInfo[1])
@@ -48,7 +53,7 @@ function GreatVaultList.Inspect:init()
 		initial = self.States.idle,
 		events = {
 			SendRequest = {
-				from = self.States.idle,
+				from = {self.States.idle, self.States.requestSent},
 				to = self.States.requestSent
 			},
 			AcceptedRequest = {
@@ -117,7 +122,14 @@ function GreatVaultList.Inspect:init()
 	self.wStateSender = wState.create(self, wStateSenderConfig)
 	self.wStateReceiver = wState.create(self, wStateReceiverConfig)
 
-	self.wStateSender:SendRequest("Muhmiauwaudh")
+	-- self.wStateSender:SendRequest("Muhmiauwaudh", UnitGUID("player"))
+
+	
+	-- GreatVaultList.Inspect.Guard:check(UnitGUID("player"))
+	-- GreatVaultList.Inspect.Guard:IsBattleNetFriend(UnitGUID("player"))
+
+
+
 
 end
 
@@ -130,19 +142,22 @@ end
 
 
 -- sender
-function GreatVaultList.Inspect:OnSendRequest(id, event, from, to, recipient)
+function GreatVaultList.Inspect:OnSendRequest(id, event, from, to, recipient, GUID)
 	-- print("ON SendRequest", recipient)
-	self:SendComm(recipient, self.CommAction.request)
-	-- TODO: UI state change open window and show loading screen
+	self:SendComm(recipient, self.CommAction.request, GUID)
 end
 
 
 -- recipient
-function GreatVaultList.Inspect:OnGetRequest(id, event, from, to, sender)
+function GreatVaultList.Inspect:OnGetRequest(id, event, from, to, sender, senderGUID)
 	-- print("ON GetRequest", sender)
-	-- TODO: implement guard here
 
-	local allow = true
+
+	local allow = GreatVaultList.Inspect.Guard:check(senderGUID)
+
+	if not self.wStateReceiver.current == self.States.idle then 
+		allow = false
+	end
 
 	if allow then 
 		self.wStateReceiver:AcceptRequest(sender)
@@ -244,13 +259,40 @@ function GreatVaultList.Inspect:AddContextMenusEntries()
 		rootDescription:CreateDivider();
 		rootDescription:CreateTitle(GreatVaultList.AddOnInfo[2]);
 		rootDescription:CreateButton("View Progress", function()
-			self.wStateSender:SendRequest(contextData.name)
+			-- self.wStateSender:SendRequest(contextData.name)
+			-- DevTool:AddData(contextData)
+
+			local GUID = contextData.accountInfo.gameAccountInfo.playerGuid or contextData.guid or (contextData.unit and UnitGUID(contextData.unit))
+			if not GUID then return end
+			-- print("GUID", GUID)
+			-- if contextData.accountInfo.gameAccountInfo then 
+			-- 	local GUID = contextData.accountInfo.gameAccountInfo.playerGuid
+
+			-- else
+			-- 	GUID = contextData.guid or (contextData.unit and UnitGUID(contextData.unit))
+
+			-- end
+
+			self.wStateSender:SendRequest(contextData.name, GUID)
+		
+			-- local c = GreatVaultList.Inspect.Guard:check(GUID)
+
+			-- print("c", c, GUID)
 		end);
 	end
 
 	Menu.ModifyMenu("MENU_UNIT_SELF", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PLAYER", menuFN)
 	Menu.ModifyMenu("MENU_UNIT_PARTY", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_RAID", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_FRIEND", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_BN_FRIEND", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_COMMUNITIES_GUILD_MEMBER", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_CHAT_ROSTER", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_GUILDS_GUILD", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_COMMUNITIES_COMMUNITY", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_PVP_SCOREBOARD", menuFN)
+	Menu.ModifyMenu("MENU_UNIT_RAF_RECRUIT", menuFN)
 end
 
 
@@ -287,11 +329,11 @@ function GreatVaultList.Inspect:OnCommReceived(commName, data, channel, sender)
 	if not success then	return 	end
 	local action, payload = table.unpack(data)
 
-	-- DevTool:AddData(action,"OnCommReceived")
+	DevTool:AddData({action, payload},"OnCommReceived")
 
 
 	if action == self.CommAction.request then
-		self.wStateReceiver:GetRequest(sender)
+		self.wStateReceiver:GetRequest(sender, payload)
 	elseif action == self.CommAction.acceptRequest then
 		self.wStateSender:AcceptedRequest(sender)
 	elseif action == self.CommAction.declineRequest then

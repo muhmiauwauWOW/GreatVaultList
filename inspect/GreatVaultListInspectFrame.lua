@@ -10,6 +10,7 @@ function InspectMixin:OnLoad()
 	self:GetPortrait():SetPoint("TOPLEFT", -2, 5)
 	self:GetPortrait():SetSize(55, 55)
 
+    self:SetTitleOffsets(0, 0)
 	self:SetTitle(GreatVaultList.AddOnInfo[2] .. " Inspect") -- set addon name as title
 
 

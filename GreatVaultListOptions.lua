@@ -23,6 +23,8 @@ function GreatVaultListOptions:init()
     -- Init Tabs category
     self:InitTabsCategory()
 
+    self:AddInspectOptions()
+
 
     local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide",
         GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"],
@@ -146,6 +148,10 @@ function GreatVaultListOptions:init()
 
 
 
+
+
+    
+
     --Settings.OpenToCategory(GreatVaultList.OptionsID)
 
     
@@ -253,4 +259,54 @@ function GreatVaultListOptions:AddColumnCategory(entry)
         GreatVaultList.db.global.Options.columns[module.key] = {}
     end
     module:AddOptions(category, GreatVaultList.db.global.Options.columns[module.key])
+end
+
+
+
+
+
+
+
+
+
+
+function GreatVaultListOptions:AddInspectOptions()
+	self.InspectSubcategory, self.InspectSubcategoryLayout = Settings.RegisterVerticalLayoutSubcategory(self.category, L["opt_inspect_category"]);
+
+
+
+    
+    self.InspectSubcategoryLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer(L["opt_inspect_permission_title"]));
+	
+    local registerdPermissionsTypes = GreatVaultList.Inspect.Guard:GetRegisterdPermissionsTypes()
+    _.forEach(registerdPermissionsTypes, function(permission, index)
+        if permission == "Self" then return end
+
+     
+
+        local name = string.format("opt_inspect_permission_%s_name", permission)
+        local desc = string.format("opt_inspect_permission_%s_desc", permission)
+
+        local setting = Settings.RegisterAddOnSetting(
+            self.category, 
+            "Inspect_" .. permission, 
+            permission, 
+            GreatVaultList.db.global.Options.inspect.permissions, 
+            "boolean", 
+            L[name], 
+            GreatVaultList.db.global.Options.inspect.permissions[permission]
+        )
+
+        setting:SetValueChangedCallback(function(self)
+            GreatVaultList.Inspect.Guard:SetPermissions(GreatVaultList.db.global.Options.inspect.permissions)
+        end)
+
+        Settings.CreateCheckbox(self.InspectSubcategory, setting, L[desc])
+
+
+     end)
+
+
+    -- Settings.OpenToCategory(self.InspectSubcategory:GetID())
+
 end
