@@ -63,46 +63,15 @@ function InspectMixin:HideLoading()
 
 
  function InspectMixin:updateData(name, payload)
-	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
-		'no "ModuleColumns" found, try to enable modules in the options')
 	if _.size(payload) == 0 then return end -- fail silent
-	
 
-	_.map(GreatVaultList.ModuleColumns, function(entry, key)
-		-- fallback for no modules options, should never happen...
-		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
-			{ active = true, index = entry.config.index }
-		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
-	end)
-
-	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
-
-	local colConfig = {}
-	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
-		colConfig[entry.key] = entry.config
-		return entry.key
-	end)
-
-	local data = {}
-	_.forEach(payload, function(entry, key)
-		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
-			return entry[_.get(cEntry, { "DBkey" })]
-		end)
-		d.name = key
-		d.enabled = entry.enabled == nil and true or entry.enabled
-		d.data = entry
-		d.selected = key == UnitName("player")
-		table.insert(data, d)
-	end)
-
-
+	GreatVaultList:updateModuleConfig()
+    local colConfig, cols = GreatVaultList:getColConfigforTableDisplay()
+    local data = GreatVaultList:getCharaterDataforTableDisplay(payload, false)
 
 	self.InspectText:SetText(name)
 	self.ListFrame:init(cols, data, colConfig, true)
 end
-
-
-
 
 
 

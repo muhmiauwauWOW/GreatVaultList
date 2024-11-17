@@ -195,11 +195,16 @@ GREATVAULTLIST_COLUMNS = {
 }
 
 
-function GreatVaultList:updateData(refresh)
+
+
+
+
+
+
+
+function GreatVaultList:updateModuleConfig()
 	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
 		'no "ModuleColumns" found, try to enable modules in the options')
-	if _.size(GreatVaultList.db.global.characters) == 0 then return end -- fail silent
-
 	_.map(GreatVaultList.ModuleColumns, function(entry, key)
 		-- fallback for no modules options, should never happen...
 		GreatVaultList.db.global.Options.modules[entry.key] = GreatVaultList.db.global.Options.modules[entry.key] or
@@ -209,15 +214,21 @@ function GreatVaultList:updateData(refresh)
 
 	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
 
+end
+
+function GreatVaultList:getColConfigforTableDisplay()
 	local colConfig = {}
 	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
 		colConfig[entry.key] = entry.config
 		return entry.key
 	end)
 
+	return colConfig, cols
+end
 
+function GreatVaultList:getCharaterDataforTableDisplay(dataObj, useSelected)
 	local data = {}
-	_.forEach(GreatVaultList.db.global.characters, function(entry, key)
+	_.forEach(dataObj, function(entry, key)
 		local d = _.map(GreatVaultList.ModuleColumns, function(cEntry)
 			return entry[_.get(cEntry, { "DBkey" })]
 		end)
@@ -229,10 +240,23 @@ function GreatVaultList:updateData(refresh)
 		d.name = key
 		d.enabled = entry.enabled
 		d.data = entry
-		d.selected = (key == UnitName("player")) or (key == UnitGUID("player"))
+		if useSelected then
+			d.selected = (key == UnitName("player")) or (key == UnitGUID("player"))
+		end
+		
 		table.insert(data, d)
 	end)
 
+	return data
+end
+
+function GreatVaultList:updateData(refresh)
+	if _.size(GreatVaultList.db.global.characters) == 0 then return end -- fail silent
+
+	GreatVaultList:updateModuleConfig()
+
+	local colConfig, cols = GreatVaultList:getColConfigforTableDisplay()
+	local data = GreatVaultList:getCharaterDataforTableDisplay(GreatVaultList.db.global.characters, true)
 
 	-- DevTool:AddData(data, "data")
 	-- DevTool:AddData(cols, "cols")
@@ -242,18 +266,8 @@ function GreatVaultList:updateData(refresh)
 end
 
 function GreatVaultList:demoMode()
-	_.map(GreatVaultList.ModuleColumns, function(entry, key)
-		entry.index = GreatVaultList.db.global.Options.modules[entry.key].index
-	end)
-
-	sort(GreatVaultList.ModuleColumns, function(a, b) return a.index < b.index end)
-
-	local colConfig = {}
-	local cols = _.map(GreatVaultList.ModuleColumns, function(entry)
-		colConfig[entry.key] = entry.config
-		return entry.key
-	end)
-
+	GreatVaultList:updateModuleConfig()
+	local colConfig, cols = GreatVaultList:getColConfigforTableDisplay()
 
 	local playerFn = _.get(GreatVaultList.ModuleColumns, {"character", "config", "demo" }, function(e) return e end)
 	local demoData = {}
@@ -273,7 +287,6 @@ function GreatVaultList:demoMode()
 	-- DevTool:AddData(cols, "cols")
 	-- DevTool:AddData(colConfig, "colConfig")
 	GreatVaultListFrame.ListFrame:init(cols, demoData, colConfig, true)
-
 end
 
 

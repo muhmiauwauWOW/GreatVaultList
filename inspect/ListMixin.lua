@@ -10,12 +10,4 @@ local ListMixin = CreateFromMixins(GreatVaultListListMixin)
 -- function ListMixin:OnShow()
 -- end
 
-
-
-
-
-
-
-
-
 GreatVaultListInspectListMixin = ListMixin
