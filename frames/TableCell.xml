@@ -30,6 +30,37 @@
 		</Frames>
 	</Frame>
 
+	<Frame name="GreatVaultListTableCellVaultStatusTemplate" mixin="GreatVaultListTableCellVaultStatusMixin" virtual="true">
+		<Size x="20" y="20"/>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" hidden="true" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="handlesTexture" atlas="greatVault-handles-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="centerPlateTexture" atlas="greatVault-centerPlate-dis" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+				
+			</Layer>
+			<Layer level="HIGHLIGHT">
+				<Texture parentKey="HighlightTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true"  alphaMode="ADD" alpha=".2" scale="0.1851852">
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>								
+			</Layer>
+		</Layers>
+	</Frame>
+
 
    <Frame name="GreatVaultListTableCellTripleTextTemplate" mixin="GreatVaultListTableCellTripleTextMixin" virtual="true">
 		<Size x="0" y="16"/>

@@ -38,7 +38,7 @@ Column.config = {
         _.forEach(WeeklyRewardChestThresholdType, function(id)
             local info =  C_WeeklyRewards.GetActivities(id)
             if not info[1] then return end
-            if not info[1].id then return end -- the first one ist always the higherst
+            if not info[1].id then return end -- the first one is  always the higherst
             local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id);
             if itemLink then
                 local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);

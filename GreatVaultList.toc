@@ -60,3 +60,4 @@ columns/raid.lua
 columns/realm.lua
 columns/world.lua
 columns/highestReward.lua
+columns/vaultStatus.lua

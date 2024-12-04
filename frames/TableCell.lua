@@ -60,3 +60,57 @@ function TableCellIconMixin:Populate(rowData, dataIndex)
 	local icon = fn(rowData, rowData[dataIndex])
     self.IconFrame.Icon:SetAtlas(icon)
 end
+
+
+
+
+
+
+
+
+local TableCellVaultStatusMixin = CreateFromMixins(TableCellBaseMixin);
+GreatVaultListTableCellVaultStatusMixin = TableCellVaultStatusMixin
+
+function TableCellVaultStatusMixin:Populate(rowData, dataIndex)
+	local fn = _.get(self.columnConfig, {self.columns[dataIndex], "populate"})
+	local state = fn(rowData, rowData[dataIndex])
+    if not state then return end
+
+    self.NormalTexture:SetShown(state ~= "incomplete");
+	self.handlesTexture:SetShown(state == "incomplete");
+	self.centerPlateTexture:SetShown(state == "incomplete");
+	self.NormalTexture:SetDesaturated(state ~= "collect");
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GreatVaultListListOpenVaultMixin = {}
+
+function GreatVaultListListOpenVaultMixin:OnShow()
+	local state = GreatVaultList:GetVaultState()
+
+	self.NormalTexture:SetShown(state ~= "incomplete");
+	self.handlesTexture:SetShown(state == "incomplete");
+	self.centerPlateTexture:SetShown(state == "incomplete");
+	self.NormalTexture:SetDesaturated(state ~= "collect");
+end
+
+function GreatVaultListListOpenVaultMixin:OnClick()
+	WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+end

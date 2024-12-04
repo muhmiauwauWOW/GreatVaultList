@@ -261,6 +261,9 @@ function GreatVaultList:demoMode()
 		d.name = playerFn(i)
 		d.enabled = true 
 		d.selected = false
+		d.data = {}
+		d.data.averageItemLevel = 500
+		
 		table.insert(demoData, d)
 	end
 
