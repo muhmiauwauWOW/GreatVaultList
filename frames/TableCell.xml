@@ -34,7 +34,7 @@
 		<Size x="20" y="20"/>
 		<Layers>
 			<Layer level="OVERLAY">
-				<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" hidden="true" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
+				<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true" scale="0.1851852">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>

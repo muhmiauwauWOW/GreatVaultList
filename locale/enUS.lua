@@ -12,12 +12,14 @@ L["highestReward"] = ""
 L["highestReward_tooltip_title"] = "Highest Reward"
 L["highestReward_tooltip_desc"] = "Item Level of the highest unlocked great vault reward" 
 
-
+L["class"] = "Class"
 L["character"] = "Character"
 L["realm"] = "Realm"
 L["ilevel"] = "iLevel"
 L["keystone"] = "Keystone"
+L["highestReward"] = "Highest Reward"
 
+L["vaultStatus"] = "Unclaimed Rewards"
 
 L["OpenVault"] = "View Vault"
 

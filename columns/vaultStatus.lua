@@ -16,7 +16,7 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellVaultStatusTemplate",
     ["width"] = 20,
     ["padding"] = 0,
-    ["header"] = {key = ColumKey, text = "", canSort = true},
+    ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true, hidden = true},
     ["sortFn"] = function(a, b, comp)
         if not StatusArray[a] or not StatusArray[b] then return false end
         return comp(StatusArray[a], StatusArray[b])

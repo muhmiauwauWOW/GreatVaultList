@@ -8,7 +8,7 @@ Column.config = {
     ["template"] = "GreatVaultListTableCellIconTemplate", 
     ["width"] = 20,
     ["padding"] = 0,
-    ["header"] = {key = ColumKey, text = "", canSort = true},
+    ["header"] = {key = ColumKey, text = L[ColumKey], canSort = true, hidden = true},
     ["sortFn"] = function(a, b, comp)
         if type(a) ~= "string" then a = "" end
         if type(b) ~= "string" then b = "" end

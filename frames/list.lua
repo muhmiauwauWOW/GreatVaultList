@@ -23,6 +23,9 @@ function ListMixin:GetBrowseListLayout(owner, itemList, useFill)
             local template = _.get(self.columnConfig, {colName, "template"}, "GreatVaultListTableCellTextTemplate")
 			local tooltip =  _.get(self.columnConfig, {colName, "tooltip"}, nil)
 			local canSort = _.get(self.columnConfig, {colName, "header", "canSort"}, false)
+
+			local headerHidden = _.get(self.columnConfig, {colName, "header", "hidden"})
+
 			if canSort then 
 				table.insert(self.sortHeaders, idx);
 			end
@@ -33,7 +36,10 @@ function ListMixin:GetBrowseListLayout(owner, itemList, useFill)
 			else
 				col = tableBuilder:AddFixedWidthColumn(owner, 0, width, padding, padding, idx, template, tooltip, idx, self.columns, self.columnConfig, width);
 			end
-			col:GetHeaderFrame():SetText(headerText);
+
+			if not headerHidden then
+				col:GetHeaderFrame():SetText(headerText);
+			end
 			
 			if colName ~= "character" then  return end		
         end)

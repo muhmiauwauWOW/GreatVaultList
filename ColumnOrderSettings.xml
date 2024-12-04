@@ -7,9 +7,10 @@
 
     <Button name="ColumnOrderSettingsEntryTemplate"  mixin="ColumnOrderSettingsEntryMixin" virtual="true">
         <size x="280" y="40"/>
-        <ButtonText parentKey="Text">
+        <ButtonText parentKey="Text" justifyH="LEFT" >
 			<Anchors>
 				<Anchor point="LEFT" x="40" y="0"/>
+                <Anchor point="RIGHT" x="-30" y="0"/>
 			</Anchors>
 		</ButtonText>
         <NormalFont style="GameFontHighlightMedium"/>
