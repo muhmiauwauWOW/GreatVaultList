@@ -74,6 +74,8 @@ L["tabLoot_name"] = "Loot de %s"
 L["tabLoot_greatVault"] = "Grande Cofre"
 L["tabLoot_upgradelvl"] = "Nível de atualização"
 
+L["List"] = "List"
+
 -- delves loot tab
 L["delvesLoot_col1"] = "Nível"
 L["delvesLoot_col2"] = "Abundante"
