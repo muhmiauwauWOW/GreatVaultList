@@ -92,6 +92,8 @@ L["tabLoot_upgradelvl"] = "Gear Level"
 
 L["tabLoot_ilvl"] = "ilvl"
 
+L["List"] = "List"
+
 -- delves loot tab
 L["delvesLoot_col1"] = "Tier"
 L["delvesLoot_col2"] = "Bountiful" -- no auto translate

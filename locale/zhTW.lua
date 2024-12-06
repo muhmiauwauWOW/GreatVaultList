@@ -74,6 +74,8 @@ L["tabLoot_name"] = "%s 戰利品"
 L["tabLoot_greatVault"] = "大秘境寶庫"
 L["tabLoot_upgradelvl"] = "升級等級"
 
+L["List"] = "List"
+
 -- delves loot tab
 L["delvesLoot_col1"] = "等級"
 L["delvesLoot_col2"] = "豐富"
