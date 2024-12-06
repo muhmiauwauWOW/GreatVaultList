@@ -81,6 +81,8 @@ L["tabLoot_upgradelvl"] = "Уровень улучшения"
 
 L["tabLoot_ilvl"] = "ilvl"
 
+L["List"] = "Персонажи"
+
 -- delves loot tab
 L["delvesLoot_col1"] = "Уровень"
 L["delvesLoot_col2"] = "Щедрый"
