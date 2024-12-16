@@ -11,10 +11,14 @@ L["highestReward"] = ""
 L["highestReward_tooltip_title"] = "Наивысшая награда"
 L["highestReward_tooltip_desc"] = "Уровень предмета наивысшей разблокированной награды Великого Хранилища" 
 
+L["class"] = "Класс"
 L["character"] = "Персонаж"
 L["realm"] = "Игровой мир"
 L["ilevel"] = "ilvl"
 L["keystone"] = "Ключ"
+L["highestReward"] = "Наивысшая награда"
+
+L["vaultStatus"] = "Невостребованные награды"
 
 L["OpenVault"] = "Открыть Хранилище"
 
@@ -76,6 +80,8 @@ L["tabLoot_greatVault"] = "Великое Хранилище"
 L["tabLoot_upgradelvl"] = "Уровень улучшения"
 
 L["tabLoot_ilvl"] = "ilvl"
+
+L["List"] = "Персонажи"
 
 -- delves loot tab
 L["delvesLoot_col1"] = "Уровень"

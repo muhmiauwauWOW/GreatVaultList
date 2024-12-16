@@ -86,6 +86,8 @@ L["tabLoot_name"] = "Botín de %s"
 L["tabLoot_greatVault"] = "Gran Bóveda"
 L["tabLoot_upgradelvl"] = "Nivel de mejora"
 
+L["List"] = "List"
+
 -- delves loot tab
 L["delvesLoot_col1"] = "Nivel"
 L["delvesLoot_col2"] = "pródigas" 

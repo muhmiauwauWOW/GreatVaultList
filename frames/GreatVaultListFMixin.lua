@@ -9,7 +9,7 @@ GreatVaultListMixin = {}
 function GreatVaultListMixin:OnLoad()
 	TabSystemOwnerMixin.OnLoad(self);
 	self:SetTabSystem(self.TabSystem);
-	self:AddNamedTab("List", self.ListFrame);
+	self:AddNamedTab(L["List"], self.ListFrame);
 	self:SetTab(1)
 
 
