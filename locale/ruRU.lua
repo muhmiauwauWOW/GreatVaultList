@@ -73,6 +73,8 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "Вкл/выкл отображение 
 
 L["ResultsText"] = "Нет персонажей для отображения"
 
+L["Tabs"] = "Вкладки"
+
 -- tabs loot general
 L["tabLoot_name"] = "Добыча %s"
 

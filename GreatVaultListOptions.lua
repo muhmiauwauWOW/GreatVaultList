@@ -152,7 +152,7 @@ function GreatVaultListOptions:init()
 end
 
 function GreatVaultListOptions:InitTabsCategory()
-    self.TabsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category, "Tabs");
+    self.TabsSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category, L["Tabs"]);
     self.tabsSubcategories = {}
 
     _.forEach(GreatVaultList.Tabs.registeredTabs, function(entry, id)
