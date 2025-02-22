@@ -69,6 +69,9 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "열쇠 정보 표시 여부 토글"
 
 L["ResultsText"] = "표시할 캐릭터가 없습니다"
 
+
+L["Tabs"] = "탭"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s 전리품"
 

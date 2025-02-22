@@ -78,6 +78,8 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "Anzeige der Schlüsselinformationen ums
 L["ResultsText"] = "Keine Charaktere zum anzeigen"
 
 
+L["Tabs"] = "Tabs"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s Beute"
 

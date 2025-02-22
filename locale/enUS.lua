@@ -84,6 +84,9 @@ L["ResultsText"] = "No characters to display"
 
 
 
+
+L["Tabs"] = "Tabs"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s Loot"
 

@@ -71,6 +71,9 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "Alternar la visualización de la inform
 
 L["ResultsText"] = "No hay personajes para mostrar"
 
+
+L["Tabs"] = "Pestañas"
+
 -- tabs loot general
 L["tabLoot_name"] = "Botín de %s"
 

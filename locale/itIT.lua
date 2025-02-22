@@ -70,6 +70,9 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "Attiva/disattiva la visualizzazione del
 
 L["ResultsText"] = "Nessun personaggio da visualizzare"
 
+
+L["Tabs"] = "Schede"
+
 -- tabs loot general
 L["tabLoot_name"] = "Bottino di %s"
 

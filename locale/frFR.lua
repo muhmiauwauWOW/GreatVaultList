@@ -68,6 +68,9 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "Activer/désactiver l'affichage des inf
 
 L["ResultsText"] = "Aucun personnage à afficher"
 
+
+L["Tabs"] = "Onglets"
+
 -- tabs loot general
 L["tabLoot_name"] = "Butin de %s"
 

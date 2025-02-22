@@ -70,6 +70,9 @@ L["opt_tab_delvesLoot_showKeys_desc"] = "切换钥匙信息的显示"
 
 L["ResultsText"] = "没有角色显示"
 
+
+L["Tabs"] = "標籤"
+
 -- tabs loot general
 L["tabLoot_name"] = "%s 战利品"
 
