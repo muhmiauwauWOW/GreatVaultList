@@ -52,61 +52,61 @@ function GreatVaultListRaidLootListMixin:BuildData()
 	self.ItemList.data = {
 		{
 			string.format("%s %s", "LFR", L["raidLoot_Regular"]),
-			584,	
-			587,	
-			590,	
-			593
-		},
-		{
-			string.format("%s %s", "LFR", L["raidLoot_VeryRare"]),
-			nil,	
-			600,	
-			600,	
-			600
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_Regular"]),
-			597,	
-			600,	
-			603,	
-			606
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_VeryRare"]),
-			nil,	
-			613,	
-			613,	
-			613
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_Regular"]),
-			610,	
-			613,	
-			616,	
-			619
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_VeryRare"]),
-			nil,	
-			626,	
-			626,	
-			626
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_Regular"]),
-			623,	
-			626,	
-			629,	
+			623,
+			626,
+			629,
 			632
 		},
 		{
-			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_VeryRare"]),
-			nil,	
-			639,	
-			639,	
+			string.format("%s %s", "LFR", L["raidLoot_VeryRare"]),
+			nil,
+			639,
+			639,
 			639
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_Regular"]),
+			636,
+			639,
+			642,
+			645
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_VeryRare"]),
+			nil,
+			652,
+			652,
+			652
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_Regular"]),
+			649,
+			652,
+			655,
+			658
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_VeryRare"]),
+			nil,
+			665,
+			665,
+			665
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_Regular"]),
+			662,
+			665,
+			668,
+			672
+		},
+		{
+			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_VeryRare"]),
+			nil,
+			678,
+			678,
+			678
 		}
-	}
+	}	
 
 
 end
