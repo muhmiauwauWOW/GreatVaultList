@@ -10,7 +10,7 @@
 	<Include file="frames/TableLine.xml"/>
 	<Include file="frames/ItemList.xml"/>
 	<Include file="frames/Content.xml"/>
-	<Include file="frames/HelpButton.xml"/>
+	<!-- <Include file="frames/HelpButton.xml"/> -->
 	<Include file="frames/list.xml"/>
 
 

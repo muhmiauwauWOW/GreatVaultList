@@ -269,7 +269,10 @@
         "WHITE_FONT_COLOR",
         "FormatPercentage",
         "RED_FONT_COLOR",
-        "NORMAL_FONT_COLOR"
+        "NORMAL_FONT_COLOR",
+        "HelpTip",
+        "PLAYER_SPELLS_FRAME_MINIMIZE_TIP",
+        "LE_FRAME_TUTORIAL_PLAYER_SPELLS_MINIMIZE"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
@@ -288,6 +291,6 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "~\\.vscode\\extensions\\ketho.wow-api-0.17.9\\Annotations"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.19.1\\Annotations"
     ]
 }
