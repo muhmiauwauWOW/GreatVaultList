@@ -6,7 +6,7 @@
 
     <Frame name="GreatVaultListRaidLootTemplate" inherits="GreatVaultListContentTemplate" mixin="GreatVaultListRaidLootListMixin" virtual="true">
         <Frames>
-            <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button>
+            <!-- <Button parentKey="HelpButton" inherits="GreatVaultListListHelpButtonTemplate" frameLevel="520"></Button> -->
         </Frames>
     </Frame>
     
