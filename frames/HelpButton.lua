@@ -17,16 +17,15 @@ function HelpButtonMixin:OnClick()
         self.helpPlate = self:GetHelpConfig()
     end
     
-	if ( self.helpPlate and not HelpPlate_IsShowing( self.helpPlate ) ) then
-		HelpPlate_Show( self.helpPlate, parent, self)
-        HelpPlate:SetScale(GreatVaultListFrame:GetScale())
+	if ( self.helpPlate and not HelpPlate.IsShowingHelpInfo( self.helpPlate ) ) then
+		HelpPlate.Show( self.helpPlate, parent, self)
+        HelpPlateCanvas:SetScale(GreatVaultListFrame:GetScale())
 	else
-		HelpPlate_Hide(true);
+		HelpPlate.Hide(true);
         self.timer = C_Timer.NewTimer(1, function()
             self.timer:Cancel()
-            HelpPlate:SetScale(1)
+            HelpPlateCanvas:SetScale(1)
         end)
-       
 	end
 end
 

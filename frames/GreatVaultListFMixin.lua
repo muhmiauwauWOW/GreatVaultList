@@ -74,7 +74,7 @@ end
 
 
 function GreatVaultListMixin:OnHide()
-    HelpPlate_Hide();
+   HelpPlate.Hide();
 end
 
 function GreatVaultListMixin:RefreshScrollFrame()
