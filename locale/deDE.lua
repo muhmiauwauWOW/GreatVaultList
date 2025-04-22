@@ -86,6 +86,9 @@ L["tabLoot_name"] = "%s Beute"
 L["tabLoot_greatVault"] = "Große Schatzkammer"
 L["tabLoot_upgradelvl"] = "Rüstungsstufe"
 
+L["tabLoot_crests"] = "Wappen"
+L["tabLoot_crests_desc"] = "Anzahl der Wappen, die für einen in der Zeit abgeschlossenen Lauf erhalten werden"
+
 L["List"] = "List"
 
 

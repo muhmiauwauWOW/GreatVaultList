@@ -78,6 +78,9 @@ L["tabLoot_name"] = "%s 전리품"
 L["tabLoot_greatVault"] = "대장장이의 금고"
 L["tabLoot_upgradelvl"] = "업그레이드 레벨"
 
+L["tabLoot_crests"] = "보상된 문장"
+L["tabLoot_crests_desc"] = "시간 내 완료로 받은 문장의 수"
+
 L["List"] = "List"
 
 -- delves loot tab

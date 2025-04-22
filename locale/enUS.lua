@@ -95,6 +95,9 @@ L["tabLoot_upgradelvl"] = "Gear Level"
 
 L["tabLoot_ilvl"] = "ilvl"
 
+L["tabLoot_crests"] = "Crest Rewarded"
+L["tabLoot_crests_desc"] = "Amount of crests received for timed run" 
+
 L["List"] = "List"
 
 -- delves loot tab

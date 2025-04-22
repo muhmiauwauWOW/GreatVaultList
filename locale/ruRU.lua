@@ -81,6 +81,9 @@ L["tabLoot_name"] = "Добыча %s"
 L["tabLoot_greatVault"] = "Великое Хранилище"
 L["tabLoot_upgradelvl"] = "Уровень улучшения"
 
+L["tabLoot_crests"] = "Полученные гербы"
+L["tabLoot_crests_desc"] = "Количество гербов, полученных за прохождение в установленное время"
+
 L["tabLoot_ilvl"] = "ilvl"
 
 L["List"] = "Персонажи"

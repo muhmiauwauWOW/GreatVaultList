@@ -77,6 +77,9 @@ L["tabLoot_name"] = "%s 戰利品"
 L["tabLoot_greatVault"] = "大秘境寶庫"
 L["tabLoot_upgradelvl"] = "升級等級"
 
+L["tabLoot_crests"] = "獎勵的徽章"
+L["tabLoot_crests_desc"] = "通過限時完成獲得的徽章數量"
+
 L["List"] = "List"
 
 -- delves loot tab

@@ -77,6 +77,9 @@ L["tabLoot_name"] = "Butin de %s"
 L["tabLoot_greatVault"] = "Grand coffre"
 L["tabLoot_upgradelvl"] = "Niveau de mise à niveau"
 
+L["tabLoot_crests"] = "Emblèmes Récompensés"
+L["tabLoot_crests_desc"] = "Quantité d'emblèmes reçus pour une course chronométrée"
+
 L["List"] = "List"
 
 -- delves loot tab
