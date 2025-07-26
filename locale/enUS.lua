@@ -98,6 +98,10 @@ L["tabLoot_ilvl"] = "ilvl"
 L["tabLoot_crests"] = "Crest Rewarded"
 L["tabLoot_crests_desc"] = "Amount of crests received for timed run" 
 
+L["tabLoot_crestType"] = "Crest"
+L["tabLoot_crestType_desc"] = "The Type of crests received" 
+
+
 L["List"] = "List"
 
 -- delves loot tab
