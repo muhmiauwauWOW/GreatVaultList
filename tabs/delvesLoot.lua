@@ -82,85 +82,32 @@ function GreatVaultListDelvesLootListMixin:BuildData()
 	self:AddColumn(L["tabLoot_upgradelvl"], false, L["tabLoot_greatVault"])
 
 
+	local function buildEntry(lvl, ilvl1, ilvl2)
+
+		local entry = {
+			lvl,
+			ilvl1,
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl1, false),
+			ilvl2,
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl2, false)
+		};
+
+		return entry
+	end
+
+
 	self.ItemList.data = {
-		{
-			1,
-			610,
-			L["gearTrack_Adventurer"] .. " 1/8",
-			623,
-			L["gearTrack_Veteran"] .. " 1/8"
-		},
-		{
-			2,
-			613,
-			L["gearTrack_Adventurer"] .. " 2/8",
-			626,
-			L["gearTrack_Veteran"] .. " 2/8"
-		},
-		{
-			3,
-			616,
-			L["gearTrack_Adventurer"] .. " 3/8",
-			629,
-			L["gearTrack_Veteran"] .. " 3/8"
-		},
-		{
-			4,
-			619,
-			L["gearTrack_Adventurer"] .. " 4/8",
-			632,
-			L["gearTrack_Veteran"] .. " 4/8"
-		},
-		{
-			5,
-			623,
-			L["gearTrack_Veteran"] .. " 1/8",
-			639,
-			L["gearTrack_Champion"] .. " 2/8"
-		},
-		{
-			6,
-			626,
-			L["gearTrack_Veteran"] .. " 2/8",
-			642,
-			L["gearTrack_Champion"] .. " 3/8"
-		},
-		{
-			7,
-			636,
-			L["gearTrack_Champion"] .. " 1/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			8,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			9,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			10,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			11,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-	}
-	
+        buildEntry(1, 655, 655),
+        buildEntry(2, 658, 668),
+        buildEntry(3, 662, 671),
+        buildEntry(4, 665, 681),
+        buildEntry(5, 668, 684),
+        buildEntry(6, 671, 691),
+        buildEntry(7, 681, 691),
+        buildEntry(8, 684, 694),
+        buildEntry(9, 684, 694),
+        buildEntry(10, 684, 694),
+        buildEntry(11, 684, 694)
+    }
 
 end

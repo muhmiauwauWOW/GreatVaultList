@@ -1,4 +1,4 @@
-﻿## Interface: 110107
+﻿## Interface: 110200
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Version: @project-version@
@@ -44,6 +44,8 @@ Libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
 locale/locale.xml
 
 GreatVaultList.lua
+
+GreatVaultListItemlvl.lua
 
 
 misc/AddonCompartment.lua

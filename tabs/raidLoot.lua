@@ -40,73 +40,36 @@ function GreatVaultListRaidLootListMixin:GetHelpConfig()
 end
 
 function GreatVaultListRaidLootListMixin:BuildData()
-
-
-
 	self:AddColumn(L["raidLoot_col1"])
-	self:AddColumn(string.format(L["raidLoot_bosses"], "1-2"), true)
-	self:AddColumn(string.format(L["raidLoot_bosses"], "3-4"), true)
-	self:AddColumn(string.format(L["raidLoot_bosses"], "5-6"), true)
+	self:AddColumn(string.format(L["raidLoot_bosses"], "1-3"), true)
+	self:AddColumn(string.format(L["raidLoot_bosses"], "4-6"), true)
 	self:AddColumn(string.format(L["raidLoot_bosses"], "7-8"), true)
+	self:AddColumn(L["tabLoot_crestType"], false, L["tabLoot_crestType_desc"])
+
+	local crestIcons = {
+		["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3285).name,
+		["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3287).name,
+		["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3289).name,
+		["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3290).name
+	}
+
+	local function buildEntry(type, ilvl1, ilvl2, ilvl3, crest)
+
+		local entry = {
+			type,
+			ilvl1,
+			ilvl2,
+			ilvl3,
+			GreatVaultList.itemlvl:GetCrestIconByKey(crest, true)
+		};
+
+		return entry
+	end
 
 	self.ItemList.data = {
-		{
-			string.format("%s %s", "LFR", L["raidLoot_Regular"]),
-			623,
-			626,
-			629,
-			632
-		},
-		{
-			string.format("%s %s", "LFR", L["raidLoot_VeryRare"]),
-			nil,
-			639,
-			639,
-			639
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_Regular"]),
-			636,
-			639,
-			642,
-			645
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY1, L["raidLoot_VeryRare"]),
-			nil,
-			652,
-			652,
-			652
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_Regular"]),
-			649,
-			652,
-			655,
-			658
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY2, L["raidLoot_VeryRare"]),
-			nil,
-			665,
-			665,
-			665
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_Regular"]),
-			662,
-			665,
-			668,
-			672
-		},
-		{
-			string.format("%s %s", PLAYER_DIFFICULTY6, L["raidLoot_VeryRare"]),
-			nil,
-			678,
-			678,
-			678
-		}
-	}	
-
-
+        buildEntry(string.format("%s %s", "LFR", L["raidLoot_Regular"]), 671, 675, 678, "weathered"),
+        buildEntry(string.format("%s %s", "Normal", L["raidLoot_Regular"]), 684, 688, 691, "carved"),
+        buildEntry(string.format("%s %s", "Heroic", L["raidLoot_Regular"]), 697, 701, 704, "runed"),
+        buildEntry(string.format("%s %s", "Mythic", L["raidLoot_Regular"]), 710, 714, 717, "gilded")
+    }
 end
