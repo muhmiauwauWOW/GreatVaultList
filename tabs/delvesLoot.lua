@@ -83,83 +83,17 @@ function GreatVaultListDelvesLootListMixin:BuildData()
 
 
 	self.ItemList.data = {
-		{
-			1,
-			610,
-			L["gearTrack_Adventurer"] .. " 1/8",
-			623,
-			L["gearTrack_Veteran"] .. " 1/8"
-		},
-		{
-			2,
-			613,
-			L["gearTrack_Adventurer"] .. " 2/8",
-			626,
-			L["gearTrack_Veteran"] .. " 2/8"
-		},
-		{
-			3,
-			616,
-			L["gearTrack_Adventurer"] .. " 3/8",
-			629,
-			L["gearTrack_Veteran"] .. " 3/8"
-		},
-		{
-			4,
-			619,
-			L["gearTrack_Adventurer"] .. " 4/8",
-			632,
-			L["gearTrack_Veteran"] .. " 4/8"
-		},
-		{
-			5,
-			623,
-			L["gearTrack_Veteran"] .. " 1/8",
-			639,
-			L["gearTrack_Champion"] .. " 2/8"
-		},
-		{
-			6,
-			626,
-			L["gearTrack_Veteran"] .. " 2/8",
-			642,
-			L["gearTrack_Champion"] .. " 3/8"
-		},
-		{
-			7,
-			636,
-			L["gearTrack_Champion"] .. " 1/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			8,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			9,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			10,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
-		{
-			11,
-			639,
-			L["gearTrack_Champion"] .. " 2/8",
-			649,
-			L["gearTrack_Hero"] .. " 1/6"
-		},
+		{1, 655, L["gearTrack_Adventurer"] .. " 1/8", 655, L["gearTrack_Adventurer"] .. " 1/8"},
+		{2, 658, L["gearTrack_Adventurer"] .. " 2/8", 668, L["gearTrack_Veteran"] .. " 1/8"},
+		{3, 662, L["gearTrack_Adventurer"] .. " 3/8", 671, L["gearTrack_Veteran"] .. " 2/8"},
+		{4, 665, L["gearTrack_Adventurer"] .. " 4/8", 681, L["gearTrack_Champion"] .. " 1/8"},
+		{5, 668, L["gearTrack_Veteran"] .. " 1/8", 684, L["gearTrack_Champion"] .. " 3/8"},
+		{6, 671, L["gearTrack_Veteran"] .. " 2/8", 691, L["gearTrack_Champion"] .. " 4/8"},
+		{7, 681, L["gearTrack_Champion"] .. " 1/8", 691, L["gearTrack_Champion"] .. " 4/8"},
+		{8, 684, L["gearTrack_Champion"] .. " 2/8", 694, L["gearTrack_Hero"] .. " 1/6"},
+		{9, 684, L["gearTrack_Champion"] .. " 2/8", 694, L["gearTrack_Hero"] .. " 1/6"},
+		{10, 684, L["gearTrack_Champion"] .. " 2/8", 694, L["gearTrack_Hero"] .. " 1/6"},
+		{11, 684, L["gearTrack_Champion"] .. " 2/8", 694, L["gearTrack_Hero"] .. " 1/6"}
 	}
 	
 
