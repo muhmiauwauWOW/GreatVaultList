@@ -53,19 +53,46 @@ function GreatVaultListDungeonLootListMixin:BuildData()
     self:AddColumn(L["tabLoot_upgradelvl"], false, L["tabLoot_greatVault"])
     self:AddColumn(L["tabLoot_crests"], false, L["tabLoot_crests_desc"])
 
-    local crestIcons = {
-        ["runed"] = "|T" .. C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID .. ":12|t",
-        ["gilded"] = "|T" .. C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID ..":12|t"
-    }
+
+	local crestIcons = {
+		["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t",
+		["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t",
+		["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t",
+		["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t"
+	}
+
+
+	local function buildEntry(lvl, ilvl1, ilvl2, crest, crestamount)
+
+		local crests
+		if crestamount then
+			crests = string.format("%sx%d", crestIcons[crest], crestamount)
+		else
+			crests = crestIcons[crest]
+		end
+
+		local entry = {
+			PLAYER_DIFFICULTY2,
+			ilvl1,
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl1),
+			ilvl2,
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl2),
+			crests
+		};
+
+		return entry
+	end
 	
+
     self.ItemList.data = {
+		buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
 		{ 
 			PLAYER_DIFFICULTY2,
 			665,
-			L["gearTrack_Adventurer"] .. " 4/8",
-			685,
-			L["gearTrack_Veteran"] .. " 4/8 ",
-			""
+			GreatVaultList.itemlvl:GetHighestTrackString(665),
+			678,
+			GreatVaultList.itemlvl:GetHighestTrackString(678),
+			crestIcons["weathered"]
 
 		},
 		{ 
@@ -74,7 +101,7 @@ function GreatVaultListDungeonLootListMixin:BuildData()
 			L["gearTrack_Champion"] .. " 1/8",
 			691,
 			L["gearTrack_Champion"] .. "  4/8",
-			""
+			crestIcons["carved"]
 		},
         {
             2,
