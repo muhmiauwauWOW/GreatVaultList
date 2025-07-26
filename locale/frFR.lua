@@ -79,6 +79,8 @@ L["tabLoot_upgradelvl"] = "Niveau de mise à niveau"
 
 L["tabLoot_crests"] = "Emblèmes Récompensés"
 L["tabLoot_crests_desc"] = "Quantité d'emblèmes reçus pour une course chronométrée"
+L["tabLoot_crestType"] = "Emblème"
+L["tabLoot_crestType_desc"] = "Le type d'emblèmes reçus"
 
 L["List"] = "List"
 

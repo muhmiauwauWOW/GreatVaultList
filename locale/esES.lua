@@ -91,6 +91,8 @@ L["tabLoot_upgradelvl"] = "Nivel de mejora"
 
 L["tabLoot_crests"] = "Emblemas Recompensados"
 L["tabLoot_crests_desc"] = "Cantidad de emblemas recibidos por completar una carrera a tiempo"
+L["tabLoot_crestType"] = "Emblema"
+L["tabLoot_crestType_desc"] = "El tipo de emblemas recibidos"
 L["List"] = "List"
 
 -- delves loot tab

@@ -79,6 +79,8 @@ L["tabLoot_upgradelvl"] = "Nível de atualização"
 
 L["tabLoot_crests"] = "Emblemas Recompensados"
 L["tabLoot_crests_desc"] = "Quantidade de emblemas recebidos por completar uma corrida no tempo"
+L["tabLoot_crestType"] = "Emblema"
+L["tabLoot_crestType_desc"] = "O tipo de emblemas recebidos"
 
 L["List"] = "List"
 

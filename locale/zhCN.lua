@@ -81,6 +81,8 @@ L["tabLoot_upgradelvl"] = "升级等级"
 
 L["tabLoot_crests"] = "奖励的徽章"
 L["tabLoot_crests_desc"] = "通过限时完成获得的徽章数量"
+L["tabLoot_crestType"] = "徽章"
+L["tabLoot_crestType_desc"] = "获得的徽章类型"
 
 L["List"] = "List"
 

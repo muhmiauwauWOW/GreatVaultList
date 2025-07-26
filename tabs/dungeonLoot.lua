@@ -78,7 +78,6 @@ function GreatVaultListDungeonLootListMixin:BuildData()
 
     self.ItemList.data = {
         buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
-        buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
         buildEntry(PLAYER_DIFFICULTY6, 681, 691, "carved"),
         buildEntry(2, 684, 694, "runed", 10),
         buildEntry(3, 684, 694, "runed", 12),
