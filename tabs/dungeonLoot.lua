@@ -54,29 +54,21 @@ function GreatVaultListDungeonLootListMixin:BuildData()
     self:AddColumn(L["tabLoot_crests"], false, L["tabLoot_crests_desc"])
 
 
-	local crestIcons = {
-		["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t",
-		["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t",
-		["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t",
-		["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t"
-	}
 
 
 	local function buildEntry(lvl, ilvl1, ilvl2, crest, crestamount)
-
-		local crests
+		local crestIcons = GreatVaultList.itemlvl:GetCrestIconByKey(crest)
+		local crests = crestIcons
 		if crestamount then
-			crests = string.format("%sx%d", crestIcons[crest], crestamount)
-		else
-			crests = crestIcons[crest]
+			crests = string.format("%sx%d", crestIcons, crestamount)
 		end
 
 		local entry = {
-			PLAYER_DIFFICULTY2,
+			lvl,
 			ilvl1,
-			GreatVaultList.itemlvl:GetHighestTrackString(ilvl1),
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl1, false),
 			ilvl2,
-			GreatVaultList.itemlvl:GetHighestTrackString(ilvl2),
+			GreatVaultList.itemlvl:GetHighestTrackString(ilvl2, false),
 			crests
 		};
 
@@ -85,112 +77,20 @@ function GreatVaultListDungeonLootListMixin:BuildData()
 	
 
     self.ItemList.data = {
-		buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
-		{ 
-			PLAYER_DIFFICULTY2,
-			665,
-			GreatVaultList.itemlvl:GetHighestTrackString(665),
-			678,
-			GreatVaultList.itemlvl:GetHighestTrackString(678),
-			crestIcons["weathered"]
-
-		},
-		{ 
-			PLAYER_DIFFICULTY6,
-			681,
-			L["gearTrack_Champion"] .. " 1/8",
-			691,
-			L["gearTrack_Champion"] .. "  4/8",
-			crestIcons["carved"]
-		},
-        {
-            2,
-            684,
-            L["gearTrack_Champion"] .. " 2/8",
-            694,
-            L["gearTrack_Hero"] .. " 1/6",
-            crestIcons["runed"] .. " x10"
-        },
-        {
-            3,
-            684,
-            L["gearTrack_Champion"] .. " 2/8",
-            694,
-            L["gearTrack_Hero"] .. " 1/6",
-            crestIcons["runed"] .. " x12"
-        },
-        {
-            4,
-            688,
-            L["gearTrack_Champion"] .. " 3/8",
-            697,
-            L["gearTrack_Hero"] .. " 2/6",
-            crestIcons["runed"] .. " x14"
-        },
-        {
-            5,
-            691,
-            L["gearTrack_Champion"] .. " 4/8",
-            697,
-            L["gearTrack_Hero"] .. " 2/6",
-            crestIcons["runed"] .. " x16"
-        },
-        {
-            6,
-            694,
-            L["gearTrack_Hero"] .. " 1/6",
-            701,
-            L["gearTrack_Hero"] .. " 3/6",
-            crestIcons["runed"] .. " x18"
-        },
-        {
-            7,
-            694,
-            L["gearTrack_Hero"] .. " 1/6",
-            704,
-            L["gearTrack_Hero"] .. " 4/6",
-            crestIcons["gilded"] .. " x10"
-        },
-        {
-            8,
-            697,
-            L["gearTrack_Hero"] .. " 2/6",
-            704,
-            L["gearTrack_Hero"] .. " 4/6",
-            crestIcons["gilded"] .. " x12"
-        },
-        {
-            9,
-            697,
-            L["gearTrack_Hero"] .. " 2/6",
-            704,
-            L["gearTrack_Hero"] .. " 4/6",
-            crestIcons["gilded"] .. " x14"
-        },
-        {
-            10,
-            701,
-            L["gearTrack_Hero"] .. " 3/6",
-            707,
-            L["gearTrack_Myth"] .. " 1/6",
-            crestIcons["gilded"] .. " x16"
-        },
-        {
-            11,
-            701,
-            L["gearTrack_Hero"] .. " 3/6",
-            707,
-            L["gearTrack_Myth"] .. " 1/6",
-            crestIcons["gilded"] .. " x18"
-        },
-        {
-            "12+",
-            701,
-            L["gearTrack_Hero"] .. " 3/6",
-            707,
-            L["gearTrack_Myth"] .. " 1/6",
-            crestIcons["gilded"] .. " x20"
-        }
+        buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
+        buildEntry(PLAYER_DIFFICULTY2, 665, 678, "weathered"),
+        buildEntry(PLAYER_DIFFICULTY6, 681, 691, "carved"),
+        buildEntry(2, 684, 694, "runed", 10),
+        buildEntry(3, 684, 694, "runed", 12),
+        buildEntry(4, 688, 697, "runed", 14),
+        buildEntry(5, 691, 697, "runed", 16),
+        buildEntry(6, 694, 701, "runed", 18),
+        buildEntry(7, 694, 704, "gilded", 10),
+        buildEntry(8, 697, 704, "gilded", 12),
+        buildEntry(9, 697, 704, "gilded", 14),
+        buildEntry(10, 701, 707, "gilded", 16),
+        buildEntry(11, 701, 707, "gilded", 18),
+        buildEntry("12+", 701, 707, "gilded", 20)
     }
 
 end

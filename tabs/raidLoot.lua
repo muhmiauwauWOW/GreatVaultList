@@ -53,34 +53,23 @@ function GreatVaultListRaidLootListMixin:BuildData()
 		["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3290).name
 	}
 
+	local function buildEntry(type, ilvl1, ilvl2, ilvl3, crest)
+
+		local entry = {
+			type,
+			ilvl1,
+			ilvl2,
+			ilvl3,
+			GreatVaultList.itemlvl:GetCrestIconByKey(crest, true)
+		};
+
+		return entry
+	end
+
 	self.ItemList.data = {
-		{
-			string.format("%s %s", "LFR", L["raidLoot_Regular"]),
-			671,
-			675,
-			678,
-			crestIcons["weathered"]
-		},
-		{
-			string.format("%s %s", "Normal", L["raidLoot_Regular"]),
-			684,
-			688,
-			691,
-			crestIcons["carved"]
-		},
-		{
-			string.format("%s %s", "Heroic", L["raidLoot_Regular"]),
-			697,
-			701,
-			704,
-			crestIcons["runed"]
-		},
-		{
-			string.format("%s %s", "Mythic", L["raidLoot_Regular"]),
-			710,
-			714,
-			717,
-			crestIcons["gilded"]
-		}
-	}
+        buildEntry(string.format("%s %s", "LFR", L["raidLoot_Regular"]), 671, 675, 678, "weathered"),
+        buildEntry(string.format("%s %s", "Normal", L["raidLoot_Regular"]), 684, 688, 691, "carved"),
+        buildEntry(string.format("%s %s", "Heroic", L["raidLoot_Regular"]), 697, 701, 704, "runed"),
+        buildEntry(string.format("%s %s", "Mythic", L["raidLoot_Regular"]), 710, 714, 717, "gilded")
+    }
 end

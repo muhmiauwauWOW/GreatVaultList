@@ -12,6 +12,21 @@ local maxRanks = {
     Myth = 6
 }
 
+local crestIcons = {
+    ["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t",
+    ["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t",
+    ["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t",
+    ["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t"
+}
+
+local crestIconsWithNames  = {
+    ["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3285).name,
+    ["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3287).name,
+    ["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3289).name,
+    ["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3290).name
+}
+
+
 local data = {
     [642] = {tracks = {{"Explorer", 1}}},
     [645] = {tracks = {{"Explorer", 2}}},
@@ -54,6 +69,17 @@ function GreatVaultList.itemlvl:GetCrestByItemLevel(ilvl)
     if not self.data[ilvl] then return nil end
     return self.data[ilvl].crest or nil
 end
+
+function GreatVaultList.itemlvl:GetCrestIconByKey(key, name)
+    local data = crestIcons
+    if name then
+        data = crestIconsWithNames
+    end
+    if not data[key] then return nil end
+    return data[key] or nil
+end
+
+
 
 function GreatVaultList.itemlvl:GetHighestTrackString(ilvl)
     local tracks = self.data[ilvl] and self.data[ilvl].tracks
