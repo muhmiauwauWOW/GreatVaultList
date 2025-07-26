@@ -1,4 +1,4 @@
-﻿## Interface: 110107
+﻿## Interface: 110200
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Version: @project-version@
