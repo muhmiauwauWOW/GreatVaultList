@@ -49,7 +49,7 @@ L["opt_CharacterDelete_title"] = "Удалить данные персонажа
 L["opt_CharacterDelete_slider_name"] = "Выберите персонажа для удаления"
 L["opt_CharacterDelete_slider_desc"] = "Выберите персонажа для удаления из списка."
 
-L["opt_CharacterDelete_btn_name"] = "Удалить выбранного персонаца"
+L["opt_CharacterDelete_btn_name"] = "Удалить выбранного персонажа"
 
 L["opt_CharacterDelete_confirm_text"] = "Вы уверены, что хотите удалить выбранные данные персонажа? Это действие не может быть отменено."
 
@@ -83,8 +83,8 @@ L["tabLoot_upgradelvl"] = "Уровень улучшения"
 
 L["tabLoot_crests"] = "Полученные гребни"
 L["tabLoot_crests_desc"] = "Количество гребней, полученных за прохождение в установленное время"
-L["tabLoot_crestType"] = "Герб"
-L["tabLoot_crestType_desc"] = "Тип полученных гербов"
+L["tabLoot_crestType"] = "Гребни"
+L["tabLoot_crestType_desc"] = "Тип полученных гребней"
 
 L["tabLoot_ilvl"] = "ilvl"
 
