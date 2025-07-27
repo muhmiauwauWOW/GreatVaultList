@@ -57,7 +57,6 @@ local data = {
 }
 
 GreatVaultList.itemlvl.data = data
-DevTool:AddData(GreatVaultList.itemlvl.data)
 local function buildTrackKey(name) return "gearTrack_" .. name end
 
 function GreatVaultList.itemlvl:GetTracksByItemLevel(ilvl)
