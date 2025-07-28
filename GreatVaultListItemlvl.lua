@@ -12,18 +12,31 @@ local maxRanks = {
     Myth = 6
 }
 
+local currencyCache = {}
+local function SafeGetCurrencyInfo(id)
+    if currencyCache[id] then return currencyCache[id] end
+    local info = C_CurrencyInfo.GetCurrencyInfo(id)
+    if info and info.iconFileID and info.name then
+        currencyCache[id] = info
+        return info
+    end
+    local fallback = { iconFileID = 134400, name = "?" }
+    currencyCache[id] = fallback
+    return fallback
+end
+
 local crestIcons = {
-    ["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t",
-    ["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t",
-    ["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t",
-    ["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t"
+    ["weathered"] = "|T"..SafeGetCurrencyInfo(3285).iconFileID..":12|t",
+    ["carved"] = "|T"..SafeGetCurrencyInfo(3287).iconFileID..":12|t",
+    ["runed"] = "|T"..SafeGetCurrencyInfo(3289).iconFileID..":12|t",
+    ["gilded"] = "|T"..SafeGetCurrencyInfo(3290).iconFileID..":12|t"
 }
 
 local crestIconsWithNames  = {
-    ["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3285).name,
-    ["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3287).name,
-    ["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3289).name,
-    ["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3290).name
+    ["weathered"] = "|T"..SafeGetCurrencyInfo(3285).iconFileID..":12|t " .. SafeGetCurrencyInfo(3285).name,
+    ["carved"] = "|T"..SafeGetCurrencyInfo(3287).iconFileID..":12|t " .. SafeGetCurrencyInfo(3287).name,
+    ["runed"] = "|T"..SafeGetCurrencyInfo(3289).iconFileID..":12|t " .. SafeGetCurrencyInfo(3289).name,
+    ["gilded"] = "|T"..SafeGetCurrencyInfo(3290).iconFileID..":12|t " .. SafeGetCurrencyInfo(3290).name
 }
 
 

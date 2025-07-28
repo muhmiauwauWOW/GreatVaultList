@@ -46,13 +46,6 @@ function GreatVaultListRaidLootListMixin:BuildData()
 	self:AddColumn(string.format(L["raidLoot_bosses"], "7-8"), true)
 	self:AddColumn(L["tabLoot_crestType"], false, L["tabLoot_crestType_desc"])
 
-	local crestIcons = {
-		["weathered"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3285).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3285).name,
-		["carved"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3287).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3287).name,
-		["runed"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3289).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3289).name,
-		["gilded"] = "|T"..C_CurrencyInfo.GetCurrencyInfo(3290).iconFileID..":12|t " .. C_CurrencyInfo.GetCurrencyInfo(3290).name
-	}
-
 	local function buildEntry(type, ilvl1, ilvl2, ilvl3, crest)
 
 		local entry = {
