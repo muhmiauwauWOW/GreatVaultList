@@ -1,5 +1,4 @@
 local addonName = ...
-local _ = LibStub("LibLodash-1"):Get()
 local L, _ = GreatVaultList:GetLibs()
 local LibGearData = LibStub("LibGearData-1.0")
 
@@ -41,11 +40,23 @@ function GreatVaultListRaidLootListMixin:GetHelpConfig()
 end
 
 function GreatVaultListRaidLootListMixin:BuildData()
+
+	local raidloot =  LibGearData:GetRaidLootList()
+	local lootTable = {}
 	self:AddColumn(L["raidLoot_col1"])
-	self:AddColumn(string.format(L["raidLoot_bosses"], "1-3"), true)
-	self:AddColumn(string.format(L["raidLoot_bosses"], "4-6"), true)
-	self:AddColumn(string.format(L["raidLoot_bosses"], "7-8"), true)
+	_.forEach(raidloot.bosses, function (v)
+		self:AddColumn(string.format(L["raidLoot_bosses"], v), true)
+	end)
 	self:AddColumn(L["tabLoot_crestType"], false, L["tabLoot_crestType_desc"])
-	
-	self.ItemList.data = LibGearData:GetRaidLootList()
+
+    _.forEach(raidloot.data, function (value)
+		local row = {value.name}
+		_.forEach(value.ilvls,function (e)
+			_.push(row, e)
+		end)
+        _.push(row, value.crest)
+        _.push(lootTable, row)
+    end)
+
+    self.ItemList.data = lootTable
 end
