@@ -1,6 +1,7 @@
 local addonName = ...
 local _ = LibStub("LibLodash-1"):Get()
 local L, _ = GreatVaultList:GetLibs()
+local LibGearData = LibStub("LibGearData-1.0")
 
 
 local TabID = "raidLoot"
@@ -45,24 +46,6 @@ function GreatVaultListRaidLootListMixin:BuildData()
 	self:AddColumn(string.format(L["raidLoot_bosses"], "4-6"), true)
 	self:AddColumn(string.format(L["raidLoot_bosses"], "7-8"), true)
 	self:AddColumn(L["tabLoot_crestType"], false, L["tabLoot_crestType_desc"])
-
-	local function buildEntry(type, ilvl1, ilvl2, ilvl3, crest)
-
-		local entry = {
-			type,
-			ilvl1,
-			ilvl2,
-			ilvl3,
-			GreatVaultList.itemlvl:GetCrestIconByKey(crest, true)
-		};
-
-		return entry
-	end
-
-	self.ItemList.data = {
-        buildEntry(string.format("%s %s", "LFR", L["raidLoot_Regular"]), 671, 675, 678, "weathered"),
-        buildEntry(string.format("%s %s", "Normal", L["raidLoot_Regular"]), 684, 688, 691, "carved"),
-        buildEntry(string.format("%s %s", "Heroic", L["raidLoot_Regular"]), 697, 701, 704, "runed"),
-        buildEntry(string.format("%s %s", "Mythic", L["raidLoot_Regular"]), 710, 714, 717, "gilded")
-    }
+	
+	self.ItemList.data = LibGearData:GetRaidLootList()
 end

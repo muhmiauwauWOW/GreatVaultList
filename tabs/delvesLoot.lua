@@ -1,5 +1,6 @@
 local addonName = ...
 local L, _ = GreatVaultList:GetLibs()
+local LibGearData = LibStub("LibGearData-1.0")
 
 
 local TabID = "delvesLoot"
@@ -82,32 +83,8 @@ function GreatVaultListDelvesLootListMixin:BuildData()
 	self:AddColumn(L["tabLoot_upgradelvl"], false, L["tabLoot_greatVault"])
 
 
-	local function buildEntry(lvl, ilvl1, ilvl2)
-
-		local entry = {
-			lvl,
-			ilvl1,
-			GreatVaultList.itemlvl:GetHighestTrackString(ilvl1, false),
-			ilvl2,
-			GreatVaultList.itemlvl:GetHighestTrackString(ilvl2, false)
-		};
-
-		return entry
-	end
 
 
-	self.ItemList.data = {
-        buildEntry(1, 655, 655),
-        buildEntry(2, 658, 668),
-        buildEntry(3, 662, 671),
-        buildEntry(4, 665, 681),
-        buildEntry(5, 668, 684),
-        buildEntry(6, 671, 691),
-        buildEntry(7, 681, 691),
-        buildEntry(8, 684, 694),
-        buildEntry(9, 684, 694),
-        buildEntry(10, 684, 694),
-        buildEntry(11, 684, 694)
-    }
+	self.ItemList.data = LibGearData:GetDelvesLootList()
 
 end

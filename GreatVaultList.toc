@@ -39,14 +39,12 @@ Libs/LibLodash/LibLodash.lua
 Libs/LibDataBroker-1.1/LibDataBroker-1.1.lua
 Libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
 
-
-
+Libs/LibGearData-1.0/LibGearData-1.0.xml
 
 locale/locale.xml
 
 GreatVaultList.lua
 
-GreatVaultListItemlvl.lua
 
 
 misc/AddonCompartment.lua
