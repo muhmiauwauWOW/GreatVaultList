@@ -107,6 +107,8 @@ L["List"] = "List"
 -- delves loot tab
 L["delvesLoot_col1"] = "Tier"
 L["delvesLoot_col2"] = "Bountiful" -- no auto translate
+L["delvesLoot_col3"] = "Delver's Bounty" -- no auto translate
+
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Level"

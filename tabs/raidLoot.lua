@@ -41,13 +41,68 @@ end
 
 function GreatVaultListRaidLootListMixin:BuildData()
 
-	local raidloot =  LibGearData:GetRaidLootList()
+
+	
+	 function GetRaidLootList()
+        local raidData = LibGearData:GetData("raid")
+        if not raidData then return {} end
+
+        local crests = {}
+		local ilvls = {}
+		local result = {}
+
+		for _, entry in ipairs(raidData) do
+			if entry.loot and entry.difficulty then
+				if not ilvls[entry.difficulty] then
+					ilvls[entry.difficulty] = {}
+				end
+				table.insert(ilvls[entry.difficulty], entry.loot)
+			end
+
+			if entry.crest and entry.crestAmount and entry.difficulty then
+				if not crests[entry.difficulty] then
+					crests[entry.difficulty] = {}
+				end
+				crests[entry.difficulty] = {
+					crest = entry.crest,
+					crestAmount = entry.crestAmount
+				}
+			end
+		end
+
+		local DifficultiesOrder = LibGearData:GetDifficultiesOrder("raid")
+		for k, v in pairs(DifficultiesOrder) do
+			local crestsObj = crests and crests[v]
+			local crestAmount = crestsObj and crests[v]["crestAmount"] or "-"
+			local crest = crestsObj and crests[v]["crest"] or {}
+			local crestStr = crestsObj and crest.icon and crest.name and
+								string.format("%s %s", crest.icon, crest.name) or
+								""
+
+			table.insert(result, {
+				name = v,
+				ilvls = ilvls[v],
+				crest = crestStr,
+				crestAmount = crestAmount
+			})
+		end
+		return {
+			bosses = LibGearData:GetRaidBossesMap(),
+			data = result
+		}
+    end
+
+    local raidloot = GetRaidLootList()
+
 	local lootTable = {}
 	self:AddColumn(L["raidLoot_col1"])
 	_.forEach(raidloot.bosses, function (v)
 		self:AddColumn(string.format(L["raidLoot_bosses"], v), true)
 	end)
 	self:AddColumn(L["tabLoot_crestType"], false, L["tabLoot_crestType_desc"])
+
+
+
 
     _.forEach(raidloot.data, function (value)
 		local row = {value.name}

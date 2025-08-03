@@ -2,7 +2,6 @@ local addonName = ...
 local L, _ = GreatVaultList:GetLibs()
 local LibGearData = LibStub("LibGearData-1.0")
 
-
 local TabID = "dungeonLoot"
 local Tab = GreatVaultList:NewModule(TabID, GREATVAULTLIST_TABS)
 
@@ -55,8 +54,28 @@ function GreatVaultListDungeonLootListMixin:BuildData()
     self:AddColumn(L["tabLoot_upgradelvl"], false, L["tabLoot_greatVault"])
     self:AddColumn(L["tabLoot_crests"], false, L["tabLoot_crests_desc"])
 
-	
+    function GetDungeonLootList()
+        local dungeonData = LibGearData:GetData("dungeons")
+        if not dungeonData then return {} end
 
-    self.ItemList.data = LibGearData:GetDungeonLootList()
+        local result = {}
+        for _, entry in ipairs(dungeonData) do
+            local crestAmount = entry.crestAmount
+            local crestIcon = entry.crest.icon or ""
+            local crestString = crestIcon
+            if crestAmount then
+                crestString = string.format("%s x %d", crestIcon, crestAmount)
+            end
+
+            table.insert(result, {
+                entry.level, entry.key,
+                LibGearData:GetHighestTrackString(entry.key), entry.vault,
+                LibGearData:GetHighestTrackString(entry.vault), crestString
+            })
+        end
+        return result
+    end
+
+    self.ItemList.data = GetDungeonLootList()
 
 end

@@ -16,5 +16,6 @@ externals:
   Libs/LibLodash: https://github.com/muhmiauwauWOW/LibLodash.git
   Libs/LibDBIcon-1.0: https://repos.curseforge.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
   Libs/LibDataBroker-1.1: https://repos.curseforge.com/wow/libdatabroker-1-1
+  Libs/LibGearData-1.0: https://github.com/muhmiauwauWOW/LibGearData.git
 
 enable-nolib-creation: no
