@@ -92,7 +92,8 @@ L["List"] = "Персонажи"
 
 -- delves loot tab
 L["delvesLoot_col1"] = "Уровень"
-L["delvesLoot_col2"] = "Щедрый"
+L["delvesLoot_col2"] = "Многообещающие вылазки"
+L["delvesLoot_col3"] = "Клад участника вылазки"
 
 -- dungeon loot tab 
 L["dungeonLoot_col1"] = "Уровень"
