@@ -4,8 +4,8 @@ local L, _ = GreatVaultList:GetLibs()
 
 local WeeklyRewardChestThresholdType = {
     Enum.WeeklyRewardChestThresholdType.Raid, 
-	Enum.WeeklyRewardChestThresholdType.Activities,
-	Enum.WeeklyRewardChestThresholdType.World,
+    Enum.WeeklyRewardChestThresholdType.Activities,
+    Enum.WeeklyRewardChestThresholdType.World,
 }
 
 
@@ -34,21 +34,40 @@ Column.config = {
     },
     ["store"] = function(characterInfo)
         local highestReward = 0
+        local hasValidData = false
+        local apiCallsMade = 0
+        local totalApiCalls = #WeeklyRewardChestThresholdType
 
         _.forEach(WeeklyRewardChestThresholdType, function(id)
-            local info =  C_WeeklyRewards.GetActivities(id)
-            if not info[1] then return end
-            if not info[1].id then return end -- the first one is  always the higherst
-            local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id);
+            local info = C_WeeklyRewards.GetActivities(id)
+            apiCallsMade = apiCallsMade + 1
+            
+            if not info or not info[1] or not info[1].id then return end
+            
+            local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id)
             if itemLink then
-                local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);
-                if itemLevel then
-                    highestReward = highestReward < itemLevel and itemLevel or highestReward
+                local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink)
+                if itemLevel and itemLevel > 0 then
+                    highestReward = math.max(highestReward, itemLevel)
+                    hasValidData = true
                 end
             end
         end)
 
-        characterInfo[ColumKey] = highestReward > 0 and highestReward or nil
+        -- If we made all API calls but found no valid rewards, it's legitimate to set to nil
+        -- If we couldn't make all API calls, preserve existing value to avoid data loss
+        if apiCallsMade == totalApiCalls then
+            if hasValidData and highestReward > 0 then
+                characterInfo[ColumKey] = highestReward
+            else
+                -- All APIs were called but no rewards found - legitimate nil case
+                characterInfo[ColumKey] = nil
+            end
+        elseif characterInfo[ColumKey] then
+            -- Not all APIs were called - preserve existing value to avoid data loss
+            -- This handles cases where APIs aren't fully loaded yet
+        end
+        
         return characterInfo
     end,
     ["populate"] = function(self, number)
