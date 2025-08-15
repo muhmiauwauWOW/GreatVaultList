@@ -84,10 +84,17 @@ function GreatVaultList:OnInitialize()
 
 end
 
+
 function GreatVaultList:OnEnable()
     GreatVaultListOptions:init()
     GreatVaultList.Data:storeAll()
+
+    C_Timer.After(1,function ()
+         self:showWindow()
+    end)
+   
 end
+
 
 function GreatVaultList:hideWindow()
 	GreatVaultListFrame:Hide()
@@ -111,6 +118,9 @@ function GreatVaultList:toggleWindow()
 		self:showWindow()
 	end
 end
+
+
+
 
 
 function GreatVaultList:slashcommand()
