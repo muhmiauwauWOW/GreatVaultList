@@ -1,13 +1,36 @@
 local ColumKey = "highestReward"
 local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
+local LibGearData = LibStub("LibGearData-1.0")
 
-local WeeklyRewardChestThresholdType = {
-    Enum.WeeklyRewardChestThresholdType.Raid, 
-	Enum.WeeklyRewardChestThresholdType.Activities,
-	Enum.WeeklyRewardChestThresholdType.World,
-}
+ local typeToDataSource = {
+        [Enum.WeeklyRewardChestThresholdType.Raid] = "raid",
+        [Enum.WeeklyRewardChestThresholdType.Activities] = "dungeons",
+        [Enum.WeeklyRewardChestThresholdType.World] = "delves"
+    }
 
+
+local function highestRewardFN(Adata)
+    if not _.isTable(Adata) then return nil end
+    local ilvlTable = {0}
+    
+    _.forEach(Adata, function(entry)
+        local dataSource = typeToDataSource[entry.type]
+        if not dataSource then return end
+        local data = LibGearData:GetData(dataSource)
+        table.insert(ilvlTable, _.get(data, {entry.level, "vault"}, 0))
+    end)
+
+    return math.max(unpack(ilvlTable))
+end
+
+local function formatNumber(rowData, rawNumber)
+    if not rawNumber then  return nil end
+    if not _.isNumber(rawNumber) then  return nil end
+    if rawNumber == 0 then return nil end
+
+    return GreatVaultList.Util:colorItemLvl(rowData.data.averageItemLevel, rawNumber, 3, 6)
+end
 
 
 Column.key = ColumKey
@@ -24,7 +47,7 @@ Column.config = {
         return math.random(500, 600)
     end,
     event = {
-        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
+        {"WEEKLY_REWARDS_UPDATE"},
         function(self)
             GreatVaultList.Data:store(self.config, true)
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
@@ -33,28 +56,17 @@ Column.config = {
         end
     },
     ["store"] = function(characterInfo)
-        local highestReward = 0
-
-        _.forEach(WeeklyRewardChestThresholdType, function(id)
-            local info =  C_WeeklyRewards.GetActivities(id)
-            if not info[1] then return end
-            if not info[1].id then return end -- the first one is  always the higherst
-            local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id);
-            if itemLink then
-                local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);
-                if itemLevel then
-                    highestReward = highestReward < itemLevel and itemLevel or highestReward
-                end
-            end
-        end)
-
-        characterInfo[ColumKey] = highestReward > 0 and highestReward or nil
+        characterInfo.activitiesData = C_WeeklyRewards.GetActivities()
         return characterInfo
     end,
     ["populate"] = function(self, number)
         if not self.rowData then return number end
-        if type(number) ~= "number" then return number end
-        
-        return GreatVaultList.Util:colorItemLvl(self.rowData.data.averageItemLevel, number, 3, 6)
+        if not self.rowData.data.activitiesData then 
+            if number then return number end
+            return nil
+        end
+        if  not _.isTable(self.rowData.data.activitiesData) then return nil end
+           
+        return formatNumber(self.rowData, highestRewardFN(self.rowData.data.activitiesData))
     end
 }
