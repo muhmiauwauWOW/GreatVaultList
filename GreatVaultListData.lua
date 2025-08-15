@@ -15,6 +15,7 @@ function GreatVaultList.Data:init()
 	GreatVaultList:RegisterEvent("WEEKLY_REWARDS_UPDATE", function()
 		if C_WeeklyRewards.CanClaimRewards() then return end
 		self.skipStore = false
+		self:storeAll()
 	end)
 end
 
