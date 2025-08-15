@@ -31,36 +31,36 @@ Column.config = {
         end
     },
     ["store"] = function(characterInfo)
+        -- If last week's rewards are still claimable, keep the existing value and do nothing
+        -- Also if the rewards are claimable there may not be clear info on the item level
+        if C_WeeklyRewards.HasAvailableRewards and C_WeeklyRewards.HasAvailableRewards() then
+            return characterInfo
+        end
+
         local highestReward = 0
         local hasValidData = false
-        local existingValue = characterInfo[ColumKey]  -- Preserve existing value to prevent data loss
 
-        -- Get rewards data from all sources (Raid, Activities, World)
+        -- Compute current cycle example reward (Raid, Activities, World)
         _.forEach(WeeklyRewardChestThresholdType, function(id)
             local info = C_WeeklyRewards.GetActivities(id)
             if not info or not info[1] or not info[1].id then return end
-            
+
             local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id)
             if itemLink then
                 local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink)
                 if itemLevel and itemLevel > 0 then
-                    highestReward = math.max(highestReward, itemLevel)  -- Track highest item level found
+                    highestReward = math.max(highestReward, itemLevel)
                     hasValidData = true
                 end
             end
         end)
 
-        -- Update the value if we found valid data, otherwise preserve existing value
         if hasValidData and highestReward > 0 then
-            characterInfo[ColumKey] = highestReward  -- Set new highest reward value
-        elseif existingValue and existingValue > 0 then
-            -- Preserve existing value if APIs aren't ready yet (prevents data loss on fast login/logout)
-            characterInfo[ColumKey] = existingValue
+            characterInfo[ColumKey] = highestReward
         else
-            -- Only set to nil if we have no existing value and no valid data
             characterInfo[ColumKey] = nil
         end
-        
+
         return characterInfo
     end,
     ["populate"] = function(self, number)
