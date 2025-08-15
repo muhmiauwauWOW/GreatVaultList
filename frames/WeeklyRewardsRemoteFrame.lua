@@ -18,7 +18,11 @@ local function getUnitColor(playerClass)
 end
 
 function RemoteMixin:show(data)
-    if not data.activitiesData then return end
+    if not data.activitiesData then 
+        PlaySound(1203);
+        UIErrorsFrame:AddMessage("Data missing.Log in on that character.", RED_FONT_COLOR:GetRGBA());
+        return
+    end
 
     self.charName =  data.name
     if GreatVaultList.db.global.Options.columns.character.useClassColors and data.class then

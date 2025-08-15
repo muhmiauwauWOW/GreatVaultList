@@ -26,6 +26,7 @@ Column.config = {
         return ary[math.random(#ary)]
     end,
     ["store"] = function(characterInfo)
+	    characterInfo.activitiesData = C_WeeklyRewards.GetActivities()
         characterInfo[ColumKey] = GreatVaultList:GetVaultState()
         return characterInfo
     end,

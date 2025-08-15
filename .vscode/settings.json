@@ -326,7 +326,8 @@
         "GREAT_VAULT_REWARDS_CURRENT_LEVEL_HEROIC",
         "GREAT_VAULT_REWARDS_CURRENT_LEVEL_MYTHIC",
         "Activities",
-        "WeeklyRewardActivityItemMixin"
+        "WeeklyRewardActivityItemMixin",
+        "UIErrorsFrame"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",

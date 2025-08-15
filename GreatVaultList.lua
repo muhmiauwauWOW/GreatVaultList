@@ -3,7 +3,7 @@ local AddOnInfo = {C_AddOns.GetAddOnInfo(addonName)}
 GreatVaultList = LibStub("AceAddon-3.0"):NewAddon("GreatVaultList", "AceEvent-3.0", "AceBucket-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("GreatVaultList")
 local _ = LibStub("LibLodash-1"):Get()
-local BlizzMoveAPI = _G.BlizzMoveAPI
+
 
 function GreatVaultList:GetLibs()
 	return L, _
@@ -88,11 +88,6 @@ end
 function GreatVaultList:OnEnable()
     GreatVaultListOptions:init()
     GreatVaultList.Data:storeAll()
-
-    C_Timer.After(1,function ()
-         self:showWindow()
-    end)
-   
 end
 
 

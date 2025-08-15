@@ -66,7 +66,5 @@ function GreatVaultList.Data:storeAll()
 		self:store(entry.config, false)
 	end)
 
-	self.characterInfo.activitiesData = C_WeeklyRewards.GetActivities()
-
 	self:write()
 end

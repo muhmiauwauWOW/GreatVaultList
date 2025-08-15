@@ -99,11 +99,18 @@ function TableCellVaultStatusMixin:ShowGreatVault(data)
     if not WeeklyRewardsRemoteFrame then
         WeeklyRewardsRemoteFrame  = CreateFrame("Frame","WeeklyRewardsRemoteFrame", UIParent, "WeeklyRewardsRemoteFrameTemplate")
         WeeklyRewardsRemoteFrame:EnableMouse(true)
+        GreatVaultList:addWeeklyRewardFrame()
     end
 
+    local sameName = (data.name == WeeklyRewardsRemoteFrame.charName)
     if WeeklyRewardsRemoteFrame:IsVisible() then
         WeeklyRewardsRemoteFrame:Hide()
+        if not sameName then 
+            WeeklyRewardsRemoteFrame:show(data)
+        end
+    else
+        WeeklyRewardsRemoteFrame:show(data)
     end
 
-    WeeklyRewardsRemoteFrame:show(data)
+
 end
