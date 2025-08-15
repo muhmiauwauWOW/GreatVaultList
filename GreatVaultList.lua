@@ -81,6 +81,12 @@ function GreatVaultList:OnInitialize()
 	self:DataBrokerInit()
 	self:BlizzMove()
 	self.ElvUi:Init()
+
+end
+
+function GreatVaultList:OnEnable()
+    GreatVaultListOptions:init()
+    GreatVaultList.Data:storeAll()
 end
 
 function GreatVaultList:hideWindow()
@@ -123,14 +129,11 @@ end
 GreatVaultList.RegisterdModules = {}
 GreatVaultList.ModuleColumns = {}
 
-GreatVaultList.DataCheck = nil
-
 GREATVAULTLIST_COLUMNS = {
 	OnInitialize = function(self)
 		if not WeeklyRewardsFrame then
 			WeeklyRewards_LoadUI();
 		end
-
 
 		local defaultState = (self.config.defaultState == nil) and true or self.config.defaultState
 
@@ -147,14 +150,6 @@ GREATVAULTLIST_COLUMNS = {
 			index = self.config.defaultIndex,
 			id = self.key
 		}
-
-		if GreatVaultList.DataCheck then GreatVaultList.DataCheck:Cancel() end
-
-		GreatVaultList.DataCheck = C_Timer.NewTimer(3, function()
-			GreatVaultList.DataCheck:Cancel()
-			GreatVaultListOptions:init()
-			GreatVaultList.Data:storeAll()
-		end)
 	end,
 	OnEnable = function(self)
 		if not GreatVaultList.db.global.Options.modules[self.key].active then self:Disable(); return; end
