@@ -85,10 +85,6 @@ function GreatVaultList:OnInitialize()
 end
 
 
-function GreatVaultList:OnEnable()
-    GreatVaultListOptions:init()
-    GreatVaultList.Data:storeAll()
-end
 
 
 function GreatVaultList:hideWindow()
@@ -96,10 +92,6 @@ function GreatVaultList:hideWindow()
 end
 
 function GreatVaultList:showWindow()
-	if not WeeklyRewardsFrame then
-		WeeklyRewards_LoadUI();
-	end
-
 	GreatVaultList.Data:storeAll()
 	GreatVaultList:updateData()
 	-- GreatVaultList:demoMode()
@@ -155,6 +147,7 @@ GREATVAULTLIST_COLUMNS = {
 			index = self.config.defaultIndex,
 			id = self.key
 		}
+
 	end,
 	OnEnable = function(self)
 		if not GreatVaultList.db.global.Options.modules[self.key].active then self:Disable(); return; end
@@ -174,6 +167,8 @@ GREATVAULTLIST_COLUMNS = {
 				self.config.event[2](self, event)
 			end)
 		end
+
+        GreatVaultList:checkModules()
 	end,
 	OnDisable = function(self)
 		if GreatVaultList.db.global.Options.modules[self.key].active then self:Enable(); return; end
@@ -186,8 +181,40 @@ GREATVAULTLIST_COLUMNS = {
 		if self.config.eventHandle then
 			GreatVaultList:UnregisterBucket(self.config.eventHandle)
 		end
+
+        GreatVaultList:checkModules()
+
 	end
 }
+
+
+
+
+GreatVaultList.moduleTicker = nil
+function GreatVaultList:checkModules()
+
+    local modules = self:IterateModules()
+    local check = _.every(modules, function(module)
+        return module.loaded
+    end)
+
+    if self.moduleTicker then
+        self.moduleTicker:Cancel()
+	end
+
+      if check then
+        self.moduleTicker = C_Timer.NewTimer(0.01, function()
+            self.moduleTicker:Cancel()
+            if not WeeklyRewardsFrame then
+                WeeklyRewards_LoadUI();
+            end
+
+            GreatVaultListOptions:init()
+            self.Data:storeAll()
+            self:updateData()
+        end)
+    end
+end
 
 
 function GreatVaultList:updateData(refresh)
