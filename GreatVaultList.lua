@@ -77,7 +77,6 @@ function GreatVaultList:OnInitialize()
     self.Data:init()
 
     self:slashcommand()
-    
     self:DataBrokerInit()
     self:BlizzMove()
     self.ElvUi:Init()
@@ -89,11 +88,19 @@ end
 
 function GreatVaultList:showWindow()
     if not WeeklyRewardsFrame then
-        WeeklyRewards_LoadUI();
+        WeeklyRewards_LoadUI();  -- Ensure weekly rewards UI is loaded
     end
 
-    GreatVaultList.Data:storeAll()
-    GreatVaultList:updateData()
+    -- Wait for weekly rewards APIs to be ready before refreshing data
+    if C_WeeklyRewards.GetActivities then
+        -- APIs are ready, now refresh all data from them
+        GreatVaultList.Data:storeAll()
+        GreatVaultList:updateData()  -- Update display with fresh data
+    else
+        -- APIs not ready yet, just show existing data
+        GreatVaultList:updateData()
+    end
+    
     -- GreatVaultList:demoMode()
     GreatVaultListFrame:Show()
 end
@@ -142,18 +149,19 @@ GREATVAULTLIST_COLUMNS = {
             module = self
         }
 
-        GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or { 
+        GreatVaultList.db.global.Options.modules[self.key] = GreatVaultList.db.global.Options.modules[self.key] or {
             active = defaultState,
             index = self.config.defaultIndex,
             id = self.key
         }
 
         if GreatVaultList.DataCheck then GreatVaultList.DataCheck:Cancel() end
-        -- check 30 seconds after login to populate the data even if the window is not open
-        GreatVaultList.DataCheck = C_Timer.NewTimer(30, function()
-            GreatVaultList.DataCheck:Cancel()
-            GreatVaultListOptions:init()
-            GreatVaultList.Data:storeAll()
+        -- check 15 seconds after login to populate the data even if the window is not open
+        GreatVaultList.DataCheck = C_Timer.NewTimer(15, function()
+            GreatVaultList.DataCheck:Cancel()  -- Clean up timer reference
+            GreatVaultListOptions:init()  -- Initialize options system
+            GreatVaultList.Data:storeAll()  -- Refresh all column data (APIs should be ready by now)
+            GreatVaultList:updateData() -- Update the table with fresh data to persist it
         end)
     end,
     OnEnable = function(self)
