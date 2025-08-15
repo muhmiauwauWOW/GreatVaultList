@@ -156,8 +156,8 @@ GREATVAULTLIST_COLUMNS = {
         }
 
         if GreatVaultList.DataCheck then GreatVaultList.DataCheck:Cancel() end
-        -- check 15 seconds after login to populate the data even if the window is not open
-        GreatVaultList.DataCheck = C_Timer.NewTimer(15, function()
+        -- check 5 seconds after login to populate the data even if the window is not open
+        GreatVaultList.DataCheck = C_Timer.NewTimer(5, function()
             GreatVaultList.DataCheck:Cancel()  -- Clean up timer reference
             GreatVaultListOptions:init()  -- Initialize options system
             GreatVaultList.Data:storeAll()  -- Refresh all column data (APIs should be ready by now)
