@@ -65,7 +65,7 @@ end
 function RemoteMixin:OnShow()
     PlaySound(SOUNDKIT.UI_WEEKLY_REWARD_OPEN_WINDOW);
     FrameUtil.RegisterFrameForEvents(self, WEEKLY_REWARDS_EVENTS);
-   self:FullRefresh();
+    self:FullRefresh();
 end
 
 function RemoteMixin:OnHide()
@@ -74,7 +74,7 @@ function RemoteMixin:OnHide()
 end
 
 function RemoteMixin:OnEvent()
-    self:Hide()
+    HideUIPanel(WeeklyRewardsRemoteFrame)
 end
 
 
@@ -96,7 +96,6 @@ function RemoteMixin:Refresh()
 				activityInfo.progress = 0;
 			end
 
-
             frame.UnselectedFrame:Hide()
             frame.SelectedTexture:Hide();
           
@@ -106,12 +105,11 @@ function RemoteMixin:Refresh()
                 local itemLevel = nil
                 local upgradeItemLevel = nil
                
-
                 self.UpdateTooltip = nil;
                 if self.info.type == Enum.WeeklyRewardChestThresholdType.Raid then
-                    local data = LibGearData:GetData("raid")
-                    itemLevel = _.get(data, { self.info.level, "vault" }, nil)
-                    self:HandlePreviewRaidRewardTooltip(itemLevel, upgradeItemLevel);
+                    -- local data = LibGearData:GetData("raid")
+                    -- itemLevel = _.get(data, { self.info.level, "vault" }, nil)
+                    --self:HandlePreviewRaidRewardTooltip(itemLevel, upgradeItemLevel);
                 elseif self.info.type == Enum.WeeklyRewardChestThresholdType.Activities then
                     local data = LibGearData:GetData("dungeons")
                     itemLevel = _.get(data, { self.info.level, "vault" }, nil)

@@ -100,6 +100,8 @@ end
 
 function GreatVaultList:toggleWindow()
 	if GreatVaultListFrame:IsShown() then
+        HideUIPanel(WeeklyRewardsRemoteFrame)
+        HideUIPanel(WeeklyRewardsFrame)
 		self:hideWindow()
 	else
 		self:showWindow()
