@@ -53,6 +53,7 @@
 			<OnLoad method="OnLoad"/>
 			<OnShow method="OnShow"/>
 			<OnHide method="OnHide"/>
+			<OnKeyDown method="OnKeyUp"/>
 		</Scripts>
 	</Frame>
 

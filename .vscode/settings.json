@@ -327,7 +327,24 @@
         "GREAT_VAULT_REWARDS_CURRENT_LEVEL_MYTHIC",
         "Activities",
         "WeeklyRewardActivityItemMixin",
-        "UIErrorsFrame"
+        "UIErrorsFrame",
+        "SetUIPanelShown",
+        "UIParentBottomManagedFrameContainer",
+        "MAIN_ACTION_BAR_DEFAULT_OFFSET_Y",
+        "MAIN_MENU_BAR_MARGIN",
+        "UIParentRightManagedFrameContainer",
+        "UpdateContainerFrameAnchors",
+        "DisplayInterfaceActionBlockedMessage",
+        "CloseAllBags",
+        "StoreFrame_IsShown",
+        "MainMenuBar",
+        "EditModeUtil",
+        "ObjectiveTrackerFrame",
+        "UIChildWindows",
+        "UIMenus",
+        "MicroButtonAndBagsBar",
+        "MinimapCluster",
+        "GameMenuFrame"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
@@ -347,5 +364,6 @@
     },
     "Lua.workspace.library": [
         "~\\.vscode\\extensions\\ketho.wow-api-0.20.8\\Annotations\\Core"
-    ]
+    ],
+    "Lua.type.weakUnionCheck": true
 }

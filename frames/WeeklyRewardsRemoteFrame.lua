@@ -32,7 +32,7 @@ function RemoteMixin:show(data)
     self.hasAvailableRewards = (data.vaultstatus == "collect")
     self.canClaimRewards = (not data.vaultstatus == "collect")
 
-    self:Show()
+    ShowUIPanel(WeeklyRewardsRemoteFrame) 
 end
 
 
@@ -48,19 +48,16 @@ function RemoteMixin:OnLoad()
     WeeklyRewardsFrame.SetUpActivity(self, self.RaidFrame, RAIDS, "evergreen-weeklyrewards-category-raids", Enum.WeeklyRewardChestThresholdType.Raid);
 	WeeklyRewardsFrame.SetUpActivity(self, self.MythicFrame, DUNGEONS, "evergreen-weeklyrewards-category-dungeons", Enum.WeeklyRewardChestThresholdType.Activities);
 	WeeklyRewardsFrame.SetUpActivity(self, self.WorldFrame, WORLD, "evergreen-weeklyrewards-category-world", Enum.WeeklyRewardChestThresholdType.World);
-
   
     local attributes =
 	{
-		area = "center",
+        area = "center",
 		pushable = 0,
 		allowOtherPanels = 1,
-		checkFit = 1,
+		checkFit = 0,
 	};
     
 	RegisterUIPanel(WeeklyRewardsRemoteFrame, attributes);
-
-
 end
 
 

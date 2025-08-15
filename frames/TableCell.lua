@@ -104,7 +104,7 @@ function TableCellVaultStatusMixin:ShowGreatVault(data)
 
     local sameName = (data.name == WeeklyRewardsRemoteFrame.charName)
     if WeeklyRewardsRemoteFrame:IsVisible() then
-        WeeklyRewardsRemoteFrame:Hide()
+        HideUIPanel(WeeklyRewardsRemoteFrame)
         if not sameName then 
             WeeklyRewardsRemoteFrame:show(data)
         end
