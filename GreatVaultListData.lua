@@ -7,7 +7,17 @@ function GreatVaultList.Data:init()
 	GreatVaultList.db.global.characters = GreatVaultList.db.global.characters or {}
 	self.characterInfo = Mixin({}, self:get())
 	self.disabled = UnitLevel("player") < GetMaxLevelForPlayerExpansion()
+	
+	self.skipStore = C_WeeklyRewards.CanClaimRewards()
+
+	-- will not work if user is logged in when C_WeeklyRewards.CanClaimRewards() changes. But who cares? right?
+	if not self.skipStore then return end
+	GreatVaultList:RegisterEvent("WEEKLY_REWARDS_UPDATE", function()
+		if C_WeeklyRewards.CanClaimRewards() then return end
+		self.skipStore = false
+	end)
 end
+
 
 function GreatVaultList.Data:get()
 	local playerGUID  = UnitGUID("player")
@@ -41,6 +51,7 @@ end
 
 function GreatVaultList.Data:store(config, write)
 	if self.disabled then return end
+	if self.skipStore then return end
 	local store = _.get(config, { "store" }, function(e) return e end)
 	self.characterInfo = store(self.characterInfo)
 	self.characterInfo.lastUpdate = time()
@@ -49,6 +60,7 @@ end
 
 function GreatVaultList.Data:storeAll()
 	if self.disabled then return end
+	if self.skipStore then return end
 	_.forEach(GreatVaultList.ModuleColumns, function(entry, key)
 		self:store(entry.config, false)
 	end)
