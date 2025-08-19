@@ -98,54 +98,34 @@ function RemoteMixin:Refresh()
 
             frame.UnselectedFrame:Hide()
             frame.SelectedTexture:Hide();
-          
+
             function frame:ShowPreviewItemTooltip()
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -7, -11);
                 GameTooltip_SetTitle(GameTooltip, WEEKLY_REWARDS_CURRENT_REWARD);
-                local itemLevel = nil
-                local upgradeItemLevel = nil
-               
-                self.UpdateTooltip = nil;
-                if self.info.type == Enum.WeeklyRewardChestThresholdType.Raid then
-                    -- local data = LibGearData:GetData("raid")
-                    -- itemLevel = _.get(data, { self.info.level, "vault" }, nil)
-                    --self:HandlePreviewRaidRewardTooltip(itemLevel, upgradeItemLevel);
-                elseif self.info.type == Enum.WeeklyRewardChestThresholdType.Activities then
-                    local data = LibGearData:GetData("dungeons")
-                    itemLevel = _.get(data, { self.info.level, "vault" }, nil)
-                    local hasData, nextActivityTierID, nextLevel, nextItemLevel = C_WeeklyRewards.GetNextActivitiesIncrease(self.info.activityTierID, self.info.level);
-                    if hasData then
-                        upgradeItemLevel = nextItemLevel;
-                    else
-                        nextLevel = WeeklyRewardsUtil.GetNextMythicLevel(self.info.level);
-                    end
-                    self:HandlePreviewMythicRewardTooltip(itemLevel, upgradeItemLevel, nextLevel);
-                elseif self.info.type == Enum.WeeklyRewardChestThresholdType.RankedPvP then
-                    self:HandlePreviewPvPRewardTooltip(itemLevel, upgradeItemLevel);
-                elseif self.info.type == Enum.WeeklyRewardChestThresholdType.World then
-                     local data = LibGearData:GetData("delves")
-                    itemLevel = _.get(data, { self.info.level, "vault" }, nil)
-
-                    local hasData, nextActivityTierID, nextLevel, nextItemLevel = C_WeeklyRewards.GetNextActivitiesIncrease(self.info.activityTierID, self.info.level);
-                    if hasData then
-                        upgradeItemLevel = nextItemLevel;
-                    else
-                        nextLevel = self.info.level + 1;
-                    end
-                    self:HandlePreviewWorldRewardTooltip(itemLevel, upgradeItemLevel, nextLevel);
-                end
-                if not upgradeItemLevel then
-                    GameTooltip_AddColoredLine(GameTooltip, WEEKLY_REWARDS_MAXED_REWARD, GREEN_FONT_COLOR);
+                
+                if _.size(self.info.tooltip) > 0 then 
+                    _.forEach(self.info.tooltip, function(entry)
+                        local color = nil
+                        if entry.color then
+                            color = CreateColorFromHexString(entry.color)
+                        end
+                       _G[entry.type](GameTooltip, entry.value, color)
+                    end)
                 end
                 GameTooltip:Show();
             end
-
             frame:Refresh(activityInfo);
 		end
 	end
 
 
 end
+
+
+
+
+
+
 function RemoteMixin:SelectActivity(activityFrame)
 end
 

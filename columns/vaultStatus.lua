@@ -25,8 +25,18 @@ Column.config = {
         local ary = _.keys(StatusArray)
         return ary[math.random(#ary)]
     end,
+    event = {
+        {"WEEKLY_REWARDS_UPDATE"},
+        function(self)
+            -- GreatVaultList:ClearVaultTmpData(ColumKey)
+            GreatVaultList.Data:store(self.config, true)
+            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+                GreatVaultListFrame:RefreshScrollFrame()
+            end
+        end
+    },
     ["store"] = function(characterInfo)
-	    characterInfo.activitiesData = C_WeeklyRewards.GetActivities()
+	    -- characterInfo.activitiesData = GreatVaultList:GetVaultData(ColumKey)
         characterInfo[ColumKey] = GreatVaultList:GetVaultState()
         return characterInfo
     end,

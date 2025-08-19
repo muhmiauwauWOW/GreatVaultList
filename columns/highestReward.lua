@@ -1,7 +1,6 @@
 local ColumKey = "highestReward"
 local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
-local LibGearData = LibStub("LibGearData-1.0")
 
  local typeToDataSource = {
         [Enum.WeeklyRewardChestThresholdType.Raid] = "raid",
@@ -15,10 +14,8 @@ local function highestRewardFN(Adata)
     local ilvlTable = {0}
     
     _.forEach(Adata, function(entry)
-        local dataSource = typeToDataSource[entry.type]
-        if not dataSource then return end
-        local data = LibGearData:GetData(dataSource)
-        table.insert(ilvlTable, _.get(data, {entry.level, "vault"}, 0))
+        local itemLevel = entry.itemLevel or 0
+        table.insert(ilvlTable, itemLevel)
     end)
 
     return math.max(unpack(ilvlTable))
@@ -46,22 +43,22 @@ Column.config = {
     ["demo"] = function(idx)
         return math.random(500, 600)
     end,
-    event = {
-        {"WEEKLY_REWARDS_UPDATE"},
-        function(self)
-            GreatVaultList.Data:store(self.config, true)
-            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultListFrame:RefreshScrollFrame()
-            end
-        end
-    },
+    -- event = {
+    --     {"WEEKLY_REWARDS_UPDATE"},
+    --     function(self)
+    --         GreatVaultList.Data:store(self.config, true)
+    --         if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
+    --             GreatVaultListFrame:RefreshScrollFrame()
+    --         end
+    --     end
+    -- },
     ["store"] = function(characterInfo)
-        characterInfo.activitiesData = C_WeeklyRewards.GetActivities()
+        -- characterInfo.activitiesData = GreatVaultList:GetVaultData(ColumKey)
         return characterInfo
     end,
     ["populate"] = function(self, number)
         if not self.rowData then return number end
-        if not self.rowData.data.activitiesData then 
+        if not self.rowData.data.activitiesData then
             if number then return number end
             return nil
         end

@@ -204,7 +204,7 @@ function GreatVaultList:checkModules()
         self.moduleTicker:Cancel()
 	end
 
-      if check then
+    if check then
         self.moduleTicker = C_Timer.NewTimer(0.01, function()
             self.moduleTicker:Cancel()
             if not WeeklyRewardsFrame then
@@ -213,6 +213,7 @@ function GreatVaultList:checkModules()
 
             GreatVaultListOptions:init()
             self.Data:storeAll()
+			self.Data:GetVaultData()
             self:updateData()
         end)
     end
@@ -325,3 +326,6 @@ function GreatVaultList:GetVaultState()
 
 	return "incomplete";
 end
+
+
+
