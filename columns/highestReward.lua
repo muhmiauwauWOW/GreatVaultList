@@ -43,19 +43,6 @@ Column.config = {
     ["demo"] = function(idx)
         return math.random(500, 600)
     end,
-    -- event = {
-    --     {"WEEKLY_REWARDS_UPDATE"},
-    --     function(self)
-    --         GreatVaultList.Data:store(self.config, true)
-    --         if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-    --             GreatVaultListFrame:RefreshScrollFrame()
-    --         end
-    --     end
-    -- },
-    ["store"] = function(characterInfo)
-        -- characterInfo.activitiesData = GreatVaultList:GetVaultData(ColumKey)
-        return characterInfo
-    end,
     ["populate"] = function(self, number)
         if not self.rowData then return number end
         if not self.rowData.data.activitiesData then

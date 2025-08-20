@@ -19,6 +19,10 @@ function GreatVaultList.Data:init()
 
 		self:ClearVaultTmpData()
 	end)
+
+	if not C_WeeklyRewards.HasAvailableRewards() then
+		self:ClearVaultTmpData()
+	end
 end
 
 
@@ -68,9 +72,10 @@ function GreatVaultList.Data:storeAll()
 		self:store(entry.config, false)
 	end)
 
+	self.characterInfo.activitiesData = self:GetVaultData()
+
 	self:write()
 end
-
 
 
 
