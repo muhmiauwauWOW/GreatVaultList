@@ -211,7 +211,10 @@ function GreatVaultList.Data:GetVaultData()
 				else
 					nextLevel = WeeklyRewardsUtil.GetNextMythicLevel(entry.level);
 				end
-				local isHeroicLevel = self:IsCompletedAtHeroicLevel();
+				
+				local difficultyID = C_WeeklyRewards.GetDifficultyIDForActivityTier(entry.activityTierID);
+				local isHeroicLevel =  (difficultyID == DifficultyUtil.ID.DungeonHeroic);
+				
 				if isHeroicLevel then		
 					GameTooltip_AddNormalLine(GameTooltip, string.format(WEEKLY_REWARDS_ITEM_LEVEL_HEROIC, itemLevel));
 				else
