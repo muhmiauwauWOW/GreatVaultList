@@ -223,7 +223,7 @@ function GreatVaultList.Data:GetVaultData()
 				GameTooltip_AddBlankLineToTooltip(GameTooltip);
 				if upgradeItemLevel then
 					GameTooltip_AddColoredLine(GameTooltip, string.format(WEEKLY_REWARDS_IMPROVE_ITEM_LEVEL, upgradeItemLevel), GREEN_FONT_COLOR);
-					if self.info.threshold == 1 then
+					if entry.threshold == 1 then
 						if isHeroicLevel then
 							GameTooltip_AddHighlightLine(GameTooltip, WEEKLY_REWARDS_COMPLETE_HEROIC_SHORT);
 						else
