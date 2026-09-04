@@ -24,7 +24,7 @@ function GreatVaultList:addWeeklyRewardFrame()
 			},
 		});
 	else
-		WeeklyRewardsRemoteFrameTemplate:SetScale(GreatVaultList.db.global.Options.scale)
+		WeeklyRewardsRemoteFrame:SetScale(GreatVaultList.db.global.Options.scale)
 	end
 
 end
