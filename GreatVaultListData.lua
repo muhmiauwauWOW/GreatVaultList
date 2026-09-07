@@ -11,15 +11,10 @@ function GreatVaultList.Data:init()
 	-- self.disabled = true
 	--@end-do-not-package@
 	
-	self.skipStore = C_WeeklyRewards.CanClaimRewards()
-
-	-- will not work if user is logged in when C_WeeklyRewards.CanClaimRewards() changes. But who cares? right?
-	if not self.skipStore then return end
+	
 	GreatVaultList:RegisterEvent("WEEKLY_REWARDS_UPDATE", function()
-		if C_WeeklyRewards.CanClaimRewards() then return end
-		self.skipStore = false
+		self.skipStore = C_WeeklyRewards.CanClaimRewards()
 		self:storeAll()
-
 		self:ClearVaultTmpData()
 	end)
 
