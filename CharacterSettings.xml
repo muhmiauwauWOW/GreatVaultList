@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+    <Script file="CharacterSettings.lua"/>
+
+    <Frame name="GreatVaultListCharacterSettingsTemplate" inherits="SettingsListElementTemplate" mixin="GreatVaultListCharacterSettingsMixin" virtual="true">
+        <Size x="680" y="44"/>
+        <Frames>
+            <CheckButton parentKey="ShowCheckbox">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-250" y="0"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+                <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+                <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+                <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+            </CheckButton>
+            <CheckButton parentKey="Ignore">
+                <Size x="24" y="24"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-120" y="0"/>
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+                <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+                <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+                <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+            </CheckButton>
+            <Button parentKey="Delete" inherits="UIPanelButtonTemplate">
+                <Size x="100" y="24"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="ShowLabel" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="RIGHT" relativeKey="$parent.ShowCheckbox" relativePoint="LEFT" x="-4" y="0"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="IgnoreLabel" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="RIGHT" relativeKey="$parent.Ignore" relativePoint="LEFT" x="-4" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
+    </Frame>
+</Ui>

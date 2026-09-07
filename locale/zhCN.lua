@@ -40,6 +40,13 @@ L["opt_ElvUiSkin_desc"] = "更改此设置需要重新加载才能生效";
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "角色列表"
+L["opt_CharacterList_show"] = "显示"
+L["opt_CharacterList_ignore"] = "忽略"
+L["opt_CharacterList_delete"] = "删除数据"
+L["opt_CharacterList_delete_confirm"] = "确定要删除角色 %s 的数据吗？此操作无法撤销。"
+L["opt_CharacterList_unknown_realm"] = "未知服务器"
+
 L["opt_CharacterDelete_title"] = "删除角色数据";
 L["opt_CharacterDelete_slider_name"] = "选择要删除的角色";
 L["opt_CharacterDelete_slider_desc"] = "从列表中选择要删除的角色。";

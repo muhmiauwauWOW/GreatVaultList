@@ -38,6 +38,13 @@ L["opt_minimap_desc"] = "Ein- oder Ausblenden des Minikarte-Buttons"
 
 
 
+L["opt_CharacterList_title"] = "Charakterliste"
+L["opt_CharacterList_show"] = "Anzeigen"
+L["opt_CharacterList_ignore"] = "Ignorieren"
+L["opt_CharacterList_delete"] = "Daten löschen"
+L["opt_CharacterList_delete_confirm"] = "Bist du sicher, dass du die Daten von %s löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+L["opt_CharacterList_unknown_realm"] = "Unbekannter Realm"
+
 L["opt_ElvUiSkin_name"] = "ElvUI Skin verwenden"
 L["opt_ElvUiSkin_desc"] = "Änderungen an dieser Einstellung benötigen einen Reload, um wirksam zu werden."
 

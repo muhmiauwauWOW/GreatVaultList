@@ -43,6 +43,13 @@ L["opt_ElvUiSkin_desc"] = "Se necesita un reinicio para que los cambios surtan e
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "Lista de personajes"
+L["opt_CharacterList_show"] = "Mostrar"
+L["opt_CharacterList_ignore"] = "Ignorar"
+L["opt_CharacterList_delete"] = "Borrar datos"
+L["opt_CharacterList_delete_confirm"] = "¿Seguro que quieres borrar los datos de %s? Esta acción no se puede deshacer."
+L["opt_CharacterList_unknown_realm"] = "Reino desconocido"
+
 L["opt_CharacterDelete_title"] = "Borrar datos de personaje"
 
 L["opt_CharacterDelete_slider_name"] = "Seleccionar personaje a borrar"

@@ -41,6 +41,13 @@ L["opt_minimap_name"] = "Hide minimap button"
 L["opt_minimap_desc"] = "Toggle visibibity of minimap button"
 
 
+L["opt_CharacterList_title"] = "Character list"
+L["opt_CharacterList_show"] = "Show"
+L["opt_CharacterList_ignore"] = "Ignore"
+L["opt_CharacterList_delete"] = "Delete data"
+L["opt_CharacterList_delete_confirm"] = "Are you sure you want to delete the data for %s? This action cannot be undone."
+L["opt_CharacterList_unknown_realm"] = "Unknown realm"
+
 L["opt_ElvUiSkin_name"] = "Use ElvUi Skin"
 L["opt_ElvUiSkin_desc"] = "Changing this settings need a reload to take effect"
 

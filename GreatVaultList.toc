@@ -57,6 +57,7 @@ GreatVaultListData.lua
 GreatVaultListTabs.lua
 
 ColumnOrderSettings.xml
+CharacterSettings.xml
 GreatVaultListOptions.lua
 
 frames/GreatVaultListFrame.xml

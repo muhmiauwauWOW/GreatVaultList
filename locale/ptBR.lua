@@ -38,6 +38,13 @@ L["opt_ElvUiSkin_desc"] = "Alterar esta configuração requer um recarregamento 
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "Lista de personagens"
+L["opt_CharacterList_show"] = "Mostrar"
+L["opt_CharacterList_ignore"] = "Ignorar"
+L["opt_CharacterList_delete"] = "Apagar dados"
+L["opt_CharacterList_delete_confirm"] = "Tem certeza de que deseja apagar os dados de %s? Esta ação não pode ser desfeita."
+L["opt_CharacterList_unknown_realm"] = "Reino desconhecido"
+
 L["opt_CharacterDelete_title"] = "Apagar dados do personagem";
 L["opt_CharacterDelete_slider_name"] = "Selecione o personagem a apagar";
 L["opt_CharacterDelete_slider_desc"] = "Selecione um personagem da lista para apagar.";

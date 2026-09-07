@@ -17,12 +17,12 @@ function GreatVaultListOptions:init()
     Settings.RegisterAddOnCategory(category)
     GreatVaultList.OptionsID = category:GetID()
 
+    self:InitCharacterCategory()
 
     -- Init columns category
     self:InitColumnCategory()
     -- Init Tabs category
     self:InitTabsCategory()
-
 
     local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide",
         GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"],
@@ -34,7 +34,6 @@ function GreatVaultListOptions:init()
             GreatVaultList.minimapIcon:Show(addonName)
         end
     end)
-
     Settings.CreateCheckbox(self.category, setting, L["opt_minimap_desc"])
 
     -- scale
@@ -42,113 +41,92 @@ function GreatVaultListOptions:init()
         local setting = Settings.RegisterAddOnSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options,
             "number", L["opt_scale_name"], 1)
         setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
-
         local function FormatScaledPercentage(value)
-            return FormatPercentage(value);
+            return FormatPercentage(value)
         end
-
         local options = Settings.CreateSliderOptions(.4, 2, .01)
-        options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage);
+        options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatScaledPercentage)
         Settings.CreateSlider(self.category, setting, options, L["opt_scale_desc"])
     end
 
     -- lines
     local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number",
         L["opt_lines_name"], 12)
-    setting:SetValueChangedCallback(function(self)
-        GreatVaultListFrame:UpdateSize()
-    end)
-
+    setting:SetValueChangedCallback(function(self) GreatVaultListFrame:UpdateSize() end)
     local options = Settings.CreateSliderOptions(4, 24, 1)
-    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+    options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right)
     Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
-
-
-
 
     GreatVaultList.ElvUi:AddOption(self.category)
 
     do
         local function onButtonClick()
-            local keybindsCategory = SettingsPanel:GetCategory(Settings.KEYBINDINGS_CATEGORY_ID);
-            local keybindsLayout = SettingsPanel:GetLayout(keybindsCategory);
+            local keybindsCategory = SettingsPanel:GetCategory(Settings.KEYBINDINGS_CATEGORY_ID)
+            local keybindsLayout = SettingsPanel:GetLayout(keybindsCategory)
             for _, initializer in keybindsLayout:EnumerateInitializers() do
                 if initializer.data.name == BINDING_HEADER_GreatVaultList then
-                    initializer.data.expanded = true;
-                    Settings.OpenToCategory(Settings.KEYBINDINGS_CATEGORY_ID, BINDING_HEADER_GreatVaultList);
-                    return;
+                    initializer.data.expanded = true
+                    Settings.OpenToCategory(Settings.KEYBINDINGS_CATEGORY_ID, BINDING_HEADER_GreatVaultList)
+                    return
                 end
             end
         end
-
-        local addSearchTags = false;
-        local initializer = CreateSettingsButtonInitializer("", SETTINGS_KEYBINDINGS_LABEL, onButtonClick, nil,
-            addSearchTags);
-        layout:AddInitializer(initializer);
+        local initializer = CreateSettingsButtonInitializer("", SETTINGS_KEYBINDINGS_LABEL, onButtonClick, nil, false)
+        layout:AddInitializer(initializer)
     end
 
+    --@do-not-package@
+	-- Settings.OpenToCategory(GreatVaultList.OptionsID)
+	--@end-do-not-package@
+end
 
+function GreatVaultListOptions:InitCharacterCategory()
+    -- Character List
+    self.CharacterSubcategory = Settings.RegisterVerticalLayoutSubcategory(self.category, L["opt_CharacterList_title"])
+    Settings.RegisterAddOnCategory(self.CharacterSubcategory)
+    local characterLayout = SettingsPanel:GetLayout(self.CharacterSubcategory)
 
+    local characters = {}
+    DevTool:AddData(GreatVaultList.db.global.characters)
+    _.forEach(GreatVaultList.db.global.characters, function(entry, key)
+        if entry.enabled == nil then entry.enabled = true end
+        table.insert(characters, { key = key, entry = entry })
+    end)
+    sort(characters, function(left, right)
+        local leftRealm = left.entry.normalizedRealm or left.entry.realm or ""
+        local rightRealm = right.entry.normalizedRealm or right.entry.realm or ""
+        if leftRealm ~= rightRealm then
+            return leftRealm < rightRealm
+        end
+        return (left.entry.name or left.key) < (right.entry.name or right.key)
+    end)
 
+    local currentRealm
+    _.forEach(characters, function(character)
+        local realmName = character.entry.normalizedRealm or character.entry.realm
+        if not realmName or realmName == "" then
+            realmName = L["opt_CharacterList_unknown_realm"]
+        end
+        if realmName ~= currentRealm then
+            characterLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer(realmName))
+            currentRealm = realmName
+        end
 
-
-    -- Character Delete
-    self.layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(L["opt_CharacterDelete_title"]));
-
-    local deleteOptionsKeys = {};
-    local function GetOptions()
-        local deleteOptions = Settings.CreateControlTextContainer();
-        local i = 0
-        deleteOptions:Add(0, "");
-
-        _.forEach(GreatVaultList.db.global.characters, function(entry, key)
-            i = i + 1;
-
-            local name = entry.normalizedRealm and string.format("%s-%s", entry.name, entry.normalizedRealm) or entry.name
-            deleteOptions:Add(i, name);
-            table.insert(deleteOptionsKeys, key)
-        end)
-
-        return deleteOptions:GetData();
-    end
-
-
-    local selectedOption = {}
-    local characterDeleteSetting = Settings.RegisterAddOnSetting(self.category, "dummyVar", "dummyVar", selectedOption, "number",  L["opt_CharacterDelete_slider_name"], 0)
-    Settings.CreateDropdown(self.category, characterDeleteSetting, GetOptions, L["opt_CharacterDelete_slider_desc"]);
-
-
-    self.layout:AddInitializer(CreateSettingsButtonInitializer(
-        "", 
-        L["opt_CharacterDelete_btn_name"],
-        function() 
-            if not selectedOption.dummyVar or selectedOption.dummyVar == 0 then return end
-
-            StaticPopupDialogs["GreatVaultListOptions_COMFIRM_DELETE_CHARATER"] = {
-                text =  L["opt_CharacterDelete_confirm_text"],
-                button1 = YES,
-                button2 = NO,
-                OnAccept = function()
-                    local keyToDelete = deleteOptionsKeys[selectedOption.dummyVar]
-                    GreatVaultList.db.global.characters[keyToDelete] = nil
-                    characterDeleteSetting:SetValue(0)
-                end,
-                timeout = 0,
-                whileDead = true,
-                hideOnEscape = true,
-            }
-        
-            StaticPopup_Show("GreatVaultListOptions_COMFIRM_DELETE_CHARATER")
-        end,
-        nil,
-        false
-    ));
-
-
-
-    --Settings.OpenToCategory(GreatVaultList.OptionsID)
-
-    
+        local setting = Settings.RegisterAddOnSetting(
+            self.category,
+            "character_" .. character.key,
+            "character_" .. character.key,
+            character.entry,
+            "table",
+            character.entry.name or character.key,
+            character.entry
+        )
+        characterLayout:AddInitializer(Settings.CreateControlInitializer(
+            "GreatVaultListCharacterSettingsTemplate",
+            setting,
+            character.key
+        ))
+    end)
 end
 
 function GreatVaultListOptions:InitTabsCategory()

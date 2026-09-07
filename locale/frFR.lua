@@ -38,6 +38,13 @@ L["opt_ElvUiSkin_desc"] = "Un rechargement est nécessaire pour que les modifica
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "Liste des personnages"
+L["opt_CharacterList_show"] = "Afficher"
+L["opt_CharacterList_ignore"] = "Ignorer"
+L["opt_CharacterList_delete"] = "Supprimer les données"
+L["opt_CharacterList_delete_confirm"] = "Êtes-vous sûr de vouloir supprimer les données de %s ? Cette action est irréversible."
+L["opt_CharacterList_unknown_realm"] = "Royaume inconnu"
+
 L["opt_CharacterDelete_title"] = "Supprimer les données du personnage";
 L["opt_CharacterDelete_slider_name"] = "Sélectionner le personnage à supprimer";
 L["opt_CharacterDelete_slider_desc"] = "Sélectionnez un personnage dans la liste pour le supprimer.";

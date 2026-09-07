@@ -281,38 +281,20 @@ end
 GreatVaultListListFilterMixin = {}
 
 function GreatVaultListListFilterMixin:OnLoad()
-	WowStyle1FilterDropdownMixin.OnLoad(self);
-	self.init = false
+	self.Text:SetText(FILTER)
 end
 
-function GreatVaultListListFilterMixin:OnShow()
-	if self.init then return end
-	self.init = true
-
-	local function IsSelected(filter)
-		return GreatVaultList.db.global.characters[filter].enabled
+function GreatVaultListListFilterMixin:OnClick()
+	local category = GreatVaultListOptions.CharacterSubcategory
+	if category then
+		Settings.OpenToCategory(category:GetID())
 	end
-	
-	local function SetSelected(filter)
-		local character = GreatVaultList.db.global.characters[filter]
-		if not character then return end
-		character.enabled = not character.enabled
-		
-		local findItemList = _.find(self:GetParent().data, function(entry) return entry.name == filter end)
-		findItemList.enabled = character.enabled
+end
 
-		self:GetParent():UpdateFilteredData()
-		self:GetParent().Search:Reset();
+function GreatVaultListListFilterMixin:OnEnter()
+	self.Hover:Show()
+end
 
-		local sortOrder = self:GetParent().sortOrder
-		local reverseSort = self:GetParent().reverseSort
-		self:GetParent():SetSortOrder(sortOrder,reverseSort)
-	end
-
-	self:SetupMenu(function(dropdown, rootDescription)
-		rootDescription:SetTag("MENU_GREATVAULTLIST_FILTER");
-		_.forEach(GreatVaultList.db.global.characters, function(char, key)
-			rootDescription:CreateCheckbox(char.name, IsSelected, SetSelected, key);
-		end)
-	end);
+function GreatVaultListListFilterMixin:OnLeave()
+	self.Hover:Hide()
 end

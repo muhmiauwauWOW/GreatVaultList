@@ -40,6 +40,13 @@ L["opt_ElvUiSkin_desc"] = "Per applicare le modifiche è necessario un riavvio."
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "Elenco personaggi"
+L["opt_CharacterList_show"] = "Mostra"
+L["opt_CharacterList_ignore"] = "Ignora"
+L["opt_CharacterList_delete"] = "Elimina dati"
+L["opt_CharacterList_delete_confirm"] = "Vuoi davvero eliminare i dati di %s? Questa azione non può essere annullata."
+L["opt_CharacterList_unknown_realm"] = "Reame sconosciuto"
+
 L["opt_CharacterDelete_title"] = "Elimina dati personaggio";
 L["opt_CharacterDelete_slider_name"] = "Seleziona personaggio da eliminare";
 L["opt_CharacterDelete_slider_desc"] = "Seleziona un personaggio dall'elenco da eliminare.";

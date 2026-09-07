@@ -39,6 +39,13 @@ L["opt_ElvUiSkin_desc"] = "이 설정을 변경하려면 다시 로드해야 효
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "캐릭터 목록"
+L["opt_CharacterList_show"] = "표시"
+L["opt_CharacterList_ignore"] = "무시"
+L["opt_CharacterList_delete"] = "데이터 삭제"
+L["opt_CharacterList_delete_confirm"] = "%s의 데이터를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다."
+L["opt_CharacterList_unknown_realm"] = "알 수 없는 서버"
+
 L["opt_CharacterDelete_title"] = "캐릭터 데이터 삭제";
 L["opt_CharacterDelete_slider_name"] = "삭제할 캐릭터 선택";
 L["opt_CharacterDelete_slider_desc"] = "목록에서 삭제할 캐릭터를 선택합니다.";

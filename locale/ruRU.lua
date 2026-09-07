@@ -44,6 +44,13 @@ L["opt_ElvUiSkin_desc"] = "Для вступления изменений в с�
 
 
 -- Character Delete
+L["opt_CharacterList_title"] = "Список персонажей"
+L["opt_CharacterList_show"] = "Показывать"
+L["opt_CharacterList_ignore"] = "Игнорировать"
+L["opt_CharacterList_delete"] = "Удалить данные"
+L["opt_CharacterList_delete_confirm"] = "Вы уверены, что хотите удалить данные персонажа %s? Это действие нельзя отменить."
+L["opt_CharacterList_unknown_realm"] = "Неизвестный мир"
+
 L["opt_CharacterDelete_title"] = "Удалить данные персонажа"
 
 L["opt_CharacterDelete_slider_name"] = "Выберите персонажа для удаления"
