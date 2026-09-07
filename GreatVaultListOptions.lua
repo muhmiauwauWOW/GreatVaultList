@@ -87,7 +87,6 @@ function GreatVaultListOptions:InitCharacterCategory()
     local characterLayout = SettingsPanel:GetLayout(self.CharacterSubcategory)
 
     local characters = {}
-    DevTool:AddData(GreatVaultList.db.global.characters)
     _.forEach(GreatVaultList.db.global.characters, function(entry, key)
         if entry.enabled == nil then entry.enabled = true end
         table.insert(characters, { key = key, entry = entry })
