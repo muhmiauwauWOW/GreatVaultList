@@ -10,12 +10,18 @@ function GreatVaultList.Data:init()
 	--@do-not-package@
 	-- self.disabled = true
 	--@end-do-not-package@
-	
-	
+
+	self.skipStore = C_WeeklyRewards.CanClaimRewards()
+
 	GreatVaultList:RegisterEvent("WEEKLY_REWARDS_UPDATE", function()
-		self.skipStore = C_WeeklyRewards.CanClaimRewards()
-		self:storeAll()
+		if C_WeeklyRewards.CanClaimRewards() then
+			self.skipStore = true
+			return
+		end
+		self.skipStore = false
 		self:ClearVaultTmpData()
+		self:storeAll()
+		GreatVaultList:updateData(true)
 	end)
 
 	if not C_WeeklyRewards.HasAvailableRewards() then
@@ -83,8 +89,139 @@ function GreatVaultList.Data:storeAll()
 	end)
 
 	self.characterInfo.activitiesData = self:GetVaultData()
-
+	self:storeHighestReward()
 	self:write()
+
+	-- Only retry when a slot is actually unlocked but ilvl hasn't resolved yet.
+	if not self.characterInfo.highestReward and self:HasUnlockedVaultSlot(self.characterInfo) and (self.vaultRetryCount or 0) < 3 then
+		self.vaultRetryCount = (self.vaultRetryCount or 0) + 1
+		C_Timer.After(2, function()
+			self:ClearVaultTmpData()
+			if not self.skipStore then
+				self:storeAll()
+				GreatVaultList:updateData(true)
+			end
+		end)
+	end
+end
+
+function GreatVaultList.Data:GetRewardItemLevel(entry, typ)
+	if type(entry) ~= "table" then return nil end
+	if not entry.progress or not entry.threshold or entry.progress < entry.threshold then
+		return nil
+	end
+	if tonumber(entry.itemLevel) then return tonumber(entry.itemLevel) end
+	typ = typ or entry.type
+	local LibGearData = LibStub("LibGearData-1.0", true)
+	if not LibGearData then return nil end
+
+	if typ == Enum.WeeklyRewardChestThresholdType.Activities then
+		local rows = LibGearData:GetData("dungeons") or {}
+		local diffID = entry.activityTierID and C_WeeklyRewards.GetDifficultyIDForActivityTier(entry.activityTierID)
+		if diffID == DifficultyUtil.ID.DungeonHeroic or diffID == DifficultyUtil.ID.DungeonTimewalker then
+			for _, row in ipairs(rows) do
+				if row.level == PLAYER_DIFFICULTY2 or row.level == "Heroic" then return row.vault end
+			end
+		end
+		if diffID == DifficultyUtil.ID.DungeonMythic and (not entry.level or entry.level == 0) then
+			for _, row in ipairs(rows) do
+				if row.level == PLAYER_DIFFICULTY6 or row.level == "Mythic" then return row.vault end
+			end
+		end
+		local keyLevel = tonumber(entry.level)
+		if not keyLevel then return nil end
+		local best, bestLevel
+		for _, row in ipairs(rows) do
+			local rowLevel = tonumber(row.level)
+			if rowLevel and rowLevel <= keyLevel and (not bestLevel or rowLevel >= bestLevel) then
+				bestLevel, best = rowLevel, row.vault
+			end
+		end
+		return best
+	end
+
+	if typ == Enum.WeeklyRewardChestThresholdType.World then
+		local tier = tonumber(entry.level)
+		if not tier then return nil end
+		local best, bestTier
+		for _, row in ipairs(LibGearData:GetData("delves") or {}) do
+			if row.tier and row.vault and row.tier <= tier and (not bestTier or row.tier >= bestTier) then
+				bestTier, best = row.tier, row.vault
+			end
+		end
+		return best
+	end
+
+	if typ == Enum.WeeklyRewardChestThresholdType.Raid then
+		local diff = entry.level
+		local target
+		if diff == DifficultyUtil.ID.PrimaryRaidMythic then
+			target = PLAYER_DIFFICULTY6
+		elseif diff == DifficultyUtil.ID.PrimaryRaidHeroic then
+			target = PLAYER_DIFFICULTY2
+		elseif diff == DifficultyUtil.ID.PrimaryRaidNormal then
+			target = PLAYER_DIFFICULTY1
+		else
+			target = "LFR"
+		end
+		local maxLoot = 0
+		for _, row in ipairs(LibGearData:GetData("raid") or {}) do
+			if row.loot and (row.difficulty == target or (target == "LFR" and (row.difficulty == "LFR" or row.difficulty == PLAYER_DIFFICULTY3))) then
+				if row.loot > maxLoot then maxLoot = row.loot end
+			end
+		end
+		return maxLoot > 0 and maxLoot or nil
+	end
+
+	return nil
+end
+
+function GreatVaultList.Data:storeHighestReward()
+	local maxIlvl = self:ComputeHighestReward(self.characterInfo)
+	self.characterInfo.highestReward = (maxIlvl and maxIlvl > 0) and maxIlvl or nil
+end
+
+function GreatVaultList.Data:HasUnlockedVaultSlot(characterInfo)
+	if type(characterInfo) ~= "table" then return false end
+	local function unlocked(entry)
+		return type(entry) == "table" and entry.progress and entry.threshold and entry.progress >= entry.threshold
+	end
+	for _, group in ipairs({ characterInfo.activitiesData, characterInfo.raid, characterInfo.activities, characterInfo.world }) do
+		if type(group) == "table" then
+			for _, entry in pairs(group) do
+				if unlocked(entry) then return true end
+			end
+		end
+	end
+	return false
+end
+
+function GreatVaultList.Data:ComputeHighestReward(characterInfo)
+	if type(characterInfo) ~= "table" then return nil end
+	local maxIlvl = 0
+	local function consider(entry, typ)
+		local itemLevel = self:GetRewardItemLevel(entry, typ)
+		if itemLevel and itemLevel > maxIlvl then maxIlvl = itemLevel end
+	end
+	if type(characterInfo.activitiesData) == "table" then
+		for _, entry in pairs(characterInfo.activitiesData) do consider(entry) end
+	end
+	if type(characterInfo.raid) == "table" then
+		for _, entry in pairs(characterInfo.raid) do
+			consider(entry, Enum.WeeklyRewardChestThresholdType.Raid)
+		end
+	end
+	if type(characterInfo.activities) == "table" then
+		for _, entry in pairs(characterInfo.activities) do
+			consider(entry, Enum.WeeklyRewardChestThresholdType.Activities)
+		end
+	end
+	if type(characterInfo.world) == "table" then
+		for _, entry in pairs(characterInfo.world) do
+			consider(entry, Enum.WeeklyRewardChestThresholdType.World)
+		end
+	end
+	return maxIlvl > 0 and maxIlvl or nil
 end
 
 
@@ -164,6 +301,10 @@ function GreatVaultList.Data:GetVaultData()
 		if itemLink then
 			itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);
 			entry.itemLevel = itemLevel
+		end
+		if not entry.itemLevel then
+			entry.itemLevel = self:GetRewardItemLevel(entry)
+			itemLevel = entry.itemLevel
 		end
 		if upgradeItemLink then
 			upgradeItemLevel = C_Item.GetDetailedItemLevelInfo(upgradeItemLink);
@@ -339,5 +480,18 @@ function GreatVaultList.Data:GetVaultData()
 
 
 	VaultTmpData = data
+	-- Reuse last saved item levels only for slots that are still unlocked.
+	local old = self.characterInfo and self.characterInfo.activitiesData
+	if type(old) == "table" then
+		for i, entry in ipairs(data) do
+			if not entry.itemLevel and entry.progress and entry.threshold and entry.progress >= entry.threshold then
+				local prev = old[i]
+				if prev and prev.itemLevel and (prev.id == entry.id or prev.index == entry.index) then
+					entry.itemLevel = prev.itemLevel
+					entry.upgradeItemLevel = entry.upgradeItemLevel or prev.upgradeItemLevel
+				end
+			end
+		end
+	end
  	return VaultTmpData
 end
