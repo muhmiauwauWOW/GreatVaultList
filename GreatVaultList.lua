@@ -150,6 +150,8 @@ GREATVAULTLIST_COLUMNS = {
 			id = self.key
 		}
 
+		self.loaded = true
+
 	end,
 	OnEnable = function(self)
 		if not GreatVaultList.db.global.Options.modules[self.key].active then self:Disable(); return; end
@@ -195,10 +197,13 @@ GREATVAULTLIST_COLUMNS = {
 GreatVaultList.moduleTicker = nil
 function GreatVaultList:checkModules()
 
-    local modules = self:IterateModules()
-    local check = _.every(modules, function(module)
-        return module.loaded
-    end)
+    local check = true
+    for _, entry in pairs(self.RegisterdModules) do
+        if not entry.module.loaded then
+            check = false
+            break
+        end
+    end
 
     if self.moduleTicker then
         self.moduleTicker:Cancel()
@@ -221,8 +226,10 @@ end
 
 
 function GreatVaultList:updateData(refresh)
-	GreatVaultList:assert(_.size(GreatVaultList.ModuleColumns) > 0, "GreatVaultListListMixin:init",
-		'no "ModuleColumns" found, try to enable modules in the options')
+	-- WEEKLY_REWARDS_UPDATE can fire before column modules finish loading.
+	if not GreatVaultList.ModuleColumns or _.size(GreatVaultList.ModuleColumns) == 0 then
+		return
+	end
 	if _.size(GreatVaultList.db.global.characters) == 0 then return end -- fail silent
 
 	_.map(GreatVaultList.ModuleColumns, function(entry, key)

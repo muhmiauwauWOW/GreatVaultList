@@ -10,6 +10,9 @@ GreatVaultListOptions = {}
 
 
 function GreatVaultListOptions:init()
+    if self.initialized then return end
+    self.initialized = true
+
     local AddOnInfo = { C_AddOns.GetAddOnInfo(addonName) }
     local category, layout = Settings.RegisterVerticalLayoutCategory(AddOnInfo[2])
     self.category = category
@@ -24,10 +27,10 @@ function GreatVaultListOptions:init()
     -- Init Tabs category
     self:InitTabsCategory()
 
-    local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide",
+    local setting = GreatVaultList.Util:RegisterSetting(self.category, "mninimaphide", "hide",
         GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"],
         GreatVaultList.db.global.Options.minimap.hide)
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         if self:GetValue() then
             GreatVaultList.minimapIcon:Hide(addonName)
         else
@@ -38,9 +41,9 @@ function GreatVaultListOptions:init()
 
     -- scale
     if not BlizzMoveAPI then
-        local setting = Settings.RegisterAddOnSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options,
+        local setting = GreatVaultList.Util:RegisterSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options,
             "number", L["opt_scale_name"], 1)
-        setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
+        GreatVaultList.Util:OnSettingChanged(setting, function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
         local function FormatScaledPercentage(value)
             return FormatPercentage(value)
         end
@@ -50,9 +53,9 @@ function GreatVaultListOptions:init()
     end
 
     -- lines
-    local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number",
+    local setting = GreatVaultList.Util:RegisterSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number",
         L["opt_lines_name"], 12)
-    setting:SetValueChangedCallback(function(self) GreatVaultListFrame:UpdateSize() end)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self) GreatVaultListFrame:UpdateSize() end)
     local options = Settings.CreateSliderOptions(4, 24, 1)
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right)
     Settings.CreateSlider(self.category, setting, options, L["opt_lines_desc"])
@@ -111,7 +114,7 @@ function GreatVaultListOptions:InitCharacterCategory()
             currentRealm = realmName
         end
 
-        local setting = Settings.RegisterAddOnSetting(
+        local setting = GreatVaultList.Util:RegisterSetting(
             self.category,
             "character_" .. character.key,
             "character_" .. character.key,
@@ -138,9 +141,9 @@ function GreatVaultListOptions:InitTabsCategory()
         local checkboxName = string.format(L["opt_tab_actve_name"], name, id)
         local checkboxTooltip = string.format(L["opt_tab_actve_desc"], name, id)
 
-        local setting = Settings.RegisterAddOnSetting(self.TabsSubcategory, id .. "active", "active",
+        local setting = GreatVaultList.Util:RegisterSetting(self.TabsSubcategory, id .. "active", "active",
             GreatVaultList.db.global.Options.tabs[id], "boolean", checkboxName, true)
-        setting:SetValueChangedCallback(function(self)
+        GreatVaultList.Util:OnSettingChanged(setting, function(self)
             local value = self:GetValue()
             if value then
                 entry:Enable()
@@ -189,11 +192,11 @@ function GreatVaultListOptions:InitColumnCategory()
     local changesModules = CopyTable(GreatVaultList.db.global.Options.modules)
 
 
-    local setting = Settings.RegisterAddOnSetting(self.ColumnsSubcategory, "modules", "modules",
+    local setting = GreatVaultList.Util:RegisterSetting(self.ColumnsSubcategory, "modules", "modules",
         GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
 
 
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         local value = self:GetValue()
         if not value then return end
 

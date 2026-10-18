@@ -8,13 +8,11 @@ local ListMixin = {};
 GreatVaultListListMixin = ListMixin
 
 function ListMixin:GetBrowseListLayout(owner, itemList, useFill)
-	owner.headers = {}
-	owner.sort = 1
-	owner.reverseSort = false
-	owner.sortHeaders = {}
     local function LayoutBrowseListTableBuilder(tableBuilder)
         tableBuilder:SetColumnHeaderOverlap(2);
         tableBuilder:SetHeaderContainer(itemList:GetHeaderContainer());
+        owner.headers = {}
+        owner.sortHeaders = {}
 
         _.forEach(self.columns, function(colName, idx)
             local width = _.get(self.columnConfig, {colName, "width"})
@@ -135,7 +133,7 @@ function ListMixin:SetSortOrder(sortOrder, reverseSort)
 		sort(self.ItemList.data, function(a, b)
 			if not a[self.sort] then return false end
 			if not b[self.sort] then return false end
-			return comp(strcmputf8i(a[self.sort], a[self.sort]), 0)
+			return comp(strcmputf8i(a[self.sort], b[self.sort]), 0)
 		end)
 	end
 
@@ -210,9 +208,7 @@ function ListMixin:init(columns, data, columnConfig, refresh)
     self:GetParent():UpdateSize(width);
 
     self.ItemList:SetTableBuilderLayout(self:GetBrowseListLayout(self, self.ItemList, false), self.columnConfig);
-	if refresh then 
-		self.ItemList:RefreshScrollFrame();
-	end
+	self:SetSortOrder(GreatVaultList.db.global.sort, GreatVaultList.db.global.sortReverse)
 end
 
 
