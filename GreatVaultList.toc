@@ -1,4 +1,4 @@
-﻿## Interface: 120105, 120100
+﻿## Interface: 120105
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Notes-ruRU: Аддон, который отслеживает прогресс Великого Хранилища для всех Ваших персонажей
